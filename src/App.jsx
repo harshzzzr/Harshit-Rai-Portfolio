@@ -6,7 +6,7 @@ import MainLayout from './layouts/MainLayout';
 import HomePage from './pages/HomePage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 import AdminLoginPage from './pages/AdminLoginPage';
-import AdminDashboardPlaceholder from './pages/AdminDashboardPlaceholder';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
 
@@ -16,31 +16,50 @@ export default function App() {
       <AuthProvider>
         <Router>
           <ScrollToTop />
-          <MainLayout>
-            <Routes>
-              {/* Public Portfolio Routes */}
-              <Route path="/" element={<HomePage />} />
-              <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
+          <Routes>
+            {/* Public Portfolio Routes */}
+            <Route
+              path="/"
+              element={
+                <MainLayout>
+                  <HomePage />
+                </MainLayout>
+              }
+            />
+            <Route
+              path="/projects/:projectId"
+              element={
+                <MainLayout>
+                  <ProjectDetailPage />
+                </MainLayout>
+              }
+            />
 
-              {/* Admin Authentication & Protected Routes */}
-              <Route path="/admin/login" element={<AdminLoginPage />} />
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute>
-                    <AdminDashboardPlaceholder />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/*"
-                element={<Navigate to="/admin" replace />}
-              />
+            {/* Admin Authentication & Console */}
+            <Route path="/admin/login" element={<AdminLoginPage />} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/*"
+              element={<Navigate to="/admin" replace />}
+            />
 
-              {/* Fallback to Home */}
-              <Route path="*" element={<HomePage />} />
-            </Routes>
-          </MainLayout>
+            {/* Fallback */}
+            <Route
+              path="*"
+              element={
+                <MainLayout>
+                  <HomePage />
+                </MainLayout>
+              }
+            />
+          </Routes>
         </Router>
       </AuthProvider>
     </ThemeProvider>
