@@ -1,9 +1,10 @@
 import React from 'react';
-import { ExternalLink, Sparkles, FolderGit2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ExternalLink, Sparkles, FolderGit2, ArrowRight } from 'lucide-react';
 import { GithubIcon } from './Icons';
 
 export default function ProjectCard({ project }) {
-  const { title, description, technologies, featured, githubUrl, liveUrl, badge } = project;
+  const { id, title, description, technologies, featured, githubUrl, liveUrl, badge } = project;
 
   return (
     <div
@@ -13,8 +14,12 @@ export default function ProjectCard({ project }) {
           : 'border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700'
       }`}
     >
-      {/* Visual Header / Image Placeholder Preview */}
-      <div className="relative h-44 w-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-950 flex items-center justify-center border-b border-slate-200 dark:border-slate-800 overflow-hidden">
+      {/* Visual Header / Image Preview */}
+      <Link
+        to={`/projects/${id}`}
+        className="block relative h-44 w-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-950 flex items-center justify-center border-b border-slate-200 dark:border-slate-800 overflow-hidden cursor-pointer"
+        title={`View details for ${title}`}
+      >
         {/* Subtle grid pattern overlay */}
         <div className="absolute inset-0 opacity-20 dark:opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]" />
         
@@ -35,14 +40,17 @@ export default function ProjectCard({ project }) {
             <span>Featured</span>
           </div>
         )}
-      </div>
+      </Link>
 
       {/* Content Area */}
       <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
         <div className="space-y-2">
-          <h3 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+          <Link
+            to={`/projects/${id}`}
+            className="block text-xl font-bold tracking-tight text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors"
+          >
             {title}
-          </h3>
+          </Link>
           <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
             {description}
           </p>
@@ -63,42 +71,53 @@ export default function ProjectCard({ project }) {
         </div>
 
         {/* Action Links */}
-        <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {githubUrl && (
-              <a
-                href={githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                title="View Source Code"
-              >
-                <GithubIcon size={15} />
-                <span>Source</span>
-              </a>
-            )}
+        <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {githubUrl && (
+                <a
+                  href={githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                  title="View Source Code"
+                >
+                  <GithubIcon size={15} />
+                  <span>Source</span>
+                </a>
+              )}
 
-            {liveUrl ? (
-              <a
-                href={liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
-                title="View Live Application"
-              >
-                <ExternalLink size={15} />
-                <span>Live Demo</span>
-              </a>
-            ) : (
-              <span className="text-xs font-mono text-slate-400 dark:text-slate-500">
-                Offline / Embedded
-              </span>
-            )}
+              {liveUrl ? (
+                <a
+                  href={liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+                  title="View Live Application"
+                >
+                  <ExternalLink size={15} />
+                  <span>Demo</span>
+                </a>
+              ) : (
+                <span className="text-xs font-mono text-slate-400 dark:text-slate-500">
+                  Offline Build
+                </span>
+              )}
+            </div>
+
+            <span className="text-[11px] font-mono text-slate-400 dark:text-slate-500">
+              {featured ? 'Priority' : 'Standard'}
+            </span>
           </div>
 
-          <span className="text-[11px] font-mono text-slate-400 dark:text-slate-500">
-            {featured ? 'Priority Build' : 'Active Build'}
-          </span>
+          {/* View Details Route Link */}
+          <Link
+            to={`/projects/${id}`}
+            className="w-full inline-flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold bg-slate-50 dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-950 text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 border border-slate-200 dark:border-slate-700 transition-colors group/btn"
+          >
+            <span>Project Details & Architecture</span>
+            <ArrowRight size={13} className="group-hover/btn:translate-x-1 transition-transform" />
+          </Link>
         </div>
       </div>
     </div>
