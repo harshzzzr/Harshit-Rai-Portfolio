@@ -23,6 +23,9 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProjectManager from '../components/admin/ProjectManager';
+import SkillManager from '../components/admin/SkillManager';
+import EducationManager from '../components/admin/EducationManager';
+import TimelineManager from '../components/admin/TimelineManager';
 
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -33,6 +36,8 @@ export default function AdminDashboardPage() {
     skillCategories: 0,
     education: 0,
     experience: 0,
+    hackathons: 0,
+    research: 0,
     achievements: 0,
     certifications: 0,
     messages: 0,
@@ -90,6 +95,8 @@ export default function AdminDashboardPage() {
         skillCategories: skillCats.length,
         education: eduList.length,
         experience: (timeData.experience || []).length,
+        hackathons: (timeData.hackathons || []).length,
+        research: (timeData.research || []).length,
         achievements: (timeData.achievements || []).length,
         certifications: (timeData.certifications || []).length,
         messages: messagesCount,
@@ -313,7 +320,7 @@ export default function AdminDashboardPage() {
 
                   <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex justify-between text-xs text-slate-500">
                     <span>Education: {counts.education} degree program</span>
-                    <span>Milestones: {counts.experience + counts.achievements + counts.certifications} entries</span>
+                    <span>Milestones: {counts.experience + counts.hackathons + counts.research + counts.achievements + counts.certifications} entries</span>
                   </div>
                 </div>
               </div>
@@ -326,8 +333,38 @@ export default function AdminDashboardPage() {
           <ProjectManager onProjectChanged={fetchDashboardData} />
         )}
 
+        {/* Skills Management CRUD View */}
+        {activeTab === 'skills' && (
+          <SkillManager onSkillChanged={fetchDashboardData} />
+        )}
+
+        {/* Education Management CRUD View */}
+        {activeTab === 'education' && (
+          <EducationManager onEducationChanged={fetchDashboardData} />
+        )}
+
+        {/* Milestones Management CRUD View (Experience, Hackathons, Research, Achievements, Certifications) */}
+        {(activeTab === 'experience' ||
+          activeTab === 'hackathons' ||
+          activeTab === 'research' ||
+          activeTab === 'achievements' ||
+          activeTab === 'certifications') && (
+          <TimelineManager
+            initialType={activeTab}
+            onTimelineChanged={fetchDashboardData}
+          />
+        )}
+
         {/* Dedicated Section Placeholders for remaining sidebar tabs */}
-        {activeTab !== 'dashboard' && activeTab !== 'projects' && (
+        {activeTab !== 'dashboard' &&
+          activeTab !== 'projects' &&
+          activeTab !== 'skills' &&
+          activeTab !== 'education' &&
+          activeTab !== 'experience' &&
+          activeTab !== 'hackathons' &&
+          activeTab !== 'research' &&
+          activeTab !== 'achievements' &&
+          activeTab !== 'certifications' && (
           <div className="p-8 sm:p-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-6 shadow-sm animate-fade-in">
             <div className="w-16 h-16 rounded-2xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 mx-auto flex items-center justify-center">
               <Sliders size={32} />
@@ -338,7 +375,6 @@ export default function AdminDashboardPage() {
                 {activeTab} Management
               </h2>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                {(activeTab === 'skills' || activeTab === 'education' || activeTab === 'experience' || activeTab === 'achievements' || activeTab === 'certifications') && 'Content Management CRUD controls for this section will be activated in Version 3.3.'}
                 {activeTab === 'messages' && 'Message Inbox, mark read, archive, and delete operations will be activated in Version 4.1.'}
                 {activeTab === 'feedback' && 'Testimonial moderation and feedback approval controls will be activated in Version 5.1.'}
                 {activeTab === 'settings' && 'Administrator preferences and Firebase environment status settings.'}
@@ -347,7 +383,7 @@ export default function AdminDashboardPage() {
 
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-mono text-slate-600 dark:text-slate-300">
               <CheckCircle2 size={14} className="text-emerald-500" />
-              <span>Section verified in v3.1 sidebar navigation</span>
+              <span>Section verified in v3.3 navigation</span>
             </div>
 
             <div className="pt-2">

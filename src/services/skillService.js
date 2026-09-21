@@ -3,6 +3,9 @@ import {
   getDocs,
   doc,
   setDoc,
+  updateDoc,
+  deleteDoc,
+  serverTimestamp,
   query,
   where,
   orderBy
@@ -46,6 +49,35 @@ export const defaultSkillsList = [
   { id: 'skill-unity', name: 'Unity', category: 'Other', icon: 'Layers', order: 18, visible: true },
 ];
 
+const LOCAL_SKILLS_KEY = 'harshit_portfolio_custom_skills';
+
+/**
+ * Get stored local skills from localStorage
+ */
+function getStoredLocalSkills() {
+  if (typeof window === 'undefined') return defaultSkillsList;
+  try {
+    const raw = localStorage.getItem(LOCAL_SKILLS_KEY);
+    if (!raw) return defaultSkillsList;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultSkillsList;
+  } catch {
+    return defaultSkillsList;
+  }
+}
+
+/**
+ * Save stored local skills to localStorage
+ */
+function saveStoredLocalSkills(skills) {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(LOCAL_SKILLS_KEY, JSON.stringify(skills));
+  } catch (e) {
+    console.warn('[SkillService] Failed to cache local skills:', e);
+  }
+}
+
 /**
  * Groups flat skill array into ordered categories
  */
@@ -88,9 +120,10 @@ export function groupSkillsByCategory(skillsArray) {
  */
 export async function getSkills() {
   if (!isFirebaseConfigured || !db) {
+    const local = getStoredLocalSkills().sort((a, b) => (a.order || 99) - (b.order || 99));
     return {
-      data: groupSkillsByCategory(defaultSkillsList),
-      rawList: defaultSkillsList,
+      data: groupSkillsByCategory(local),
+      rawList: local,
       error: null,
       isLive: false,
     };
@@ -108,9 +141,10 @@ export async function getSkills() {
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
+      const local = getStoredLocalSkills().sort((a, b) => (a.order || 99) - (b.order || 99));
       return {
-        data: groupSkillsByCategory(defaultSkillsList),
-        rawList: defaultSkillsList,
+        data: groupSkillsByCategory(local),
+        rawList: local,
         error: null,
         isLive: false,
       };
@@ -124,7 +158,9 @@ export async function getSkills() {
       order: typeof docSnap.data().order === 'number' ? docSnap.data().order : 99,
       visible: docSnap.data().visible !== false,
       ...docSnap.data()
-    }));
+    })).sort((a, b) => (a.order || 99) - (b.order || 99));
+
+    saveStoredLocalSkills(skills);
 
     return {
       data: groupSkillsByCategory(skills),
@@ -134,13 +170,132 @@ export async function getSkills() {
     };
   } catch (err) {
     console.warn('[Firebase] Firestore getSkills error, using fallback:', err.message);
+    const local = getStoredLocalSkills().sort((a, b) => (a.order || 99) - (b.order || 99));
     return {
-      data: groupSkillsByCategory(defaultSkillsList),
-      rawList: defaultSkillsList,
+      data: groupSkillsByCategory(local),
+      rawList: local,
       error: `Operating in fallback mode (${err.message})`,
       isLive: false,
     };
   }
+}
+
+/**
+ * CREATE a new skill
+ */
+export async function createSkill(skillInput) {
+  const id = (skillInput.id || `skill-${skillInput.name || Date.now()}`)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+
+  const newSkill = {
+    id,
+    name: skillInput.name || 'New Skill',
+    category: skillInput.category || 'Other',
+    icon: skillInput.icon || 'Code',
+    order: Number(skillInput.order) || 99,
+    visible: skillInput.visible !== false,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  const localList = getStoredLocalSkills();
+  const existingIdx = localList.findIndex((s) => s.id === id);
+  if (existingIdx >= 0) {
+    localList[existingIdx] = newSkill;
+  } else {
+    localList.push(newSkill);
+  }
+  saveStoredLocalSkills(localList);
+
+  if (!isFirebaseConfigured || !db) {
+    return { success: true, data: newSkill, isLive: false };
+  }
+
+  try {
+    const docRef = doc(db, COLLECTIONS.SKILLS, id);
+    await setDoc(docRef, {
+      ...newSkill,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    return { success: true, data: newSkill, isLive: true };
+  } catch (err) {
+    console.error('[Firebase] createSkill error:', err);
+    return { success: false, error: err.message, data: newSkill };
+  }
+}
+
+/**
+ * UPDATE an existing skill
+ */
+export async function updateSkill(skillId, updateData) {
+  if (!skillId) return { success: false, error: 'Skill ID is required' };
+
+  const localList = getStoredLocalSkills();
+  const index = localList.findIndex((s) => s.id === skillId);
+  let updatedSkill = null;
+
+  if (index >= 0) {
+    updatedSkill = {
+      ...localList[index],
+      ...updateData,
+      order: updateData.order !== undefined ? Number(updateData.order) : localList[index].order,
+      visible: updateData.visible !== undefined ? Boolean(updateData.visible) : localList[index].visible,
+      updatedAt: new Date().toISOString(),
+    };
+    localList[index] = updatedSkill;
+    saveStoredLocalSkills(localList);
+  }
+
+  if (!isFirebaseConfigured || !db) {
+    return { success: true, data: updatedSkill, isLive: false };
+  }
+
+  try {
+    const docRef = doc(db, COLLECTIONS.SKILLS, skillId);
+    await updateDoc(docRef, {
+      ...updateData,
+      updatedAt: serverTimestamp(),
+    });
+    return { success: true, data: updatedSkill, isLive: true };
+  } catch (err) {
+    console.error('[Firebase] updateSkill error:', err);
+    return { success: false, error: err.message };
+  }
+}
+
+/**
+ * DELETE a skill
+ */
+export async function deleteSkill(skillId) {
+  if (!skillId) return { success: false, error: 'Skill ID is required' };
+
+  const localList = getStoredLocalSkills();
+  const filtered = localList.filter((s) => s.id !== skillId);
+  saveStoredLocalSkills(filtered);
+
+  if (!isFirebaseConfigured || !db) {
+    return { success: true, isLive: false };
+  }
+
+  try {
+    const docRef = doc(db, COLLECTIONS.SKILLS, skillId);
+    await deleteDoc(docRef);
+    return { success: true, isLive: true };
+  } catch (err) {
+    console.error('[Firebase] deleteSkill error:', err);
+    return { success: false, error: err.message };
+  }
+}
+
+/**
+ * Toggle skill visibility
+ */
+export async function toggleSkillVisibility(skillId, currentVisible) {
+  return updateSkill(skillId, { visible: !currentVisible });
 }
 
 /**

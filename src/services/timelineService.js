@@ -3,6 +3,9 @@ import {
   getDocs,
   doc,
   setDoc,
+  updateDoc,
+  deleteDoc,
+  serverTimestamp,
   query,
   where,
   orderBy
@@ -147,13 +150,69 @@ export function groupTimelineByType(items) {
   return grouped;
 }
 
+const LOCAL_EDUCATION_KEY = 'harshit_portfolio_custom_education';
+const LOCAL_TIMELINE_KEY = 'harshit_portfolio_custom_timeline';
+
+/**
+ * Local storage cache helpers for Education
+ */
+function getStoredLocalEducation() {
+  if (typeof window === 'undefined') return defaultEducation;
+  try {
+    const raw = localStorage.getItem(LOCAL_EDUCATION_KEY);
+    if (!raw) return defaultEducation;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultEducation;
+  } catch {
+    return defaultEducation;
+  }
+}
+
+function saveStoredLocalEducation(list) {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(LOCAL_EDUCATION_KEY, JSON.stringify(list));
+  } catch (e) {
+    console.warn('[TimelineService] Failed to cache local education:', e);
+  }
+}
+
+/**
+ * Local storage cache helpers for Timeline Items
+ */
+function getStoredLocalTimeline() {
+  if (typeof window === 'undefined') return defaultTimelineItems;
+  try {
+    const raw = localStorage.getItem(LOCAL_TIMELINE_KEY);
+    if (!raw) return defaultTimelineItems;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultTimelineItems;
+  } catch {
+    return defaultTimelineItems;
+  }
+}
+
+function saveStoredLocalTimeline(list) {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(LOCAL_TIMELINE_KEY, JSON.stringify(list));
+  } catch (e) {
+    console.warn('[TimelineService] Failed to cache local timeline:', e);
+  }
+}
+
 /**
  * Fetch Education records from Firestore
  */
-export async function getEducation() {
+export async function getEducation(options = {}) {
+  const { includeHidden = false } = options;
+
   if (!isFirebaseConfigured || !db) {
+    const local = getStoredLocalEducation().sort((a, b) => (a.order || 99) - (b.order || 99));
+    const filtered = includeHidden ? local : local.filter((item) => item.visible !== false);
     return {
-      data: defaultEducation,
+      data: filtered,
+      rawList: local,
       error: null,
       isLive: false,
     };
@@ -171,8 +230,11 @@ export async function getEducation() {
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
+      const local = getStoredLocalEducation().sort((a, b) => (a.order || 99) - (b.order || 99));
+      const filtered = includeHidden ? local : local.filter((item) => item.visible !== false);
       return {
-        data: defaultEducation,
+        data: filtered,
+        rawList: local,
         error: null,
         isLive: false,
       };
@@ -183,18 +245,25 @@ export async function getEducation() {
         id: docSnap.id,
         ...docSnap.data(),
       }))
-      .filter((item) => item.visible !== false)
       .sort((a, b) => (a.order || 99) - (b.order || 99));
 
+    saveStoredLocalEducation(list);
+
+    const filtered = includeHidden ? list : list.filter((item) => item.visible !== false);
+
     return {
-      data: list.length > 0 ? list : defaultEducation,
+      data: filtered,
+      rawList: list,
       error: null,
       isLive: true,
     };
   } catch (err) {
     console.warn('[Firebase] Firestore getEducation error, using fallback:', err.message);
+    const local = getStoredLocalEducation().sort((a, b) => (a.order || 99) - (b.order || 99));
+    const filtered = includeHidden ? local : local.filter((item) => item.visible !== false);
     return {
-      data: defaultEducation,
+      data: filtered,
+      rawList: local,
       error: `Operating in fallback mode (${err.message})`,
       isLive: false,
     };
@@ -202,33 +271,167 @@ export async function getEducation() {
 }
 
 /**
+ * CREATE Education Record
+ */
+export async function createEducation(eduInput) {
+  const id = (eduInput.id || `edu-${Date.now()}`)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+
+  const newEdu = {
+    id,
+    degree: eduInput.degree || 'Degree Program',
+    institution: eduInput.institution || 'Institution Name',
+    status: eduInput.status || 'Graduated',
+    highlights: Array.isArray(eduInput.highlights)
+      ? eduInput.highlights
+      : (typeof eduInput.highlights === 'string' ? eduInput.highlights.split('\n').map(s => s.trim()).filter(Boolean) : []),
+    courses: Array.isArray(eduInput.courses)
+      ? eduInput.courses
+      : (typeof eduInput.courses === 'string' ? eduInput.courses.split(',').map(s => s.trim()).filter(Boolean) : []),
+    order: Number(eduInput.order) || 99,
+    visible: eduInput.visible !== false,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  const localList = getStoredLocalEducation();
+  const existingIdx = localList.findIndex((e) => e.id === id);
+  if (existingIdx >= 0) {
+    localList[existingIdx] = newEdu;
+  } else {
+    localList.push(newEdu);
+  }
+  saveStoredLocalEducation(localList);
+
+  if (!isFirebaseConfigured || !db) {
+    return { success: true, data: newEdu, isLive: false };
+  }
+
+  try {
+    const docRef = doc(db, COLLECTIONS.EDUCATION, id);
+    await setDoc(docRef, {
+      ...newEdu,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    return { success: true, data: newEdu, isLive: true };
+  } catch (err) {
+    console.error('[Firebase] createEducation error:', err);
+    return { success: false, error: err.message, data: newEdu };
+  }
+}
+
+/**
+ * UPDATE Education Record
+ */
+export async function updateEducation(eduId, updateData) {
+  if (!eduId) return { success: false, error: 'Education ID is required' };
+
+  const localList = getStoredLocalEducation();
+  const index = localList.findIndex((e) => e.id === eduId);
+  let updatedRecord = null;
+
+  if (index >= 0) {
+    updatedRecord = {
+      ...localList[index],
+      ...updateData,
+      order: updateData.order !== undefined ? Number(updateData.order) : localList[index].order,
+      visible: updateData.visible !== undefined ? Boolean(updateData.visible) : localList[index].visible,
+      highlights: updateData.highlights !== undefined
+        ? (Array.isArray(updateData.highlights) ? updateData.highlights : updateData.highlights.split('\n').map(s => s.trim()).filter(Boolean))
+        : localList[index].highlights,
+      courses: updateData.courses !== undefined
+        ? (Array.isArray(updateData.courses) ? updateData.courses : updateData.courses.split(',').map(s => s.trim()).filter(Boolean))
+        : localList[index].courses,
+      updatedAt: new Date().toISOString(),
+    };
+    localList[index] = updatedRecord;
+    saveStoredLocalEducation(localList);
+  }
+
+  if (!isFirebaseConfigured || !db) {
+    return { success: true, data: updatedRecord, isLive: false };
+  }
+
+  try {
+    const docRef = doc(db, COLLECTIONS.EDUCATION, eduId);
+    await updateDoc(docRef, {
+      ...updateData,
+      updatedAt: serverTimestamp(),
+    });
+    return { success: true, data: updatedRecord, isLive: true };
+  } catch (err) {
+    console.error('[Firebase] updateEducation error:', err);
+    return { success: false, error: err.message };
+  }
+}
+
+/**
+ * DELETE Education Record
+ */
+export async function deleteEducation(eduId) {
+  if (!eduId) return { success: false, error: 'Education ID is required' };
+
+  const localList = getStoredLocalEducation();
+  const filtered = localList.filter((e) => e.id !== eduId);
+  saveStoredLocalEducation(filtered);
+
+  if (!isFirebaseConfigured || !db) {
+    return { success: true, isLive: false };
+  }
+
+  try {
+    const docRef = doc(db, COLLECTIONS.EDUCATION, eduId);
+    await deleteDoc(docRef);
+    return { success: true, isLive: true };
+  } catch (err) {
+    console.error('[Firebase] deleteEducation error:', err);
+    return { success: false, error: err.message };
+  }
+}
+
+/**
+ * Toggle Education Visibility
+ */
+export async function toggleEducationVisibility(eduId, currentVisible) {
+  return updateEducation(eduId, { visible: !currentVisible });
+}
+
+/**
  * Fetch all Timeline records (Experience, Hackathons, Research, Achievements, Certifications)
  */
-export async function getTimelineData() {
+export async function getTimelineData(options = {}) {
+  const { includeHidden = false } = options;
+
   if (!isFirebaseConfigured || !db) {
+    const local = getStoredLocalTimeline().sort((a, b) => (a.order || 99) - (b.order || 99));
+    const items = includeHidden ? local : local.filter((item) => item.visible !== false);
     return {
-      data: groupTimelineByType(defaultTimelineItems),
-      rawList: defaultTimelineItems,
+      data: groupTimelineByType(items),
+      rawList: local,
       error: null,
       isLive: false,
     };
   }
 
   try {
-    // Attempt reading from unified 'timeline' or 'experience'
     const timelineRef = collection(db, 'timeline');
     let snapshot = await getDocs(timelineRef);
 
     if (snapshot.empty) {
-      // Also check COLLECTIONS.EXPERIENCE
       const expRef = collection(db, COLLECTIONS.EXPERIENCE);
       snapshot = await getDocs(expRef);
     }
 
     if (snapshot.empty) {
+      const local = getStoredLocalTimeline().sort((a, b) => (a.order || 99) - (b.order || 99));
+      const items = includeHidden ? local : local.filter((item) => item.visible !== false);
       return {
-        data: groupTimelineByType(defaultTimelineItems),
-        rawList: defaultTimelineItems,
+        data: groupTimelineByType(items),
+        rawList: local,
         error: null,
         isLive: false,
       };
@@ -237,23 +440,150 @@ export async function getTimelineData() {
     const items = snapshot.docs.map((docSnap) => ({
       id: docSnap.id,
       ...docSnap.data(),
-    }));
+    })).sort((a, b) => (a.order || 99) - (b.order || 99));
+
+    saveStoredLocalTimeline(items);
+
+    const filtered = includeHidden ? items : items.filter((item) => item.visible !== false);
 
     return {
-      data: groupTimelineByType(items),
+      data: groupTimelineByType(filtered),
       rawList: items,
       error: null,
       isLive: true,
     };
   } catch (err) {
     console.warn('[Firebase] Firestore getTimelineData error, using fallback:', err.message);
+    const local = getStoredLocalTimeline().sort((a, b) => (a.order || 99) - (b.order || 99));
+    const items = includeHidden ? local : local.filter((item) => item.visible !== false);
     return {
-      data: groupTimelineByType(defaultTimelineItems),
-      rawList: defaultTimelineItems,
+      data: groupTimelineByType(items),
+      rawList: local,
       error: `Operating in fallback mode (${err.message})`,
       isLive: false,
     };
   }
+}
+
+/**
+ * CREATE Timeline Item (Experience, Hackathons, Research, Achievements, Certifications)
+ */
+export async function createTimelineItem(itemInput) {
+  const id = (itemInput.id || `${itemInput.type || 'timeline'}-${Date.now()}`)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+
+  const newItem = {
+    id,
+    type: itemInput.type || 'experience',
+    title: itemInput.title || 'Untitled Milestone',
+    role: itemInput.role || '',
+    period: itemInput.period || '',
+    organization: itemInput.organization || '',
+    description: itemInput.description || '',
+    order: Number(itemInput.order) || 99,
+    visible: itemInput.visible !== false,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  const localList = getStoredLocalTimeline();
+  const existingIdx = localList.findIndex((i) => i.id === id);
+  if (existingIdx >= 0) {
+    localList[existingIdx] = newItem;
+  } else {
+    localList.push(newItem);
+  }
+  saveStoredLocalTimeline(localList);
+
+  if (!isFirebaseConfigured || !db) {
+    return { success: true, data: newItem, isLive: false };
+  }
+
+  try {
+    const docRef = doc(db, 'timeline', id);
+    await setDoc(docRef, {
+      ...newItem,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    return { success: true, data: newItem, isLive: true };
+  } catch (err) {
+    console.error('[Firebase] createTimelineItem error:', err);
+    return { success: false, error: err.message, data: newItem };
+  }
+}
+
+/**
+ * UPDATE Timeline Item
+ */
+export async function updateTimelineItem(itemId, updateData) {
+  if (!itemId) return { success: false, error: 'Timeline Item ID is required' };
+
+  const localList = getStoredLocalTimeline();
+  const index = localList.findIndex((i) => i.id === itemId);
+  let updatedItem = null;
+
+  if (index >= 0) {
+    updatedItem = {
+      ...localList[index],
+      ...updateData,
+      order: updateData.order !== undefined ? Number(updateData.order) : localList[index].order,
+      visible: updateData.visible !== undefined ? Boolean(updateData.visible) : localList[index].visible,
+      updatedAt: new Date().toISOString(),
+    };
+    localList[index] = updatedItem;
+    saveStoredLocalTimeline(localList);
+  }
+
+  if (!isFirebaseConfigured || !db) {
+    return { success: true, data: updatedItem, isLive: false };
+  }
+
+  try {
+    const docRef = doc(db, 'timeline', itemId);
+    await updateDoc(docRef, {
+      ...updateData,
+      updatedAt: serverTimestamp(),
+    });
+    return { success: true, data: updatedItem, isLive: true };
+  } catch (err) {
+    console.error('[Firebase] updateTimelineItem error:', err);
+    return { success: false, error: err.message };
+  }
+}
+
+/**
+ * DELETE Timeline Item
+ */
+export async function deleteTimelineItem(itemId) {
+  if (!itemId) return { success: false, error: 'Timeline Item ID is required' };
+
+  const localList = getStoredLocalTimeline();
+  const filtered = localList.filter((i) => i.id !== itemId);
+  saveStoredLocalTimeline(filtered);
+
+  if (!isFirebaseConfigured || !db) {
+    return { success: true, isLive: false };
+  }
+
+  try {
+    const docRef = doc(db, 'timeline', itemId);
+    await deleteDoc(docRef);
+    return { success: true, isLive: true };
+  } catch (err) {
+    console.error('[Firebase] deleteTimelineItem error:', err);
+    return { success: false, error: err.message };
+  }
+}
+
+/**
+ * Toggle Timeline Item Visibility
+ */
+export async function toggleTimelineItemVisibility(itemId, currentVisible) {
+  return updateTimelineItem(itemId, { visible: !currentVisible });
 }
 
 /**
@@ -285,3 +615,4 @@ export async function seedFirestoreTimeline() {
     return { success: false, error: err.message };
   }
 }
+

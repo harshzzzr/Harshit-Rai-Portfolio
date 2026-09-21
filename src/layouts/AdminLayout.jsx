@@ -10,6 +10,8 @@ import {
   Briefcase,
   Award,
   BookmarkCheck,
+  Trophy,
+  BookOpen,
   Mail,
   MessageSquareQuote,
   Settings,
@@ -28,6 +30,8 @@ export const ADMIN_TABS = [
   { id: 'skills', label: 'Skills', icon: Code },
   { id: 'education', label: 'Education', icon: GraduationCap },
   { id: 'experience', label: 'Experience', icon: Briefcase },
+  { id: 'hackathons', label: 'Hackathons', icon: Trophy },
+  { id: 'research', label: 'Research', icon: BookOpen },
   { id: 'achievements', label: 'Achievements', icon: Award },
   { id: 'certifications', label: 'Certifications', icon: BookmarkCheck },
   { id: 'messages', label: 'Messages', icon: Mail },
@@ -73,7 +77,7 @@ export default function AdminLayout({ activeTab, onSelectTab, children }) {
             <ShieldCheck size={20} className="text-primary-600 dark:text-primary-400" />
             <span>Admin Console</span>
             <span className="hidden sm:inline-block text-xs font-mono px-2 py-0.5 rounded bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800">
-              v3.1
+              v3.3
             </span>
           </Link>
         </div>
