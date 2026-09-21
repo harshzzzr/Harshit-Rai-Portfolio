@@ -1,5 +1,6 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -21,14 +22,16 @@ export const isFirebaseConfigured = Boolean(
 
 let app = null;
 let db = null;
+let storage = null;
 
 if (isFirebaseConfigured) {
   try {
     app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
     db = getFirestore(app);
+    storage = getStorage(app);
   } catch (error) {
     console.warn('[Firebase] Initialization notice:', error.message);
   }
 }
 
-export { app, db };
+export { app, db, storage };

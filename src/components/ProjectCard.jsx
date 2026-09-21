@@ -2,9 +2,24 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ExternalLink, Sparkles, FolderGit2, ArrowRight } from 'lucide-react';
 import { GithubIcon } from './Icons';
+import SafeImage from './SafeImage';
 
 export default function ProjectCard({ project }) {
-  const { id, title, description, technologies, featured, githubUrl, liveUrl, badge } = project;
+  const { id, title, description, technologies, featured, githubUrl, liveUrl, badge, image } = project;
+
+  const fallbackBanner = (
+    <div className="relative h-44 w-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-950 flex items-center justify-center border-b border-slate-200 dark:border-slate-800 overflow-hidden">
+      <div className="absolute inset-0 opacity-20 dark:opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]" />
+      <div className="flex flex-col items-center gap-2 z-10 transition-transform duration-300 group-hover:scale-105">
+        <div className="p-3 rounded-xl bg-white dark:bg-slate-900/90 shadow-sm border border-slate-200 dark:border-slate-700 text-primary-600 dark:text-primary-400">
+          <FolderGit2 size={32} />
+        </div>
+        <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400 tracking-wide">
+          {badge || 'Project Architecture'}
+        </span>
+      </div>
+    </div>
+  );
 
   return (
     <div
@@ -14,24 +29,22 @@ export default function ProjectCard({ project }) {
           : 'border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700'
       }`}
     >
-      {/* Visual Header / Image Preview */}
+      {/* Visual Header / Image Preview with Fallback */}
       <Link
         to={`/projects/${id}`}
-        className="block relative h-44 w-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-950 flex items-center justify-center border-b border-slate-200 dark:border-slate-800 overflow-hidden cursor-pointer"
+        className="block relative h-44 w-full border-b border-slate-200 dark:border-slate-800 overflow-hidden cursor-pointer"
         title={`View details for ${title}`}
       >
-        {/* Subtle grid pattern overlay */}
-        <div className="absolute inset-0 opacity-20 dark:opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]" />
-        
-        {/* Project Card Icon Banner */}
-        <div className="flex flex-col items-center gap-2 z-10 transition-transform duration-300 group-hover:scale-105">
-          <div className="p-3 rounded-xl bg-white dark:bg-slate-900/90 shadow-sm border border-slate-200 dark:border-slate-700 text-primary-600 dark:text-primary-400">
-            <FolderGit2 size={32} />
-          </div>
-          <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400 tracking-wide">
-            {badge || 'Project Architecture'}
-          </span>
-        </div>
+        {image ? (
+          <SafeImage
+            src={image}
+            alt={title}
+            className="w-full h-44"
+            fallbackComponent={fallbackBanner}
+          />
+        ) : (
+          fallbackBanner
+        )}
 
         {/* Featured Tag */}
         {featured && (

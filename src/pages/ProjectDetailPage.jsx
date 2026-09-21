@@ -17,6 +17,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { GithubIcon } from '../components/Icons';
+import SafeImage from '../components/SafeImage';
 
 export default function ProjectDetailPage() {
   const { projectId } = useParams();
@@ -281,7 +282,16 @@ export default function ProjectDetailPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {project.screenshots.map((shot, idx) => (
                   <div key={idx} className="rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800">
-                    <img src={shot.url} alt={shot.caption || `Screenshot ${idx + 1}`} className="w-full h-auto object-cover" />
+                    <SafeImage
+                      src={shot.url || shot}
+                      alt={shot.caption || `Screenshot ${idx + 1}`}
+                      className="w-full h-auto min-h-[160px] object-cover"
+                      fallbackComponent={
+                        <div className="h-40 flex items-center justify-center text-slate-400 text-xs font-mono">
+                          Image preview unavailable
+                        </div>
+                      }
+                    />
                     {shot.caption && (
                       <p className="p-2 text-xs font-mono text-slate-500 text-center">{shot.caption}</p>
                     )}

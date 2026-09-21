@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowDown, FileText } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, LeetcodeIcon, SpotifyIcon } from './Icons';
 import { personalInfo } from '../data/portfolioData';
+import SafeImage from './SafeImage';
 
 export default function Hero() {
   return (
@@ -13,6 +14,17 @@ export default function Hero() {
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl pointer-events-none -z-10" />
 
       <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-in">
+        {/* Profile Image (Loaded from Firebase Storage when available) */}
+        {personalInfo.profileImage && (
+          <div className="mx-auto w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-primary-500/60 shadow-md">
+            <SafeImage
+              src={personalInfo.profileImage}
+              alt={personalInfo.name}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        )}
+
         {/* Intro Tag */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-primary-700 dark:text-primary-400">
           <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
