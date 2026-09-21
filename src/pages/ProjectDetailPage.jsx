@@ -139,7 +139,7 @@ export default function ProjectDetailPage() {
 
   const projectSeoTitle = `${project.title} | Harshit Rai Developer Portfolio`;
   const projectSeoDesc = project.shortDescription || project.description || `${project.title} software engineering project by Harshit Rai, built with ${(project.technologies || []).join(', ')}.`;
-  const projectCanonical = `https://harshitrai.dev/projects/${projectId}`;
+  const projectCanonical = `https://harshitrai.com/projects/${projectId}`;
   const projectJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareSourceCode',
@@ -151,7 +151,7 @@ export default function ProjectDetailPage() {
     'author': {
       '@type': 'Person',
       'name': 'Harshit Rai',
-      'url': 'https://harshitrai.dev'
+      'url': 'https://harshitrai.com'
     }
   };
 
@@ -162,7 +162,7 @@ export default function ProjectDetailPage() {
         description={projectSeoDesc}
         canonicalUrl={projectCanonical}
         ogType="article"
-        ogImage={project.image || 'https://harshitrai.dev/images/og-preview.png'}
+        ogImage={project.image || 'https://harshitrai.com/images/og-preview.png'}
         jsonLd={projectJsonLd}
       />
       {/* Top Back Navigation */}

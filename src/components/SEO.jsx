@@ -32,13 +32,16 @@ function setLinkTag(rel, href) {
  * SEO Component
  * Dynamically synchronizes document title, meta descriptions, canonical URLs,
  * Open Graph, Twitter cards, and JSON-LD structured data upon page transitions.
+ *
+ * Tailored for WhatsApp, LinkedIn, X (Twitter), Facebook, and Discord preview crawlers.
  */
 export default function SEO({
   title = 'Harshit Rai | Developer Portfolio',
-  description = 'Personal portfolio of Harshit Rai — Computer Engineering student and developer specializing in full-stack web applications, C++, system architecture, and algorithmic problem solving.',
-  canonicalUrl = 'https://harshitrai.dev/',
+  description = 'Explore the portfolio of Harshit Rai — Computer Engineering student and developer specializing in C++, React, Node.js, and high-performance software systems.',
+  canonicalUrl = 'https://harshitrai.com/',
   ogType = 'website',
-  ogImage = 'https://harshitrai.dev/images/og-preview.png',
+  ogImage = 'https://harshitrai.com/images/og-preview.png',
+  imageAlt = 'Harshit Rai - Developer Portfolio Preview',
   noindex = false,
   jsonLd = null
 }) {
@@ -55,24 +58,35 @@ export default function SEO({
       setLinkTag('canonical', canonicalUrl);
     }
 
-    // 4. Open Graph Metadata
+    // 4. Open Graph Metadata (LinkedIn, WhatsApp, Facebook, Discord)
     setMetaTag('property', 'og:site_name', 'Harshit Rai Developer Portfolio');
     setMetaTag('property', 'og:title', title);
     setMetaTag('property', 'og:description', description);
     setMetaTag('property', 'og:type', ogType);
+    setMetaTag('property', 'og:locale', 'en_US');
+
     if (canonicalUrl) {
       setMetaTag('property', 'og:url', canonicalUrl);
     }
+
     if (ogImage) {
       setMetaTag('property', 'og:image', ogImage);
+      setMetaTag('property', 'og:image:secure_url', ogImage);
+      setMetaTag('property', 'og:image:type', 'image/png');
+      setMetaTag('property', 'og:image:width', '1200');
+      setMetaTag('property', 'og:image:height', '630');
+      setMetaTag('property', 'og:image:alt', imageAlt);
     }
 
     // 5. Twitter / X Card Metadata
     setMetaTag('name', 'twitter:card', 'summary_large_image');
+    setMetaTag('name', 'twitter:site', '@harshitrai');
+    setMetaTag('name', 'twitter:creator', '@harshitrai');
     setMetaTag('name', 'twitter:title', title);
     setMetaTag('name', 'twitter:description', description);
     if (ogImage) {
       setMetaTag('name', 'twitter:image', ogImage);
+      setMetaTag('name', 'twitter:image:alt', imageAlt);
     }
 
     // 6. JSON-LD Structured Data
@@ -91,12 +105,12 @@ export default function SEO({
       scriptEl.remove();
     }
 
-    // Cleanup on unmount (revert to default portfolio title if needed)
+    // Cleanup on unmount
     return () => {
       const el = document.getElementById(SCRIPT_ID);
       if (el) el.remove();
     };
-  }, [title, description, canonicalUrl, ogType, ogImage, noindex, jsonLd]);
+  }, [title, description, canonicalUrl, ogType, ogImage, imageAlt, noindex, jsonLd]);
 
   return null;
 }
