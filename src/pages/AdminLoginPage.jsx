@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   LogOut
 } from 'lucide-react';
+import SEO from '../components/SEO';
 
 export default function AdminLoginPage() {
   const { login, logout, currentUser, isAuthenticated } = useAuth();
@@ -79,6 +80,7 @@ export default function AdminLoginPage() {
   if (isAuthenticated && currentUser) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
+        <SEO title="Admin Console | Harshit Rai Developer Portfolio" noindex={true} />
         <div className="max-w-md w-full p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-6 shadow-lg animate-fade-in">
           <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center">
             <ShieldCheck size={36} />
@@ -125,6 +127,7 @@ export default function AdminLoginPage() {
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">
+      <SEO title="Admin Login | Harshit Rai Developer Portfolio" noindex={true} />
       <div className="max-w-md w-full p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6 animate-fade-in">
         {/* Header */}
         <div className="text-center space-y-2">

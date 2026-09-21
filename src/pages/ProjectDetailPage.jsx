@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { GithubIcon } from '../components/Icons';
 import SafeImage from '../components/SafeImage';
+import SEO from '../components/SEO';
 
 export default function ProjectDetailPage() {
   const { projectId } = useParams();
@@ -107,6 +108,11 @@ export default function ProjectDetailPage() {
   if (!project) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center px-4">
+        <SEO
+          title="Project Not Found | Harshit Rai Developer Portfolio"
+          description="The requested project could not be found in the portfolio repository."
+          noindex={true}
+        />
         <div className="max-w-md w-full p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-5 shadow-lg animate-fade-in">
           <div className="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 mx-auto flex items-center justify-center">
             <AlertTriangle size={32} />
@@ -131,8 +137,34 @@ export default function ProjectDetailPage() {
     );
   }
 
+  const projectSeoTitle = `${project.title} | Harshit Rai Developer Portfolio`;
+  const projectSeoDesc = project.shortDescription || project.description || `${project.title} software engineering project by Harshit Rai, built with ${(project.technologies || []).join(', ')}.`;
+  const projectCanonical = `https://harshitrai.dev/projects/${projectId}`;
+  const projectJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareSourceCode',
+    'name': project.title,
+    'headline': project.tagline || project.title,
+    'description': projectSeoDesc,
+    'programmingLanguage': (project.technologies || []).join(', '),
+    'codeRepository': project.githubUrl || undefined,
+    'author': {
+      '@type': 'Person',
+      'name': 'Harshit Rai',
+      'url': 'https://harshitrai.dev'
+    }
+  };
+
   return (
     <article className="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-12 animate-fade-in">
+      <SEO
+        title={projectSeoTitle}
+        description={projectSeoDesc}
+        canonicalUrl={projectCanonical}
+        ogType="article"
+        ogImage={project.image || 'https://harshitrai.dev/images/og-preview.png'}
+        jsonLd={projectJsonLd}
+      />
       {/* Top Back Navigation */}
       <div>
         <Link

@@ -1,0 +1,10 @@
+# Robots.txt for Harshit Rai Portfolio
+# https://harshitrai.dev
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+# Sitemap Location
+Sitemap: https://harshitrai.dev/sitemap.xml

@@ -22,7 +22,7 @@ export default function ProjectCard({ project }) {
   );
 
   return (
-    <div
+    <article
       className={`group relative rounded-xl bg-white dark:bg-slate-900 border transition-all duration-300 flex flex-col justify-between overflow-hidden ${
         featured
           ? 'border-primary-500/40 dark:border-primary-500/30 shadow-md hover:shadow-xl hover:border-primary-500'
@@ -58,12 +58,14 @@ export default function ProjectCard({ project }) {
       {/* Content Area */}
       <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
         <div className="space-y-2">
-          <Link
-            to={`/projects/${id}`}
-            className="block text-xl font-bold tracking-tight text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors"
-          >
-            {title}
-          </Link>
+          <h3 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <Link
+              to={`/projects/${id}`}
+              className="block hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            >
+              {title}
+            </Link>
+          </h3>
           <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
             {description}
           </p>
@@ -133,6 +135,6 @@ export default function ProjectCard({ project }) {
           </Link>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

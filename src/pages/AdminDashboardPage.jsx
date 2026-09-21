@@ -34,6 +34,7 @@ import MessageManager from '../components/admin/MessageManager';
 import FeedbackManager from '../components/admin/FeedbackManager';
 import AnalyticsManager from '../components/admin/AnalyticsManager';
 import { getAnalyticsSummary } from '../services/analyticsService';
+import SEO from '../components/SEO';
 
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -118,6 +119,7 @@ export default function AdminDashboardPage() {
 
   return (
     <AdminLayout activeTab={activeTab} onSelectTab={setActiveTab}>
+      <SEO title="Admin Console | Harshit Rai Developer Portfolio" noindex={true} />
       <div className="max-w-6xl mx-auto space-y-8 animate-fade-in">
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
