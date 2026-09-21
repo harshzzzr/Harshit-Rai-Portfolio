@@ -3,30 +3,55 @@ import { personalInfo } from '../data/portfolioData';
 export const SPOTIFY_PROFILE_URL =
   import.meta.env.VITE_SPOTIFY_URL || personalInfo.socials.spotify || 'https://open.spotify.com/user/harshitrai';
 
+export const SPOTIFY_USERNAME =
+  import.meta.env.VITE_SPOTIFY_USERNAME || personalInfo.socials.spotifyUsername || 'harshitrai';
+
 export const CODING_SOUNDTRACKS = [
   {
+    id: 'track-1',
     title: 'Deep Focus & Ambient Electronics',
-    artist: 'Instrumental Coding Sessions',
-    genre: 'Ambient / Lo-Fi / Synthwave'
+    artist: 'Synthesized Flow & Algorithms',
+    album: 'Coding Sessions Vol. 1',
+    genre: 'Lo-Fi / Ambient / Synthwave',
+    songUrl: SPOTIFY_PROFILE_URL,
+    duration: 'Focus Track',
+    coverColor: 'from-emerald-600 to-teal-800'
   },
   {
-    title: 'Modern Classical & Piano Algorithms',
-    artist: 'High Productivity Flow',
-    genre: 'Classical Minimal'
+    id: 'track-2',
+    title: 'Minimal Piano & Algorithmic Reverie',
+    artist: 'Instrumental Productivity',
+    album: 'Architectural Thinking',
+    genre: 'Modern Classical',
+    songUrl: SPOTIFY_PROFILE_URL,
+    duration: 'Deep Work',
+    coverColor: 'from-blue-600 to-indigo-900'
   },
   {
-    title: 'Electronic Engineering Beats',
-    artist: 'Night Coding Sessions',
-    genre: 'Downtempo / Electronic'
+    id: 'track-3',
+    title: 'Night Systems & Downtempo Beats',
+    artist: 'Late Night Developer Sessions',
+    album: 'Zero Interruptions',
+    genre: 'Downtempo / Electronic',
+    songUrl: SPOTIFY_PROFILE_URL,
+    duration: 'Night Session',
+    coverColor: 'from-purple-600 to-slate-900'
   }
 ];
 
 /**
  * Architectural Currently-Playing Service
- * Designed to connect with Spotify Web API or serverless proxy (/api/spotify-now-playing)
- * when credentials (Client ID/Refresh Token) are configured.
  *
- * CRITICAL RULE: Fails gracefully without throwing errors or requiring site visitors to log in.
+ * SECURE ARCHITECTURE NOTE:
+ * Spotify's Web API (/v1/me/player/currently-playing) requires an OAuth 2.0 User Access Token.
+ * To adhere strictly to security best practices and prevent client secret exposure in public
+ * frontend bundles, live polling is routed through an optional backend proxy (e.g. Vercel /
+ * Cloud Functions: VITE_SPOTIFY_NOW_PLAYING_ENDPOINT).
+ *
+ * If no proxy is configured or the user is not actively streaming music:
+ * - Fails gracefully with isPlaying: false.
+ * - Displays a clean, attractive Spotify profile card with curated coding flow soundtracks.
+ * - Zero mandatory authentication or login wall for site visitors.
  */
 export async function getCurrentlyPlaying() {
   const customEndpoint = import.meta.env.VITE_SPOTIFY_NOW_PLAYING_ENDPOINT;
@@ -34,12 +59,13 @@ export async function getCurrentlyPlaying() {
   if (customEndpoint) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000);
+      const timeoutId = setTimeout(() => controller.abort(), 3500);
 
       const res = await fetch(customEndpoint, { signal: controller.signal });
       clearTimeout(timeoutId);
 
-      if (res.status === 204 || res.status > 400) {
+      // 204: No Content (Nothing currently playing)
+      if (res.status === 204) {
         return {
           isPlaying: false,
           status: 'idle',
@@ -48,27 +74,49 @@ export async function getCurrentlyPlaying() {
         };
       }
 
-      const data = await res.json();
-      return {
-        isPlaying: Boolean(data.isPlaying),
-        title: data.title || '',
-        artist: data.artist || '',
-        album: data.album || '',
-        albumImageUrl: data.albumImageUrl || '',
-        songUrl: data.songUrl || SPOTIFY_PROFILE_URL,
-        profileUrl: SPOTIFY_PROFILE_URL,
-        soundtracks: CODING_SOUNDTRACKS
-      };
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.item) {
+          return {
+            isPlaying: Boolean(data.is_playing),
+            title: data.item.name || 'Coding Track',
+            artist: (data.item.artists || []).map((a) => a.name).join(', ') || 'Various Artists',
+            album: data.item.album?.name || '',
+            albumImageUrl: data.item.album?.images?.[0]?.url || '',
+            songUrl: data.item.external_urls?.spotify || SPOTIFY_PROFILE_URL,
+            durationMs: data.item.duration_ms,
+            progressMs: data.progress_ms,
+            profileUrl: SPOTIFY_PROFILE_URL,
+            soundtracks: CODING_SOUNDTRACKS
+          };
+        } else if (data && data.title) {
+          // Custom formatted response from serverless function
+          return {
+            isPlaying: Boolean(data.isPlaying),
+            title: data.title,
+            artist: data.artist || 'Various Artists',
+            album: data.album || '',
+            albumImageUrl: data.albumImageUrl || '',
+            songUrl: data.songUrl || SPOTIFY_PROFILE_URL,
+            profileUrl: SPOTIFY_PROFILE_URL,
+            soundtracks: CODING_SOUNDTRACKS
+          };
+        }
+      }
     } catch {
-      // Fall through to idle state
+      // Graceful offline/network failure
     }
   }
 
-  // Graceful unconfigured / idle state
+  // Clean offline / curated focus listening mode
   return {
     isPlaying: false,
     status: 'idle',
-    label: 'Focus & Productivity Audio',
+    title: 'Focused Development Soundtracks',
+    artist: 'Instrumental & Electronic Lo-Fi',
+    album: 'Deep Work Atmosphere',
+    albumImageUrl: null,
+    songUrl: SPOTIFY_PROFILE_URL,
     profileUrl: SPOTIFY_PROFILE_URL,
     soundtracks: CODING_SOUNDTRACKS
   };

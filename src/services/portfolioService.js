@@ -46,6 +46,8 @@ export {
 } from './leetcodeService';
 export {
   getCurrentlyPlaying,
+  CODING_SOUNDTRACKS,
+  SPOTIFY_USERNAME,
   SPOTIFY_PROFILE_URL
 } from './spotifyService';
 

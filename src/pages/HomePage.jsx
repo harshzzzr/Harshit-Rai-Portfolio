@@ -8,6 +8,7 @@ import LeetCodeSection from '../components/LeetCodeSection';
 import Education from '../components/Education';
 import Experience from '../components/Experience';
 import SocialProfiles from '../components/SocialProfiles';
+import SpotifySection from '../components/SpotifySection';
 import Feedback from '../components/Feedback';
 import Contact from '../components/Contact';
 
@@ -23,6 +24,7 @@ export default function HomePage() {
       <Education />
       <Experience />
       <SocialProfiles />
+      <SpotifySection />
       <Feedback />
       <Contact />
     </div>
