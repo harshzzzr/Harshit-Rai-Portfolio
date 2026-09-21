@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Send, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Mail, MapPin, Send, CheckCircle2, AlertCircle, RefreshCw, X, ShieldCheck } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+import { submitContactMessage } from '../services/messageService';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ export default function Contact() {
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [serverError, setServerError] = useState(null);
 
   const validate = () => {
     const newErrors = {};
@@ -51,9 +53,12 @@ export default function Contact() {
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
+    if (serverError) {
+      setServerError(null);
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
 
@@ -63,14 +68,26 @@ export default function Contact() {
     }
 
     setIsSubmitting(true);
+    setServerError(null);
 
-    // Client-side simulation of message submission (Firebase will be integrated in v2.0)
-    setTimeout(() => {
+    try {
+      const res = await submitContactMessage(formData);
+
+      if (res.success) {
+        setIsSubmitted(true);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        setErrors({});
+      } else {
+        if (res.fieldErrors) {
+          setErrors(res.fieldErrors);
+        }
+        setServerError(res.error || 'Failed to send message. Please try again.');
+      }
+    } catch (err) {
+      setServerError(err.message || 'Network error while delivering your message. Please try again.');
+    } finally {
       setIsSubmitting(false);
-      setIsSubmitted(true);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      setErrors({});
-    }, 600);
+    }
   };
 
   return (
@@ -132,30 +149,60 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-xs font-mono text-slate-500 dark:text-slate-400">
-              ⚡ Status: Visual contact form initialized with client validation. Real-time Firebase persistence connects in Version 2.0.
+            <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-xs font-mono text-slate-500 dark:text-slate-400 space-y-1">
+              <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold">
+                <ShieldCheck size={14} />
+                <span>Cloud Firestore Connected</span>
+              </div>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Messages are delivered securely to Firestore `messages` and protected from public access.
+              </p>
             </div>
           </div>
 
           {/* Right Column: Visual Contact Form */}
           <div className="lg:col-span-7 p-6 sm:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+            {serverError && (
+              <div className="mb-5 p-4 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800/80 text-rose-800 dark:text-rose-200 text-xs sm:text-sm flex items-start justify-between gap-3 animate-fade-in">
+                <div className="flex items-start gap-2.5">
+                  <AlertCircle size={18} className="shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" />
+                  <div className="space-y-0.5">
+                    <p className="font-semibold">Unable to send message</p>
+                    <p className="text-xs opacity-90">{serverError}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setServerError(null)}
+                  className="text-rose-500 hover:text-rose-700 dark:hover:text-rose-300 p-1 cursor-pointer"
+                  title="Dismiss alert"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            )}
+
             {isSubmitted ? (
               <div className="text-center py-10 space-y-4 animate-fade-in">
                 <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center">
                   <CheckCircle2 size={32} />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                  Message Sent Successfully!
+                  Message Delivered Successfully!
                 </h3>
-                <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto">
-                  Thank you for reaching out. Your message has passed frontend validation and will be saved to Cloud Firestore when backend integration is activated.
+                <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+                  Thank you for reaching out! Your message has been safely saved to Cloud Firestore with an unread status. I'll get back to you as soon as possible.
                 </p>
-                <button
-                  onClick={() => setIsSubmitted(false)}
-                  className="mt-4 px-5 py-2.5 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold transition-colors"
-                >
-                  Send Another Message
-                </button>
+                <div className="pt-2">
+                  <button
+                    onClick={() => {
+                      setIsSubmitted(false);
+                      setServerError(null);
+                    }}
+                    className="px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold transition-colors cursor-pointer shadow-sm"
+                  >
+                    Send Another Message
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} noValidate className="space-y-4">
@@ -169,6 +216,7 @@ export default function Contact() {
                       type="text"
                       id="name"
                       name="name"
+                      disabled={isSubmitting}
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="e.g. John Doe"
@@ -176,7 +224,7 @@ export default function Contact() {
                         errors.name
                           ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
                           : 'border-slate-200 dark:border-slate-700 focus:border-primary-500 focus:ring-primary-500/20'
-                      } text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all`}
+                      } text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all disabled:opacity-60`}
                     />
                     {errors.name && (
                       <p className="flex items-center gap-1 text-xs text-rose-500">
@@ -195,6 +243,7 @@ export default function Contact() {
                       type="email"
                       id="email"
                       name="email"
+                      disabled={isSubmitting}
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="e.g. john@example.com"
@@ -202,7 +251,7 @@ export default function Contact() {
                         errors.email
                           ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
                           : 'border-slate-200 dark:border-slate-700 focus:border-primary-500 focus:ring-primary-500/20'
-                      } text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all`}
+                      } text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all disabled:opacity-60`}
                     />
                     {errors.email && (
                       <p className="flex items-center gap-1 text-xs text-rose-500">
@@ -222,14 +271,15 @@ export default function Contact() {
                     type="text"
                     id="subject"
                     name="subject"
+                    disabled={isSubmitting}
                     value={formData.subject}
                     onChange={handleChange}
-                    placeholder="e.g. Collaboration on Open Source Project"
+                    placeholder="e.g. Software Engineering Opportunity"
                     className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-800 border ${
                       errors.subject
                         ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
                         : 'border-slate-200 dark:border-slate-700 focus:border-primary-500 focus:ring-primary-500/20'
-                    } text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all`}
+                    } text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all disabled:opacity-60`}
                   />
                   {errors.subject && (
                     <p className="flex items-center gap-1 text-xs text-rose-500">
@@ -248,6 +298,7 @@ export default function Contact() {
                     id="message"
                     name="message"
                     rows={4}
+                    disabled={isSubmitting}
                     value={formData.message}
                     onChange={handleChange}
                     placeholder="Hello Harshit, I'd like to discuss..."
@@ -255,7 +306,7 @@ export default function Contact() {
                       errors.message
                         ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
                         : 'border-slate-200 dark:border-slate-700 focus:border-primary-500 focus:ring-primary-500/20'
-                    } text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all resize-none`}
+                    } text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all resize-none disabled:opacity-60`}
                   />
                   {errors.message && (
                     <p className="flex items-center gap-1 text-xs text-rose-500">
@@ -269,10 +320,19 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 cursor-pointer"
                 >
-                  <Send size={16} />
-                  <span>{isSubmitting ? 'Validating...' : 'Send Message'}</span>
+                  {isSubmitting ? (
+                    <>
+                      <RefreshCw size={16} className="animate-spin" />
+                      <span>Delivering Message...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send size={16} />
+                      <span>Send Message</span>
+                    </>
+                  )}
                 </button>
               </form>
             )}

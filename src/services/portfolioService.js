@@ -10,3 +10,10 @@ export {
   seedFirestoreEducation,
   seedFirestoreTimeline
 } from './timelineService';
+export {
+  submitContactMessage,
+  getMessages,
+  getMessageCount,
+  updateMessageStatus,
+  deleteMessage
+} from './messageService';

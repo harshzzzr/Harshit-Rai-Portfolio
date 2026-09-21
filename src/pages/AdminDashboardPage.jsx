@@ -3,6 +3,7 @@ import AdminLayout from '../layouts/AdminLayout';
 import { getProjects } from '../services/projectService';
 import { getSkills } from '../services/skillService';
 import { getEducation, getTimelineData } from '../services/timelineService';
+import { getMessageCount } from '../services/messageService';
 import { db, isFirebaseConfigured } from '../firebase/config';
 import { collection, getDocs } from 'firebase/firestore';
 import { COLLECTIONS } from '../firebase/collections';
@@ -68,18 +69,11 @@ export default function AdminDashboardPage() {
       const timeRes = await getTimelineData();
       const timeData = timeRes.data || {};
 
-      // 5. Messages count (from Firestore if available)
-      let messagesCount = 0;
+      // 5. Messages count
+      const messagesCount = await getMessageCount();
       let feedbackCount = 0;
 
       if (isFirebaseConfigured && db) {
-        try {
-          const msgSnap = await getDocs(collection(db, COLLECTIONS.MESSAGES));
-          messagesCount = msgSnap.size;
-        } catch {
-          messagesCount = 0;
-        }
-
         try {
           const fbSnap = await getDocs(collection(db, COLLECTIONS.FEEDBACK));
           feedbackCount = fbSnap.size;
