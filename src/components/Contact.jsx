@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Send, CheckCircle2, AlertCircle, RefreshCw, X, ShieldCheck } from 'lucide-react';
+import { Mail, MapPin, Send, CheckCircle2, AlertCircle, RefreshCw, X, ShieldCheck, Lock } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
-import { submitContactMessage } from '../services/messageService';
+import { submitContactMessage, checkClientRateLimit } from '../services/messageService';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '',
+    honeypot: '' // Anti-bot trap field
   });
 
   const [errors, setErrors] = useState({});
@@ -19,28 +20,52 @@ export default function Contact() {
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.name.trim()) {
+    // 1. Rate limiting check
+    const rateCheck = checkClientRateLimit();
+    if (rateCheck.isLimited) {
+      newErrors.general = `Rate limit active: Please wait ${rateCheck.remainingSeconds} seconds before sending another message.`;
+      return newErrors;
+    }
+
+    // 2. Name validation (2 - 100 characters)
+    const trimmedName = formData.name.trim();
+    if (!trimmedName) {
       newErrors.name = 'Full name is required.';
-    } else if (formData.name.trim().length < 2) {
+    } else if (trimmedName.length < 2) {
       newErrors.name = 'Name must be at least 2 characters.';
+    } else if (trimmedName.length > 100) {
+      newErrors.name = 'Name cannot exceed 100 characters.';
     }
 
-    if (!formData.email.trim()) {
+    // 3. Strict RFC email validation (5 - 150 characters)
+    const trimmedEmail = formData.email.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!trimmedEmail) {
       newErrors.email = 'Email address is required.';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      newErrors.email = 'Please provide a valid email address.';
+    } else if (trimmedEmail.length > 150) {
+      newErrors.email = 'Email address cannot exceed 150 characters.';
+    } else if (!emailRegex.test(trimmedEmail)) {
+      newErrors.email = 'Please provide a valid email address (e.g. name@domain.com).';
     }
 
-    if (!formData.subject.trim()) {
+    // 4. Subject validation (3 - 200 characters)
+    const trimmedSubject = formData.subject.trim();
+    if (!trimmedSubject) {
       newErrors.subject = 'Subject is required.';
-    } else if (formData.subject.trim().length < 3) {
+    } else if (trimmedSubject.length < 3) {
       newErrors.subject = 'Subject must be at least 3 characters.';
+    } else if (trimmedSubject.length > 200) {
+      newErrors.subject = 'Subject cannot exceed 200 characters.';
     }
 
-    if (!formData.message.trim()) {
+    // 5. Message validation (10 - 3000 characters)
+    const trimmedMessage = formData.message.trim();
+    if (!trimmedMessage) {
       newErrors.message = 'Message content is required.';
-    } else if (formData.message.trim().length < 10) {
+    } else if (trimmedMessage.length < 10) {
       newErrors.message = 'Message must be at least 10 characters long.';
+    } else if (trimmedMessage.length > 3000) {
+      newErrors.message = 'Message cannot exceed 3,000 characters.';
     }
 
     return newErrors;
@@ -162,17 +187,21 @@ export default function Contact() {
 
           {/* Right Column: Visual Contact Form */}
           <div className="lg:col-span-7 p-6 sm:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-            {serverError && (
+            {/* General or Server Error Alert */}
+            {(serverError || errors.general) && (
               <div className="mb-5 p-4 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800/80 text-rose-800 dark:text-rose-200 text-xs sm:text-sm flex items-start justify-between gap-3 animate-fade-in">
                 <div className="flex items-start gap-2.5">
                   <AlertCircle size={18} className="shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" />
                   <div className="space-y-0.5">
-                    <p className="font-semibold">Unable to send message</p>
-                    <p className="text-xs opacity-90">{serverError}</p>
+                    <p className="font-semibold">Unable to submit message</p>
+                    <p className="text-xs opacity-90">{serverError || errors.general}</p>
                   </div>
                 </div>
                 <button
-                  onClick={() => setServerError(null)}
+                  onClick={() => {
+                    setServerError(null);
+                    setErrors((prev) => ({ ...prev, general: '' }));
+                  }}
                   className="text-rose-500 hover:text-rose-700 dark:hover:text-rose-300 p-1 cursor-pointer"
                   title="Dismiss alert"
                 >
@@ -197,6 +226,7 @@ export default function Contact() {
                     onClick={() => {
                       setIsSubmitted(false);
                       setServerError(null);
+                      setErrors({});
                     }}
                     className="px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold transition-colors cursor-pointer shadow-sm"
                   >
@@ -206,6 +236,20 @@ export default function Contact() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} noValidate className="space-y-4">
+                {/* Anti-Bot Honeypot field (hidden from human visitors) */}
+                <div className="hidden" aria-hidden="true" style={{ display: 'none' }}>
+                  <label htmlFor="fax_number">Do not fill this field</label>
+                  <input
+                    type="text"
+                    id="fax_number"
+                    name="fax_number"
+                    tabIndex="-1"
+                    autoComplete="off"
+                    value={formData.honeypot}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, honeypot: e.target.value }))}
+                  />
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Name */}
                   <div className="space-y-1.5">
@@ -216,6 +260,7 @@ export default function Contact() {
                       type="text"
                       id="name"
                       name="name"
+                      maxLength={100}
                       disabled={isSubmitting}
                       value={formData.name}
                       onChange={handleChange}
@@ -243,6 +288,7 @@ export default function Contact() {
                       type="email"
                       id="email"
                       name="email"
+                      maxLength={150}
                       disabled={isSubmitting}
                       value={formData.email}
                       onChange={handleChange}
@@ -271,6 +317,7 @@ export default function Contact() {
                     type="text"
                     id="subject"
                     name="subject"
+                    maxLength={200}
                     disabled={isSubmitting}
                     value={formData.subject}
                     onChange={handleChange}
@@ -291,13 +338,23 @@ export default function Contact() {
 
                 {/* Message */}
                 <div className="space-y-1.5">
-                  <label htmlFor="message" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                    Message <span className="text-rose-500">*</span>
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="message" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      Message <span className="text-rose-500">*</span>
+                    </label>
+                    <span
+                      className={`text-[11px] font-mono ${
+                        formData.message.length > 2800 ? 'text-amber-500 font-bold' : 'text-slate-400 dark:text-slate-500'
+                      }`}
+                    >
+                      {formData.message.length} / 3000
+                    </span>
+                  </div>
                   <textarea
                     id="message"
                     name="message"
                     rows={4}
+                    maxLength={3000}
                     disabled={isSubmitting}
                     value={formData.message}
                     onChange={handleChange}

@@ -43,14 +43,22 @@ service cloud.firestore {
       allow write: if isAuthenticated();
     }
 
-    // Contact messages: public write (new message submission), admin-only read/manage
+    // Contact messages: public create with strict validation, admin-only read/update/delete
     match /messages/{messageId} {
-      allow create: if request.resource.data.name is string 
+      allow create: if request.resource.data.keys().hasOnly(['name', 'email', 'subject', 'message', 'status', 'createdAt', 'createdAtIso'])
+                    && request.resource.data.name is string 
                     && request.resource.data.name.size() >= 2
+                    && request.resource.data.name.size() <= 100
                     && request.resource.data.email is string
+                    && request.resource.data.email.size() >= 5
+                    && request.resource.data.email.size() <= 150
+                    && request.resource.data.email.matches('^[^@]+@[^@]+\\.[a-zA-Z]{2,}$')
                     && request.resource.data.subject is string
+                    && request.resource.data.subject.size() >= 3
+                    && request.resource.data.subject.size() <= 200
                     && request.resource.data.message is string
                     && request.resource.data.message.size() >= 10
+                    && request.resource.data.message.size() <= 3000
                     && request.resource.data.status == 'unread';
       allow read, update, delete: if isAuthenticated();
     }

@@ -62,40 +62,122 @@ function saveStoredLocalMessages(messages) {
   }
 }
 
+const RATE_LIMIT_COOLDOWN_SECONDS = 45;
+const LAST_SUBMISSION_KEY = 'harshit_portfolio_last_msg_ts';
+
 /**
- * Validate contact message fields
+ * Check client-side rate limiting / cooldown
  */
-export function validateContactPayload({ name, email, subject, message }) {
+export function checkClientRateLimit() {
+  if (typeof window === 'undefined') return { isLimited: false, remainingSeconds: 0 };
+  try {
+    const last = localStorage.getItem(LAST_SUBMISSION_KEY);
+    if (!last) return { isLimited: false, remainingSeconds: 0 };
+    const elapsed = (Date.now() - parseInt(last, 10)) / 1000;
+    if (elapsed < RATE_LIMIT_COOLDOWN_SECONDS) {
+      return { isLimited: true, remainingSeconds: Math.ceil(RATE_LIMIT_COOLDOWN_SECONDS - elapsed) };
+    }
+    return { isLimited: false, remainingSeconds: 0 };
+  } catch {
+    return { isLimited: false, remainingSeconds: 0 };
+  }
+}
+
+function recordClientSubmissionTime() {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(LAST_SUBMISSION_KEY, Date.now().toString());
+  } catch {}
+}
+
+/**
+ * Basic sanitize string removing script tags
+ */
+function sanitizeString(str) {
+  if (!str || typeof str !== 'string') return '';
+  return str
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .trim();
+}
+
+/**
+ * Validate contact message fields with strict bounds & abuse protection
+ */
+export function validateContactPayload({ name, email, subject, message, honeypot }) {
   const errors = {};
 
-  if (!name || !name.trim()) {
+  // 1. Anti-bot honeypot detection
+  if (honeypot && honeypot.trim()) {
+    return {
+      isValid: false,
+      isBot: true,
+      error: 'Automated spam submission detected.',
+      errors: { general: 'Spam submission detected.' },
+    };
+  }
+
+  // 2. Client-side rate limiting check
+  const rateLimit = checkClientRateLimit();
+  if (rateLimit.isLimited) {
+    return {
+      isValid: false,
+      isRateLimited: true,
+      remainingSeconds: rateLimit.remainingSeconds,
+      error: `Please wait ${rateLimit.remainingSeconds} seconds before sending another message.`,
+      errors: { general: `Rate limit active: please wait ${rateLimit.remainingSeconds}s before submitting again.` },
+    };
+  }
+
+  // 3. Name validation (2 - 100 characters)
+  const cleanName = sanitizeString(name);
+  if (!cleanName) {
     errors.name = 'Full name is required.';
-  } else if (name.trim().length < 2) {
+  } else if (cleanName.length < 2) {
     errors.name = 'Name must be at least 2 characters long.';
+  } else if (cleanName.length > 100) {
+    errors.name = 'Name cannot exceed 100 characters.';
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!email || !email.trim()) {
+  // 4. Strict email format & length (5 - 150 characters)
+  const cleanEmail = sanitizeString(email).toLowerCase();
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!cleanEmail) {
     errors.email = 'Email address is required.';
-  } else if (!emailRegex.test(email.trim())) {
-    errors.email = 'Please provide a valid email address.';
+  } else if (cleanEmail.length > 150) {
+    errors.email = 'Email address cannot exceed 150 characters.';
+  } else if (!emailRegex.test(cleanEmail)) {
+    errors.email = 'Please provide a valid email address (e.g. name@domain.com).';
   }
 
-  if (!subject || !subject.trim()) {
+  // 5. Subject validation (3 - 200 characters)
+  const cleanSubject = sanitizeString(subject);
+  if (!cleanSubject) {
     errors.subject = 'Subject is required.';
-  } else if (subject.trim().length < 3) {
+  } else if (cleanSubject.length < 3) {
     errors.subject = 'Subject must be at least 3 characters long.';
+  } else if (cleanSubject.length > 200) {
+    errors.subject = 'Subject cannot exceed 200 characters.';
   }
 
-  if (!message || !message.trim()) {
+  // 6. Message validation (10 - 3000 characters)
+  const cleanMessage = sanitizeString(message);
+  if (!cleanMessage) {
     errors.message = 'Message content is required.';
-  } else if (message.trim().length < 10) {
+  } else if (cleanMessage.length < 10) {
     errors.message = 'Message must be at least 10 characters long.';
+  } else if (cleanMessage.length > 3000) {
+    errors.message = 'Message cannot exceed 3,000 characters.';
   }
 
   return {
     isValid: Object.keys(errors).length === 0,
     errors,
+    sanitized: {
+      name: cleanName,
+      email: cleanEmail,
+      subject: cleanSubject,
+      message: cleanMessage,
+    },
   };
 }
 
@@ -108,19 +190,25 @@ export async function submitContactMessage(input) {
   if (!validation.isValid) {
     return {
       success: false,
-      error: 'Validation failed. Please check form fields.',
+      error: validation.error || 'Validation failed. Please check form fields.',
       fieldErrors: validation.errors,
+      isRateLimited: validation.isRateLimited || false,
+      remainingSeconds: validation.remainingSeconds || 0,
     };
   }
 
+  // Record submission timestamp for client-side cooldown
+  recordClientSubmissionTime();
+
   const newDocId = `msg-${Date.now()}`;
   const nowIso = new Date().toISOString();
+  const { name, email, subject, message } = validation.sanitized;
 
   const messagePayload = {
-    name: input.name.trim(),
-    email: input.email.trim().toLowerCase(),
-    subject: input.subject.trim(),
-    message: input.message.trim(),
+    name,
+    email,
+    subject,
+    message,
     status: 'unread',
     createdAt: nowIso,
   };

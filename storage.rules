@@ -2,41 +2,63 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     
-    // Helper to check authentication
+    // Helpers
     function isAuthenticated() {
       return request.auth != null;
     }
 
-    // Public asset files: read by anyone, write/delete by admin only
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+
+    function isPdfOrImage() {
+      return request.resource.contentType == 'application/pdf' || request.resource.contentType.matches('image/.*');
+    }
+
+    function isUnder5MB() {
+      return request.resource.size < 5 * 1024 * 1024;
+    }
+
+    function isUnder10MB() {
+      return request.resource.size < 10 * 1024 * 1024;
+    }
+
+    // Image folders: read by anyone, create/update by admin under 5MB, delete by admin
     match /profile/{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isImage() && isUnder5MB();
+      allow delete: if isAuthenticated();
     }
 
     match /projects/{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isImage() && isUnder5MB();
+      allow delete: if isAuthenticated();
     }
 
     match /screenshots/{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isImage() && isUnder5MB();
+      allow delete: if isAuthenticated();
     }
 
     match /certificates/{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isImage() && isUnder5MB();
+      allow delete: if isAuthenticated();
     }
 
+    // Resume: PDF or image under 10MB, delete by admin
     match /resume/{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isPdfOrImage() && isUnder10MB();
+      allow delete: if isAuthenticated();
     }
 
-    // Fallback rule
+    // Strict fallback: no write access to unknown paths
     match /{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated();
+      allow write: if false;
     }
   }
 }
