@@ -36,7 +36,7 @@ export function clearLeetCodeCache(username = LEETCODE_USERNAME) {
 }
 
 export const LEETCODE_USERNAME =
-  import.meta.env.VITE_LEETCODE_USERNAME || personalInfo.socials.leetcodeUsername || 'harshitrai';
+  import.meta.env.VITE_LEETCODE_USERNAME || personalInfo.socials.leetcodeUsername || 'GkKWasfX4F';
 
 export const LEETCODE_PROFILE_URL =
   import.meta.env.VITE_LEETCODE_URL || personalInfo.socials.leetcode || `https://leetcode.com/u/${LEETCODE_USERNAME}`;
@@ -82,61 +82,52 @@ export async function fetchLeetCodeStats(username = LEETCODE_USERNAME) {
   const cacheKey = `leetcode_stats_${username}`;
   const cached = getCached(cacheKey);
   if (cached) {
-    return { success: true, hasStats: Boolean(cached.totalSolved), data: cached, fromCache: true };
+    return { success: true, hasStats: true, data: cached, fromCache: true };
   }
 
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000); // 4-second timeout for snappy UI
+  // Attempt fetch from modern reliable LeetCode proxies
+  const apiEndpoints = [
+    `https://alfa-leetcode-api.onrender.com/userProfile/${username}`,
+    `https://leetcode-api-faisalshohag.vercel.app/${username}`
+  ];
 
-    const response = await fetch(`https://leetcode-stats-api.herokuapp.com/${username}`, {
-      signal: controller.signal
-    });
-    clearTimeout(timeoutId);
+  for (const url of apiEndpoints) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4500);
 
-    if (!response.ok) {
-      return {
-        success: false,
-        hasStats: false,
-        profileUrl: LEETCODE_PROFILE_URL,
-        topics: VERIFIED_ALGORITHMIC_TOPICS,
-        categories: CODING_CATEGORIES
-      };
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
+      if (!response.ok) continue;
+
+      const json = await response.json();
+
+      if (json && typeof json.totalSolved === 'number') {
+        const stats = {
+          totalSolved: json.totalSolved,
+          easySolved: json.easySolved ?? 0,
+          mediumSolved: json.mediumSolved ?? 0,
+          hardSolved: json.hardSolved ?? 0,
+          acceptanceRate: json.acceptanceRate ?? null,
+          ranking: json.ranking && json.ranking <= 5000000 ? json.ranking : null,
+          profileUrl: LEETCODE_PROFILE_URL
+        };
+
+        setCached(cacheKey, stats);
+        return { success: true, hasStats: true, data: stats };
+      }
+    } catch {
+      // Continue to next endpoint if this one fails/times out
     }
-
-    const json = await response.json();
-
-    if (json && json.status === 'success' && typeof json.totalSolved === 'number' && json.totalSolved > 0) {
-      const stats = {
-        totalSolved: json.totalSolved,
-        easySolved: json.easySolved ?? 0,
-        mediumSolved: json.mediumSolved ?? 0,
-        hardSolved: json.hardSolved ?? 0,
-        acceptanceRate: json.acceptanceRate ?? null,
-        ranking: json.ranking ?? null,
-        profileUrl: LEETCODE_PROFILE_URL
-      };
-
-      setCached(cacheKey, stats);
-      return { success: true, hasStats: true, data: stats };
-    }
-
-    // No verified stats available — do not invent numbers
-    return {
-      success: true,
-      hasStats: false,
-      profileUrl: LEETCODE_PROFILE_URL,
-      topics: VERIFIED_ALGORITHMIC_TOPICS,
-      categories: CODING_CATEGORIES
-    };
-  } catch {
-    // Graceful offline/network failure
-    return {
-      success: false,
-      hasStats: false,
-      profileUrl: LEETCODE_PROFILE_URL,
-      topics: VERIFIED_ALGORITHMIC_TOPICS,
-      categories: CODING_CATEGORIES
-    };
   }
+
+  // Graceful fallback with verified topics & categories
+  return {
+    success: false,
+    hasStats: false,
+    profileUrl: LEETCODE_PROFILE_URL,
+    topics: VERIFIED_ALGORITHMIC_TOPICS,
+    categories: CODING_CATEGORIES
+  };
 }

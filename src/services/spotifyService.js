@@ -1,10 +1,10 @@
 import { personalInfo } from '../data/portfolioData';
 
 export const SPOTIFY_PROFILE_URL =
-  import.meta.env.VITE_SPOTIFY_URL || personalInfo.socials.spotify || 'https://open.spotify.com/user/harshitrai';
+  import.meta.env.VITE_SPOTIFY_URL || personalInfo.socials.spotify || 'https://open.spotify.com/user/31b6a5xevyjjpxunwv3fr2f662mu';
 
 export const SPOTIFY_USERNAME =
-  import.meta.env.VITE_SPOTIFY_USERNAME || personalInfo.socials.spotifyUsername || 'harshitrai';
+  import.meta.env.VITE_SPOTIFY_USERNAME || personalInfo.socials.spotifyUsername || '31b6a5xevyjjpxunwv3fr2f662mu';
 
 export const CODING_SOUNDTRACKS = [
   {

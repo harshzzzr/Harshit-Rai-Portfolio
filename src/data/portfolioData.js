@@ -20,17 +20,17 @@ export const personalInfo = {
     }
   ],
   socials: {
-    github: 'https://github.com/harshitrai',
-    githubUsername: 'harshitrai',
-    linkedin: 'https://linkedin.com/in/harshit-rai',
-    linkedinUsername: 'harshit-rai',
-    leetcode: 'https://leetcode.com/u/harshitrai',
-    leetcodeUsername: 'harshitrai',
-    spotify: 'https://open.spotify.com/user/harshitrai',
-    spotifyUsername: 'harshitrai'
+    github: 'https://github.com/harshzzzr',
+    githubUsername: 'harshzzzr',
+    linkedin: 'https://www.linkedin.com/in/harshit-rai-/',
+    linkedinUsername: 'harshit-rai-',
+    leetcode: 'https://leetcode.com/u/GkKWasfX4F/',
+    leetcodeUsername: 'GkKWasfX4F',
+    spotify: 'https://open.spotify.com/user/31b6a5xevyjjpxunwv3fr2f662mu',
+    spotifyUsername: '31b6a5xevyjjpxunwv3fr2f662mu'
   },
   contact: {
-    email: 'harshit.rai@example.com',
+    email: 'harshittrrai@gmail.com',
     location: 'Available for Opportunities & Collaborations'
   }
 };
@@ -99,7 +99,7 @@ export const projectsData = [
     ],
     technologies: ['JavaScript', 'Node.js', 'Express', 'MongoDB', 'CSS', 'HTML'],
     featured: true,
-    githubUrl: 'https://github.com/#',
+    githubUrl: 'https://github.com/harshzzzr',
     liveUrl: 'https://#',
     badge: 'Featured Project',
     screenshots: []
@@ -121,7 +121,7 @@ export const projectsData = [
     ],
     technologies: ['SQL', 'MySQL', 'Python'],
     featured: true,
-    githubUrl: 'https://github.com/#',
+    githubUrl: 'https://github.com/harshzzzr',
     liveUrl: null,
     badge: 'Systems',
     screenshots: []
@@ -142,7 +142,7 @@ export const projectsData = [
     ],
     technologies: ['Android', 'Java'],
     featured: false,
-    githubUrl: 'https://github.com/#',
+    githubUrl: 'https://github.com/harshzzzr',
     liveUrl: null,
     badge: 'Mobile',
     screenshots: []
@@ -163,7 +163,7 @@ export const projectsData = [
     ],
     technologies: ['Arduino', 'C++'],
     featured: false,
-    githubUrl: 'https://github.com/#',
+    githubUrl: 'https://github.com/harshzzzr',
     liveUrl: null,
     badge: 'Hardware',
     screenshots: []
@@ -184,7 +184,7 @@ export const projectsData = [
     ],
     technologies: ['Unity', 'C++'],
     featured: false,
-    githubUrl: 'https://github.com/#',
+    githubUrl: 'https://github.com/harshzzzr',
     liveUrl: null,
     badge: 'Graphics',
     screenshots: []

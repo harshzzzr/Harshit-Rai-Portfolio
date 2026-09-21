@@ -3,7 +3,7 @@ import { personalInfo, projectsData } from '../data/portfolioData';
 const CACHE_TTL_MS = 1000 * 60 * 15; // 15 minutes session cache to prevent rate-limiting
 
 export const GITHUB_USERNAME =
-  import.meta.env.VITE_GITHUB_USERNAME || personalInfo.socials.githubUsername || 'harshitrai';
+  import.meta.env.VITE_GITHUB_USERNAME || personalInfo.socials.githubUsername || 'harshzzzr';
 
 export const GITHUB_PROFILE_URL =
   import.meta.env.VITE_GITHUB_URL || personalInfo.socials.github || `https://github.com/${GITHUB_USERNAME}`;
@@ -153,8 +153,8 @@ export async function fetchGitHubRepos(username = GITHUB_USERNAME, limit = 12) {
     }
 
     const list = await response.json();
-    if (!Array.isArray(list)) {
-      return { success: false, isFallback: true, data: getFallbackRepos() };
+    if (!Array.isArray(list) || list.length === 0) {
+      return { success: true, isFallback: true, data: getFallbackRepos() };
     }
 
     const repos = list.map((r) => ({
