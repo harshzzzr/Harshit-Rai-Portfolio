@@ -135,32 +135,32 @@ export default function Skills() {
               return (
                 <div
                   key={catGroup.category}
-                  className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200 flex flex-col justify-between"
+                  className="p-4 sm:p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200 flex flex-col justify-between"
                 >
                   <div>
-                    <div className="flex items-center gap-3 mb-5">
-                      <div className="p-2 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400">
+                    <div className="flex items-center gap-2.5 sm:gap-3 mb-4 sm:mb-5">
+                      <div className="p-2 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 shrink-0">
                         <IconComponent size={20} />
                       </div>
-                      <h3 className="text-base font-semibold text-slate-900 dark:text-white">
+                      <h3 className="text-base font-semibold text-slate-900 dark:text-white break-words">
                         {catGroup.category}
                       </h3>
                     </div>
 
-                    <div className="flex flex-wrap gap-2.5">
+                    <div className="flex flex-wrap gap-2 sm:gap-2.5">
                       {catGroup.skills.map((skill) => (
                         <span
                           key={skill.id || skill.name}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-200 hover:border-primary-500/60 dark:hover:border-primary-500/60 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                          className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-200 hover:border-primary-500/60 dark:hover:border-primary-500/60 hover:text-primary-600 dark:hover:text-primary-400 transition-colors break-words"
                         >
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary-500" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-primary-500 shrink-0" />
                           <span>{skill.name}</span>
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  <div className="mt-6 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-[11px] font-mono text-slate-400 dark:text-slate-500">
+                  <div className="mt-5 sm:mt-6 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-[11px] font-mono text-slate-400 dark:text-slate-500">
                     {catGroup.skills.length} verified technologies
                   </div>
                 </div>

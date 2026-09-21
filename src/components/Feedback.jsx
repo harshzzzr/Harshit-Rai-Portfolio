@@ -216,7 +216,7 @@ export default function Feedback() {
                 {approvedList.map((item) => (
                   <div
                     key={item.id}
-                    className={`p-6 rounded-2xl border transition-all duration-200 hover:-translate-y-0.5 ${
+                    className={`p-4 sm:p-6 rounded-2xl border transition-all duration-200 hover:-translate-y-0.5 ${
                       item.featured
                         ? 'border-amber-300 dark:border-amber-500/60 bg-gradient-to-br from-amber-500/[0.04] via-white to-transparent dark:from-amber-500/[0.08] dark:via-slate-950 dark:to-transparent shadow-md shadow-amber-500/5 ring-1 ring-amber-400/20'
                         : 'border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm hover:shadow-md'
@@ -271,23 +271,23 @@ export default function Feedback() {
                       <span className="text-3xl font-serif text-primary-300 dark:text-primary-800 leading-none select-none absolute -top-2 -left-1 opacity-60">
                         “
                       </span>
-                      <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed pl-4 italic">
+                      <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed pl-4 italic break-words">
                         {item.feedback}
                       </p>
                     </div>
 
                     {/* Author Signature */}
-                    <div className="flex items-center justify-between pt-3 mt-2 border-t border-slate-100 dark:border-slate-800/80 text-xs">
-                      <div className="flex items-center gap-2.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-3 mt-2 border-t border-slate-100 dark:border-slate-800/80 text-xs">
+                      <div className="flex items-center gap-2.5 min-w-0">
                         <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary-600 to-sky-500 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
                           {(item.name || 'U').charAt(0).toUpperCase()}
                         </div>
-                        <span className="font-semibold text-slate-900 dark:text-white">
+                        <span className="font-semibold text-slate-900 dark:text-white break-words">
                           {item.name}
                         </span>
                       </div>
 
-                      <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded shrink-0">
                         <ShieldCheck size={11} />
                         <span>Verified Review</span>
                       </span>
@@ -300,7 +300,7 @@ export default function Feedback() {
 
           {/* Right Column: Feedback Submission Form (lg: 5 cols) */}
           <div className="lg:col-span-5">
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 sm:p-8 shadow-sm">
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-4 sm:p-8 shadow-sm">
               <div className="mb-6">
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">
                   Leave a Review
@@ -404,7 +404,7 @@ export default function Feedback() {
                     <div
                       role="radiogroup"
                       aria-labelledby="rating-label"
-                      className="flex items-center gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
+                      className="flex items-center justify-between sm:justify-start gap-1 sm:gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
                     >
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
@@ -431,8 +431,8 @@ export default function Feedback() {
                           aria-label={`Rate ${star} star${star > 1 ? 's' : ''} — ${RATING_LABELS[star]}`}
                         >
                           <Star
-                            size={24}
-                            className={`transition-colors ${
+                            size={20}
+                            className={`sm:w-6 sm:h-6 transition-colors ${
                               star <= activeRating
                                 ? 'text-amber-400 fill-amber-400'
                                 : 'text-slate-300 dark:text-slate-700'

@@ -281,56 +281,58 @@ export default function AnalyticsManager({ onDataChanged }) {
         ) : (
           <div className="space-y-4">
             {/* Chart Area */}
-            <div className="h-56 w-full flex items-end gap-1.5 sm:gap-3 pt-6 pb-2 border-b border-slate-100 dark:border-slate-800">
-              {summary.dailyTrends.map((day, idx) => {
-                const totalPct = Math.max(Math.round((day.views / summary.maxDailyViews) * 100), 4);
-                const projectPct = Math.round((day.projectViews / summary.maxDailyViews) * 100);
-                const isHovered = hoveredDay?.date === day.date;
-                const isPeak = day.views === summary.maxDailyViews && day.views > 0;
+            <div className="overflow-x-auto touch-scroll pb-1">
+              <div className="h-56 min-w-[320px] sm:min-w-full flex items-end gap-1.5 sm:gap-3 pt-6 pb-2 border-b border-slate-100 dark:border-slate-800">
+                {summary.dailyTrends.map((day, idx) => {
+                  const totalPct = Math.max(Math.round((day.views / summary.maxDailyViews) * 100), 4);
+                  const projectPct = Math.round((day.projectViews / summary.maxDailyViews) * 100);
+                  const isHovered = hoveredDay?.date === day.date;
+                  const isPeak = day.views === summary.maxDailyViews && day.views > 0;
 
-                return (
-                  <div
-                    key={day.date}
-                    onMouseEnter={() => setHoveredDay(day)}
-                    onMouseLeave={() => setHoveredDay(null)}
-                    className="flex-1 h-full flex flex-col justify-end items-center relative group cursor-pointer"
-                  >
-                    {/* Tooltip on Hover */}
-                    {isHovered && (
-                      <div className="absolute -top-14 z-20 px-3 py-1.5 rounded-lg bg-slate-900 dark:bg-slate-800 text-white text-[11px] shadow-lg whitespace-nowrap pointer-events-none transform -translate-y-1 transition-all">
-                        <div className="font-semibold">{day.label}</div>
-                        <div className="text-slate-300">
-                          {day.views} total • {day.projectViews} project views
+                  return (
+                    <div
+                      key={day.date}
+                      onMouseEnter={() => setHoveredDay(day)}
+                      onMouseLeave={() => setHoveredDay(null)}
+                      className="flex-1 h-full flex flex-col justify-end items-center relative group cursor-pointer"
+                    >
+                      {/* Tooltip on Hover */}
+                      {isHovered && (
+                        <div className="absolute -top-14 z-20 px-3 py-1.5 rounded-lg bg-slate-900 dark:bg-slate-800 text-white text-[11px] shadow-lg whitespace-nowrap pointer-events-none transform -translate-y-1 transition-all">
+                          <div className="font-semibold">{day.label}</div>
+                          <div className="text-slate-300">
+                            {day.views} total • {day.projectViews} project views
+                          </div>
                         </div>
+                      )}
+
+                      {/* Peak Day Indicator */}
+                      {isPeak && !isHovered && (
+                        <span className="absolute -top-5 text-[9px] font-mono font-bold text-primary-600 dark:text-primary-400 uppercase">
+                          Peak
+                        </span>
+                      )}
+
+                      {/* Total Views Bar Container */}
+                      <div className="w-full max-w-[36px] bg-slate-100 dark:bg-slate-800 rounded-t-lg flex flex-col justify-end overflow-hidden transition-all group-hover:opacity-90" style={{ height: `${totalPct}%` }}>
+                        {/* Project views nested sub-bar */}
+                        <div
+                          className="w-full bg-indigo-400 dark:bg-indigo-500 rounded-t-none"
+                          style={{ height: `${day.views > 0 ? (day.projectViews / day.views) * 100 : 0}%` }}
+                        />
+                        <div
+                          className={`w-full rounded-t-lg transition-colors ${
+                            isHovered
+                              ? 'bg-primary-600 dark:bg-primary-400'
+                              : 'bg-primary-500 dark:bg-primary-500'
+                          }`}
+                          style={{ height: `${day.views > 0 ? ((day.views - day.projectViews) / day.views) * 100 : 100}%` }}
+                        />
                       </div>
-                    )}
-
-                    {/* Peak Day Indicator */}
-                    {isPeak && !isHovered && (
-                      <span className="absolute -top-5 text-[9px] font-mono font-bold text-primary-600 dark:text-primary-400 uppercase">
-                        Peak
-                      </span>
-                    )}
-
-                    {/* Total Views Bar Container */}
-                    <div className="w-full max-w-[36px] bg-slate-100 dark:bg-slate-800 rounded-t-lg flex flex-col justify-end overflow-hidden transition-all group-hover:opacity-90" style={{ height: `${totalPct}%` }}>
-                      {/* Project views nested sub-bar */}
-                      <div
-                        className="w-full bg-indigo-400 dark:bg-indigo-500 rounded-t-none"
-                        style={{ height: `${day.views > 0 ? (day.projectViews / day.views) * 100 : 0}%` }}
-                      />
-                      <div
-                        className={`w-full rounded-t-lg transition-colors ${
-                          isHovered
-                            ? 'bg-primary-600 dark:bg-primary-400'
-                            : 'bg-primary-500 dark:bg-primary-500'
-                        }`}
-                        style={{ height: `${day.views > 0 ? ((day.views - day.projectViews) / day.views) * 100 : 100}%` }}
-                      />
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
 
             {/* X-Axis Date Labels */}

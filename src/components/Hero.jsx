@@ -36,24 +36,24 @@ export default function Hero() {
           <p className="text-base sm:text-lg font-medium text-slate-600 dark:text-slate-400">
             Hi, I'm
           </p>
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white break-words">
             {personalInfo.name.toUpperCase()}
           </h1>
-          <p className="text-xl sm:text-2xl md:text-3xl font-semibold text-primary-600 dark:text-primary-400">
+          <p className="text-lg sm:text-2xl md:text-3xl font-semibold text-primary-600 dark:text-primary-400">
             {personalInfo.role}
           </p>
         </div>
 
         {/* Short Bio */}
-        <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+        <p className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
           {personalInfo.shortBio}
         </p>
 
         {/* CTA Action Buttons */}
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2 w-full max-w-md mx-auto sm:max-w-none">
           <a
             href="#projects"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm sm:text-base font-semibold shadow-md shadow-primary-500/20 hover:shadow-primary-500/30 transition-all transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm sm:text-base font-semibold shadow-md shadow-primary-500/20 hover:shadow-primary-500/30 transition-all transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
           >
             <span>View Projects</span>
             <ArrowDown size={16} aria-hidden="true" />
@@ -62,7 +62,7 @@ export default function Hero() {
           <a
             href="/resume/resume.pdf"
             download="Harshit_Rai_Resume.pdf"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm sm:text-base font-semibold border border-slate-300 dark:border-slate-700 shadow-sm transition-all transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-primary-500"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm sm:text-base font-semibold border border-slate-300 dark:border-slate-700 shadow-sm transition-all transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-primary-500"
             aria-label="Download resume PDF of Harshit Rai"
           >
             <FileText size={16} aria-hidden="true" />

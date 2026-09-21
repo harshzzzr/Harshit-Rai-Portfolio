@@ -61,13 +61,13 @@ export default function SpotifySection() {
         </div>
 
         {/* Profile Status & Action Bar */}
-        <div className="mb-8 p-5 sm:p-6 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
+        <div className="mb-8 p-4 sm:p-6 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-5">
             {/* Spotify Brand & Profile Info */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
               <div className="relative shrink-0">
-                <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-[#1DB954] text-white p-3 flex items-center justify-center shadow-md shadow-[#1DB954]/20">
-                  <SpotifyIcon size={32} />
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#1DB954] text-white p-2.5 sm:p-3 flex items-center justify-center shadow-md shadow-[#1DB954]/20">
+                  <SpotifyIcon size={30} />
                 </div>
                 {/* Live Equalizer Status Pill */}
                 <span
@@ -78,28 +78,28 @@ export default function SpotifySection() {
                 />
               </div>
 
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white break-words">
                     Spotify Profile
                   </h3>
-                  <span className="text-xs font-mono text-emerald-700 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+                  <span className="text-xs font-mono text-emerald-700 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800 shrink-0">
                     @{SPOTIFY_USERNAME}
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
                   Deep Work Ambient • Instrumental Synthwave • Downtempo Engineering Beats
                 </p>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-3 self-start md:self-auto">
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 self-start md:self-auto w-full md:w-auto">
               <button
                 onClick={fetchPlayback}
                 disabled={loading}
                 aria-label="Refresh Spotify playback status"
-                className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-[#1DB954]"
+                className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-[#1DB954] shrink-0"
               >
                 <RefreshCw size={14} className={loading ? 'animate-spin' : ''} aria-hidden="true" />
               </button>
@@ -109,7 +109,7 @@ export default function SpotifySection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Open Spotify Profile of Harshit Rai (opens in new tab)"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1DB954] hover:bg-[#1aa34a] text-white font-semibold text-xs transition-colors shadow-sm shadow-[#1DB954]/25 focus-visible:ring-2 focus-visible:ring-[#1DB954]"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#1DB954] hover:bg-[#1aa34a] text-white font-semibold text-xs transition-colors shadow-sm shadow-[#1DB954]/25 focus-visible:ring-2 focus-visible:ring-[#1DB954] flex-1 sm:flex-initial"
               >
                 <span>Open Spotify Profile</span>
                 <ExternalLink size={13} aria-hidden="true" />
@@ -119,9 +119,9 @@ export default function SpotifySection() {
         </div>
 
         {/* 2-Column Content Grid: Currently Playing Player (Left) + Curated Soundtracks (Right) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           {/* Left: Currently Listening Player Card (lg: 6 cols) */}
-          <div className="lg:col-span-6 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 sm:p-7 shadow-sm flex flex-col justify-between">
+          <div className="lg:col-span-6 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 p-4 sm:p-7 shadow-sm flex flex-col justify-between">
             <div className="space-y-6">
               {/* Card Header with Animated Equalizer */}
               <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
@@ -143,18 +143,18 @@ export default function SpotifySection() {
               </div>
 
               {/* Player Body with Album Artwork */}
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
                 {/* Artwork Container */}
                 <div className="relative shrink-0 group">
                   {playback?.albumImageUrl ? (
                     <img
                       src={playback.albumImageUrl}
                       alt={`Album artwork for ${playback.title || 'Track'} by ${playback.artist || 'Artist'}`}
-                      className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl object-cover shadow-md border border-slate-200 dark:border-slate-800 group-hover:scale-105 transition-transform"
+                      className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl object-cover shadow-md border border-slate-200 dark:border-slate-800 group-hover:scale-105 transition-transform"
                     />
                   ) : (
-                    <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-gradient-to-br from-[#1DB954]/20 via-slate-900 to-slate-950 text-white flex flex-col items-center justify-center p-3 border border-slate-200 dark:border-slate-800 shadow-md" aria-hidden="true">
-                      <Disc3 size={38} className="text-[#1DB954] animate-spin duration-3000" />
+                    <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-gradient-to-br from-[#1DB954]/20 via-slate-900 to-slate-950 text-white flex flex-col items-center justify-center p-3 border border-slate-200 dark:border-slate-800 shadow-md" aria-hidden="true">
+                      <Disc3 size={34} className="text-[#1DB954] animate-spin duration-3000" />
                       <span className="text-[10px] font-mono text-slate-400 mt-2">Spotify Audio</span>
                     </div>
                   )}

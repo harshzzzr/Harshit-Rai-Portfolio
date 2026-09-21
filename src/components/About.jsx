@@ -61,14 +61,14 @@ export default function About() {
               return (
                 <div
                   key={idx}
-                  className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all duration-200"
+                  className="p-4 sm:p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all duration-200"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className="p-2.5 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="p-2.5 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 shrink-0">
                       <Icon size={22} />
                     </div>
-                    <div>
-                      <h3 className="text-base font-semibold text-slate-900 dark:text-white">
+                    <div className="min-w-0">
+                      <h3 className="text-base font-semibold text-slate-900 dark:text-white break-words">
                         {item.title}
                       </h3>
                       <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-normal">

@@ -120,22 +120,22 @@ export default function SocialProfiles() {
         {/* 4 Profile Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {/* 1. GITHUB CARD */}
-          <div className="rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-6 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+          <div className="rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-4 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
             <div className="space-y-4">
               {/* Header */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white shadow-xs">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="p-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white shadow-xs shrink-0">
                     <GithubIcon size={22} />
                   </div>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <div className="min-w-0">
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white flex flex-wrap items-center gap-1.5">
                       <span>GitHub</span>
-                      <span className="text-[11px] font-mono font-normal text-slate-500">
+                      <span className="text-[11px] font-mono font-normal text-slate-500 truncate">
                         @{GITHUB_USERNAME}
                       </span>
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                       Open-Source Repositories & Architecture
                     </p>
                   </div>
@@ -145,7 +145,7 @@ export default function SocialProfiles() {
                   href={GITHUB_PROFILE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0"
                   aria-label="Open GitHub Profile"
                 >
                   <ExternalLink size={16} />
@@ -232,23 +232,23 @@ export default function SocialProfiles() {
           </div>
 
           {/* 2. LINKEDIN CARD */}
-          <div className="rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-6 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+          <div className="rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-4 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
             <div className="space-y-4">
               {/* Header */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-[#0A66C2] text-white shadow-xs">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="p-2.5 rounded-xl bg-[#0A66C2] text-white shadow-xs shrink-0">
                     <LinkedinIcon size={22} />
                   </div>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <div className="min-w-0">
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white flex flex-wrap items-center gap-1.5">
                       <span>LinkedIn</span>
-                      <span className="inline-flex items-center gap-0.5 text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.2 rounded">
+                      <span className="inline-flex items-center gap-0.5 text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.2 rounded shrink-0">
                         <CheckCircle2 size={10} />
                         Verified
                       </span>
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                       Professional Network & Collaborations
                     </p>
                   </div>
@@ -258,7 +258,7 @@ export default function SocialProfiles() {
                   href={personalInfo.socials.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:ring-2 focus-visible:ring-[#0A66C2]"
+                  className="p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:ring-2 focus-visible:ring-[#0A66C2] shrink-0"
                   aria-label="Open LinkedIn Profile of Harshit Rai in new tab"
                 >
                   <ExternalLink size={16} aria-hidden="true" />
@@ -318,22 +318,22 @@ export default function SocialProfiles() {
           </div>
 
           {/* 3. LEETCODE CARD */}
-          <div className="rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-6 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+          <div className="rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-4 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
             <div className="space-y-4">
               {/* Header */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-amber-500 text-white shadow-xs">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="p-2.5 rounded-xl bg-amber-500 text-white shadow-xs shrink-0">
                     <LeetcodeIcon size={22} />
                   </div>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <div className="min-w-0">
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white flex flex-wrap items-center gap-1.5">
                       <span>LeetCode</span>
-                      <span className="text-[11px] font-mono font-normal text-slate-500">
+                      <span className="text-[11px] font-mono font-normal text-slate-500 truncate">
                         @{LEETCODE_USERNAME}
                       </span>
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                       Data Structures & Algorithmic Problem Solving
                     </p>
                   </div>
@@ -343,10 +343,10 @@ export default function SocialProfiles() {
                   href={LEETCODE_PROFILE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:ring-2 focus-visible:ring-amber-500"
+                  className="p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:ring-2 focus-visible:ring-amber-500 shrink-0"
                   aria-label="Open LeetCode Profile of Harshit Rai in new tab"
                 >
-                  <ExternalLink size={16} aria-hidden="true" />
+                  <ExternalLink size={16} />
                 </a>
               </div>
 
@@ -420,16 +420,16 @@ export default function SocialProfiles() {
           </div>
 
           {/* 4. SPOTIFY CARD */}
-          <div className="rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-6 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+          <div className="rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-4 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
             <div className="space-y-4">
               {/* Header */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-[#1DB954] text-white shadow-xs">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="p-2.5 rounded-xl bg-[#1DB954] text-white shadow-xs shrink-0">
                     <SpotifyIcon size={22} />
                   </div>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <div className="min-w-0">
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white flex flex-wrap items-center gap-1.5">
                       <span>Spotify</span>
                       {/* Equalizer animation */}
                       <span className="flex items-end gap-0.5 h-3 ml-1" aria-hidden="true">
@@ -438,7 +438,7 @@ export default function SocialProfiles() {
                         <span className="w-0.5 h-1.5 bg-emerald-500 animate-pulse delay-150" />
                       </span>
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                       Focus Beats & Development Soundtracks
                     </p>
                   </div>
@@ -448,7 +448,7 @@ export default function SocialProfiles() {
                   href={SPOTIFY_PROFILE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:ring-2 focus-visible:ring-[#1DB954]"
+                  className="p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:ring-2 focus-visible:ring-[#1DB954] shrink-0"
                   aria-label="Open Spotify Profile of Harshit Rai in new tab"
                 >
                   <ExternalLink size={16} aria-hidden="true" />

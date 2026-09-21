@@ -115,22 +115,22 @@ export default function Education() {
               {educationList.map((edu) => (
                 <div
                   key={edu.id}
-                  className="p-6 sm:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all space-y-5"
+                  className="p-4 sm:p-6 lg:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all space-y-5"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400">
-                      <GraduationCap size={28} />
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="p-2.5 sm:p-3 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 shrink-0">
+                      <GraduationCap size={26} />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       {edu.status && (
                         <span className="inline-block px-2.5 py-0.5 rounded text-xs font-mono font-medium bg-primary-50 dark:bg-primary-950/80 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 mb-2">
                           {edu.status}
                         </span>
                       )}
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                      <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white break-words">
                         {edu.degree}
                       </h3>
-                      <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mt-0.5">
+                      <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mt-0.5 break-words">
                         {edu.institution}
                       </p>
                     </div>
@@ -145,7 +145,7 @@ export default function Education() {
                         {edu.highlights.map((item, hIdx) => (
                           <li key={hIdx} className="flex items-start gap-2.5 text-sm text-slate-600 dark:text-slate-300">
                             <CheckCircle2 size={16} className="text-primary-500 mt-0.5 shrink-0" />
-                            <span>{item}</span>
+                            <span className="break-words">{item}</span>
                           </li>
                         ))}
                       </ul>
@@ -156,12 +156,12 @@ export default function Education() {
             </div>
 
             {/* Core Coursework Card */}
-            <div className="lg:col-span-5 p-6 sm:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
+            <div className="lg:col-span-5 p-4 sm:p-6 lg:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400">
+                <div className="p-2.5 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 shrink-0">
                   <BookOpen size={22} />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white break-words">
                   Core Coursework
                 </h3>
               </div>

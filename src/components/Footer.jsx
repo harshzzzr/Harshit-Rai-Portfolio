@@ -11,9 +11,9 @@ export default function Footer() {
   return (
     <footer className="bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-sm">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Col */}
-          <div className="md:col-span-2 space-y-3">
+          <div className="sm:col-span-2 space-y-3">
             <a
               href="#hero"
               className="inline-flex items-center gap-1.5 text-slate-900 dark:text-white font-bold tracking-tight text-lg"
@@ -135,8 +135,8 @@ export default function Footer() {
                 href="#contact"
                 className="inline-flex items-center gap-1.5 text-primary-600 dark:text-primary-400 hover:underline focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
               >
-                <Mail size={13} />
-                <span>{personalInfo.contact.email}</span>
+                <Mail size={13} className="shrink-0" />
+                <span className="break-all">{personalInfo.contact.email}</span>
               </a>
             </div>
           </div>

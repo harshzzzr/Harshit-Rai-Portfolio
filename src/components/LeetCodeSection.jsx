@@ -77,13 +77,13 @@ export default function LeetCodeSection() {
         </div>
 
         {/* Profile Card & Action Bar */}
-        <div className="mb-10 p-5 sm:p-6 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 shadow-sm">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
+        <div className="mb-8 sm:mb-10 p-4 sm:p-6 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-5">
             {/* Handle info */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
               <div className="relative shrink-0">
-                <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-amber-500 text-white p-3 flex items-center justify-center shadow-md">
-                  <LeetcodeIcon size={30} />
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-amber-500 text-white p-2.5 sm:p-3 flex items-center justify-center shadow-md">
+                  <LeetcodeIcon size={28} />
                 </div>
                 <span
                   className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center ${
@@ -93,28 +93,28 @@ export default function LeetCodeSection() {
                 />
               </div>
 
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white break-words">
                     LeetCode Profile
                   </h3>
-                  <span className="text-xs font-mono text-amber-600 dark:text-amber-400 font-semibold bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800">
+                  <span className="text-xs font-mono text-amber-600 dark:text-amber-400 font-semibold bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800 shrink-0">
                     @{LEETCODE_USERNAME}
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
                   Algorithm Practice • Data Structures • C++ Systems Solutions
                 </p>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-3 self-start md:self-auto">
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 self-start md:self-auto w-full md:w-auto">
               <button
                 onClick={() => loadStats(true)}
                 disabled={loading}
                 aria-label="Refresh LeetCode statistics"
-                className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-500"
+                className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-500 shrink-0"
               >
                 <RefreshCw size={14} className={loading ? 'animate-spin' : ''} aria-hidden="true" />
               </button>
@@ -124,7 +124,7 @@ export default function LeetCodeSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="View LeetCode Profile of Harshit Rai (opens in new tab)"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs transition-colors shadow-xs focus-visible:ring-2 focus-visible:ring-amber-500"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs transition-colors shadow-xs focus-visible:ring-2 focus-visible:ring-amber-500 flex-1 sm:flex-initial"
               >
                 <span>View LeetCode Profile</span>
                 <ExternalLink size={13} aria-hidden="true" />

@@ -5,6 +5,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   /* Accessibility: Respect reduced motion preference */
@@ -34,9 +35,16 @@
   body {
     margin: 0;
     min-height: 100vh;
+    overflow-x: hidden;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
+}
+
+/* Smooth touch scrolling utility for horizontal mobile pill tabs and tables */
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
 /* Performance: Skip layout/paint computations for off-screen sections until scrolled near */

@@ -294,7 +294,7 @@ export default function ProjectManager({ onProjectChanged }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
         <div className="flex flex-wrap items-center gap-3 flex-1">
           {/* Search Box */}
-          <div className="relative min-w-[220px] sm:min-w-[280px]">
+          <div className="relative w-full sm:w-auto sm:min-w-[240px]">
             <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
               <Search size={15} />
             </span>

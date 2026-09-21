@@ -135,13 +135,13 @@ export default function GitHubSection() {
         </div>
 
         {/* Profile Stats & API Status Bar */}
-        <div className="mb-8 p-5 sm:p-6 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
+        <div className="mb-8 p-4 sm:p-6 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-5">
             {/* User Info */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
               <div className="relative shrink-0">
-                <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-slate-900 text-white p-2.5 flex items-center justify-center shadow-md">
-                  <GithubIcon size={32} />
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-slate-900 text-white p-2.5 flex items-center justify-center shadow-md">
+                  <GithubIcon size={30} />
                 </div>
                 <span
                   className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white dark:border-slate-950 flex items-center justify-center ${
@@ -151,9 +151,9 @@ export default function GitHubSection() {
                 />
               </div>
 
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white break-words">
                     {profile?.name || 'Harshit Rai'}
                   </h3>
                   <span className="text-xs font-mono text-slate-400">
@@ -167,8 +167,8 @@ export default function GitHubSection() {
             </div>
 
             {/* Counts & Actions */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4 self-start md:self-auto">
-              <div className="flex items-center gap-3 text-xs font-mono text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800">
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-4 self-start md:self-auto w-full md:w-auto">
+              <div className="flex items-center gap-3 text-xs font-mono text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 shrink-0">
                 <span>
                   <strong className="text-slate-900 dark:text-white font-bold">
                     {profile?.publicRepos ?? repos.length}
@@ -188,7 +188,7 @@ export default function GitHubSection() {
                 onClick={() => loadGitHubData(true)}
                 disabled={loading}
                 aria-label="Force refresh GitHub data from API"
-                className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500"
+                className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 shrink-0"
               >
                 <RefreshCw size={14} className={loading ? 'animate-spin' : ''} aria-hidden="true" />
               </button>
@@ -198,7 +198,7 @@ export default function GitHubSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="View Harshit Rai GitHub profile (opens in new tab)"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-semibold text-xs transition-colors shadow-xs focus-visible:ring-2 focus-visible:ring-primary-500"
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-semibold text-xs transition-colors shadow-xs focus-visible:ring-2 focus-visible:ring-primary-500 flex-1 sm:flex-initial"
               >
                 <span>View on GitHub</span>
                 <ExternalLink size={13} aria-hidden="true" />

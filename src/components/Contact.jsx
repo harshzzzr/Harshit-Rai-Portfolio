@@ -134,7 +134,7 @@ export default function Contact() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Contact Information */}
-          <div className="lg:col-span-5 p-6 sm:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+          <div className="lg:col-span-5 p-4 sm:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
             <div className="space-y-2">
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">
                 Let's Connect
@@ -145,29 +145,29 @@ export default function Contact() {
             </div>
 
             <div className="space-y-4 pt-2">
-              <div className="flex items-start gap-4">
-                <div className="p-3 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400">
+              <div className="flex items-start gap-3 sm:gap-4">
+                <div className="p-3 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 shrink-0">
                   <Mail size={20} />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <span className="text-xs font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 font-semibold block">
                     Direct Email
                   </span>
-                  <span className="text-sm font-medium text-slate-800 dark:text-slate-200">
+                  <span className="text-sm font-medium text-slate-800 dark:text-slate-200 break-all">
                     {personalInfo.contact.email}
                   </span>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4">
-                <div className="p-3 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400">
+              <div className="flex items-start gap-3 sm:gap-4">
+                <div className="p-3 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 shrink-0">
                   <MapPin size={20} />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <span className="text-xs font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 font-semibold block">
                     Availability
                   </span>
-                  <span className="text-sm font-medium text-slate-800 dark:text-slate-200">
+                  <span className="text-sm font-medium text-slate-800 dark:text-slate-200 break-words">
                     {personalInfo.contact.location}
                   </span>
                 </div>
@@ -186,7 +186,7 @@ export default function Contact() {
           </div>
 
           {/* Right Column: Visual Contact Form */}
-          <div className="lg:col-span-7 p-6 sm:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="lg:col-span-7 p-4 sm:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
             {/* General or Server Error Alert */}
             {(serverError || errors.general) && (
               <div className="mb-5 p-4 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800/80 text-rose-800 dark:text-rose-200 text-xs sm:text-sm flex items-start justify-between gap-3 animate-fade-in">

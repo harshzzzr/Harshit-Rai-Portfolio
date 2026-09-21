@@ -95,7 +95,7 @@ export default function Experience() {
 
         {/* Category Navigation Tabs */}
         {!loading && (
-          <div role="tablist" aria-label="Experience Categories" className="flex flex-wrap items-center justify-center gap-2">
+          <div role="tablist" aria-label="Experience Categories" className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
             {tabs.map((tab, idx) => {
               const Icon = tab.icon;
               const count = (timelineData[tab.id] || []).length;
@@ -110,13 +110,13 @@ export default function Experience() {
                   tabIndex={isActive ? 0 : -1}
                   onKeyDown={(e) => handleTabKeyDown(e, idx)}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 ${
+                  className={`inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 ${
                     isActive
                       ? 'bg-primary-600 text-white shadow-sm'
                       : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`}
                 >
-                  <Icon size={16} aria-hidden="true" />
+                  <Icon size={15} aria-hidden="true" />
                   <span>{tab.label}</span>
                   <span
                     className={`text-[11px] font-mono px-1.5 py-0.2 rounded-full ${
@@ -196,20 +196,20 @@ export default function Experience() {
             aria-labelledby={`tab-${activeTab}`}
             className="max-w-3xl mx-auto"
           >
-            <div className="relative border-l-2 border-slate-200 dark:border-slate-800 ml-4 sm:ml-6 space-y-8 py-2">
+            <div className="relative border-l-2 border-slate-200 dark:border-slate-800 ml-2 sm:ml-6 space-y-6 sm:space-y-8 py-2">
               {items.map((item) => (
-                <div key={item.id} className="relative pl-6 sm:pl-8 group">
+                <div key={item.id} className="relative pl-4 sm:pl-8 group">
                   {/* Timeline Dot */}
                   <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-white dark:bg-slate-950 border-2 border-primary-500 group-hover:scale-125 transition-transform" />
 
                   {/* Card */}
-                  <div className="p-5 sm:p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all">
+                  <div className="p-4 sm:p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all">
                     <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white break-words">
                         {item.title}
                       </h3>
                       {item.period && (
-                        <div className="inline-flex items-center gap-1.5 text-xs font-mono text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950 px-2.5 py-1 rounded">
+                        <div className="inline-flex items-center gap-1.5 text-xs font-mono text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded shrink-0">
                           <Calendar size={13} />
                           <span>{item.period}</span>
                         </div>
@@ -217,9 +217,9 @@ export default function Experience() {
                     </div>
 
                     {(item.role || item.organization) && (
-                      <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 mb-3">
-                        <Building2 size={15} />
-                        <span>
+                      <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 mb-3">
+                        <Building2 size={15} className="shrink-0" />
+                        <span className="break-words">
                           {item.role} {item.organization ? `• ${item.organization}` : ''}
                         </span>
                       </div>
