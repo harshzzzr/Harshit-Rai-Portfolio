@@ -6,6 +6,7 @@ import MainLayout from './layouts/MainLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
 import AnalyticsTracker from './components/AnalyticsTracker';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Route-level code splitting
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -20,7 +21,7 @@ function RouteLoadingFallback() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center p-8">
       <div className="flex flex-col items-center gap-3">
-        <div className="w-8 h-8 rounded-full border-3 border-primary-500 border-t-transparent animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-primary-500 border-t-transparent animate-spin" />
         <span className="text-xs font-mono text-slate-500 dark:text-slate-400">Loading experience...</span>
       </div>
     </div>
@@ -34,8 +35,9 @@ export default function App() {
         <Router>
           <AnalyticsTracker />
           <ScrollToTop />
-          <Suspense fallback={<RouteLoadingFallback />}>
-            <Routes>
+          <ErrorBoundary>
+            <Suspense fallback={<RouteLoadingFallback />}>
+              <Routes>
               {/* Public Portfolio Routes */}
               <Route
                 path="/"
@@ -80,7 +82,8 @@ export default function App() {
               />
             </Routes>
           </Suspense>
-        </Router>
+        </ErrorBoundary>
+      </Router>
       </AuthProvider>
     </ThemeProvider>
   );

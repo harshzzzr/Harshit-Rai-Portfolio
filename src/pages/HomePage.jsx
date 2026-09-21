@@ -9,6 +9,7 @@ import Education from '../components/Education';
 import Experience from '../components/Experience';
 import SocialProfiles from '../components/SocialProfiles';
 import SpotifySection from '../components/SpotifySection';
+import Feedback from '../components/Feedback';
 import Contact from '../components/Contact';
 import SEO from '../components/SEO';
 
