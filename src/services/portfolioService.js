@@ -7,36 +7,9 @@ import {
   timelineData
 } from '../data/portfolioData';
 
-// Re-export Firestore project services
+// Re-export Firestore domain services
 export { getProjects, getProjectById } from './projectService';
-
-/**
- * Fetch categorized skills from Firestore with local fallback
- */
-export async function getSkills() {
-  if (!isFirebaseConfigured || !db) {
-    return { data: localSkills, error: null, isLive: false };
-  }
-
-  try {
-    const skillsRef = collection(db, COLLECTIONS.SKILLS);
-    const snapshot = await getDocs(skillsRef);
-
-    if (snapshot.empty) {
-      return { data: localSkills, error: null, isLive: false };
-    }
-
-    const skills = snapshot.docs.map((docSnap) => ({
-      id: docSnap.id,
-      ...docSnap.data()
-    }));
-
-    return { data: skills, error: null, isLive: true };
-  } catch (error) {
-    console.error('[Firebase] Error fetching skills:', error);
-    return { data: localSkills, error: error.message, isLive: false };
-  }
-}
+export { getSkills } from './skillService';
 
 /**
  * Fetch education records from Firestore with local fallback
