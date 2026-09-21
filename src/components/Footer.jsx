@@ -54,6 +54,11 @@ export default function Footer() {
                 </a>
               </li>
               <li>
+                <a href="#coding" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  Coding & LeetCode
+                </a>
+              </li>
+              <li>
                 <a href="#education" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                   Education
                 </a>

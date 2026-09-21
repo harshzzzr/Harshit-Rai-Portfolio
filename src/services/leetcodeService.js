@@ -26,6 +26,15 @@ function setCached(key, data) {
   }
 }
 
+export function clearLeetCodeCache(username = LEETCODE_USERNAME) {
+  if (typeof window === 'undefined') return;
+  try {
+    sessionStorage.removeItem(`leetcode_stats_${username}`);
+  } catch {
+    // Ignore
+  }
+}
+
 export const LEETCODE_USERNAME =
   import.meta.env.VITE_LEETCODE_USERNAME || personalInfo.socials.leetcodeUsername || 'harshitrai';
 
@@ -41,6 +50,29 @@ export const VERIFIED_ALGORITHMIC_TOPICS = [
   'Object-Oriented Problem Solving'
 ];
 
+export const CODING_CATEGORIES = [
+  {
+    category: 'Data Structures',
+    description: 'Fundamental in-memory models for efficient data organization and retrieval',
+    skills: ['Arrays & Vectors', 'Linked Lists', 'Stacks & Queues', 'Hash Tables', 'Binary Trees', 'Heaps & Priority Queues']
+  },
+  {
+    category: 'Algorithmic Paradigms',
+    description: 'Core tactical patterns for solving non-trivial search and traversal problems',
+    skills: ['Two Pointers', 'Sliding Window', 'Binary Search', 'Recursion & Backtracking', 'Divide & Conquer']
+  },
+  {
+    category: 'Advanced Problem Solving',
+    description: 'Complex optimization techniques and graph-theoretic approaches',
+    skills: ['Dynamic Programming', 'Graph Traversal (BFS / DFS)', 'Shortest Path (Dijkstra)', 'Greedy Optimization']
+  },
+  {
+    category: 'Engineering & Complexity',
+    description: 'Rigorous implementation and asymptotic performance evaluation',
+    skills: ['C++ Standard Template Library (STL)', 'Asymptotic Complexity (Big-O)', 'Bit Manipulation', 'System Constraints Evaluation']
+  }
+];
+
 /**
  * Fetch verified LeetCode statistics via reliable public proxy API
  * CRITICAL RULE: Never invent statistics. If the API is unreachable,
@@ -50,7 +82,7 @@ export async function fetchLeetCodeStats(username = LEETCODE_USERNAME) {
   const cacheKey = `leetcode_stats_${username}`;
   const cached = getCached(cacheKey);
   if (cached) {
-    return { success: true, hasStats: Boolean(cached.totalSolved), data: cached };
+    return { success: true, hasStats: Boolean(cached.totalSolved), data: cached, fromCache: true };
   }
 
   try {
@@ -67,7 +99,8 @@ export async function fetchLeetCodeStats(username = LEETCODE_USERNAME) {
         success: false,
         hasStats: false,
         profileUrl: LEETCODE_PROFILE_URL,
-        topics: VERIFIED_ALGORITHMIC_TOPICS
+        topics: VERIFIED_ALGORITHMIC_TOPICS,
+        categories: CODING_CATEGORIES
       };
     }
 
@@ -93,7 +126,8 @@ export async function fetchLeetCodeStats(username = LEETCODE_USERNAME) {
       success: true,
       hasStats: false,
       profileUrl: LEETCODE_PROFILE_URL,
-      topics: VERIFIED_ALGORITHMIC_TOPICS
+      topics: VERIFIED_ALGORITHMIC_TOPICS,
+      categories: CODING_CATEGORIES
     };
   } catch {
     // Graceful offline/network failure
@@ -101,7 +135,8 @@ export async function fetchLeetCodeStats(username = LEETCODE_USERNAME) {
       success: false,
       hasStats: false,
       profileUrl: LEETCODE_PROFILE_URL,
-      topics: VERIFIED_ALGORITHMIC_TOPICS
+      topics: VERIFIED_ALGORITHMIC_TOPICS,
+      categories: CODING_CATEGORIES
     };
   }
 }

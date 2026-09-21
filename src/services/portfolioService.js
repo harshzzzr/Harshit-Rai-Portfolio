@@ -38,6 +38,9 @@ export {
 } from './githubService';
 export {
   fetchLeetCodeStats,
+  clearLeetCodeCache,
+  CODING_CATEGORIES,
+  VERIFIED_ALGORITHMIC_TOPICS,
   LEETCODE_USERNAME,
   LEETCODE_PROFILE_URL
 } from './leetcodeService';
