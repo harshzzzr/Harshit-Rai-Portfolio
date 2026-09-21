@@ -22,6 +22,7 @@ import {
   Sliders
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ProjectManager from '../components/admin/ProjectManager';
 
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -320,8 +321,13 @@ export default function AdminDashboardPage() {
           </div>
         )}
 
+        {/* Projects Management CRUD View */}
+        {activeTab === 'projects' && (
+          <ProjectManager onProjectChanged={fetchDashboardData} />
+        )}
+
         {/* Dedicated Section Placeholders for remaining sidebar tabs */}
-        {activeTab !== 'dashboard' && (
+        {activeTab !== 'dashboard' && activeTab !== 'projects' && (
           <div className="p-8 sm:p-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-6 shadow-sm animate-fade-in">
             <div className="w-16 h-16 rounded-2xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 mx-auto flex items-center justify-center">
               <Sliders size={32} />
@@ -332,7 +338,6 @@ export default function AdminDashboardPage() {
                 {activeTab} Management
               </h2>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                {activeTab === 'projects' && 'Full Project CRUD operations (Add, Edit, Delete, Feature, and Image Upload) will be activated in Version 3.2.'}
                 {(activeTab === 'skills' || activeTab === 'education' || activeTab === 'experience' || activeTab === 'achievements' || activeTab === 'certifications') && 'Content Management CRUD controls for this section will be activated in Version 3.3.'}
                 {activeTab === 'messages' && 'Message Inbox, mark read, archive, and delete operations will be activated in Version 4.1.'}
                 {activeTab === 'feedback' && 'Testimonial moderation and feedback approval controls will be activated in Version 5.1.'}
