@@ -5,6 +5,7 @@ import Skills from '../components/Skills';
 import Projects from '../components/Projects';
 import Education from '../components/Education';
 import Experience from '../components/Experience';
+import Feedback from '../components/Feedback';
 import Contact from '../components/Contact';
 
 export default function HomePage() {
@@ -16,6 +17,7 @@ export default function HomePage() {
       <Projects />
       <Education />
       <Experience />
+      <Feedback />
       <Contact />
     </div>
   );

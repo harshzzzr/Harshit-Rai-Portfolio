@@ -17,3 +17,11 @@ export {
   updateMessageStatus,
   deleteMessage
 } from './messageService';
+export {
+  submitFeedback,
+  getApprovedFeedback,
+  getAllFeedback,
+  updateFeedbackStatus,
+  deleteFeedback
+} from './feedbackService';
+

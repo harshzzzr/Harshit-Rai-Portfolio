@@ -63,10 +63,19 @@ service cloud.firestore {
       allow read, update, delete: if isAuthenticated();
     }
 
-    // Testimonials / Feedback: public submit, approved read publicly, admin-only moderation
+    // Testimonials / Feedback: public submit (pending), approved read publicly, admin moderation
     match /feedback/{feedbackId} {
-      allow create: if request.resource.data.name is string
-                    && request.resource.data.feedback is string;
+      allow create: if request.resource.data.keys().hasOnly(['name', 'rating', 'feedback', 'status', 'createdAt', 'createdAtIso'])
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() >= 2
+                    && request.resource.data.name.size() <= 100
+                    && request.resource.data.rating is int
+                    && request.resource.data.rating >= 1
+                    && request.resource.data.rating <= 5
+                    && request.resource.data.feedback is string
+                    && request.resource.data.feedback.size() >= 5
+                    && request.resource.data.feedback.size() <= 1000
+                    && request.resource.data.status == 'pending';
       allow read: if resource.data.status == 'approved' || isAuthenticated();
       allow update, delete: if isAuthenticated();
     }

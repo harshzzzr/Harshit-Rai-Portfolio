@@ -4,6 +4,7 @@ import { getProjects } from '../services/projectService';
 import { getSkills } from '../services/skillService';
 import { getEducation, getTimelineData } from '../services/timelineService';
 import { getMessageCount } from '../services/messageService';
+import { getAllFeedback } from '../services/feedbackService';
 import { db, isFirebaseConfigured } from '../firebase/config';
 import { collection, getDocs } from 'firebase/firestore';
 import { COLLECTIONS } from '../firebase/collections';
@@ -70,18 +71,10 @@ export default function AdminDashboardPage() {
       const timeRes = await getTimelineData();
       const timeData = timeRes.data || {};
 
-      // 5. Messages count
+      // 5. Messages count & Feedback count
       const messagesCount = await getMessageCount();
-      let feedbackCount = 0;
-
-      if (isFirebaseConfigured && db) {
-        try {
-          const fbSnap = await getDocs(collection(db, COLLECTIONS.FEEDBACK));
-          feedbackCount = fbSnap.size;
-        } catch {
-          feedbackCount = 0;
-        }
-      }
+      const fbRes = await getAllFeedback();
+      const feedbackCount = (fbRes.data || []).length;
 
       setCounts({
         projects: projectList.length,
