@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { projectsData } from '../data/portfolioData';
+import { getProjectById } from '../services/portfolioService';
 import { ArrowLeft, ExternalLink, Sparkles, FolderGit2, CheckCircle2, AlertTriangle, Layers, Target, Lightbulb, Image as ImageIcon } from 'lucide-react';
 import { GithubIcon } from '../components/Icons';
 
@@ -8,13 +8,30 @@ export default function ProjectDetailPage() {
   const { projectId } = useParams();
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Mimic quick lookup and allow seamless migration to Firestore async fetch in v2.0
+    let isMounted = true;
     setLoading(true);
-    const foundProject = projectsData.find((p) => p.id === projectId);
-    setProject(foundProject || null);
-    setLoading(false);
+    setError(null);
+
+    getProjectById(projectId)
+      .then((res) => {
+        if (!isMounted) return;
+        setProject(res.data);
+        setError(res.error);
+      })
+      .catch((err) => {
+        if (!isMounted) return;
+        setError(err.message || 'Error loading project');
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [projectId]);
 
   if (loading) {

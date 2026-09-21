@@ -1,0 +1,213 @@
+import { collection, getDocs, doc, getDoc, query, orderBy } from 'firebase/firestore';
+import { db, isFirebaseConfigured } from '../firebase/config';
+import { COLLECTIONS } from '../firebase/collections';
+import {
+  projectsData as localProjects,
+  skillsData as localSkills,
+  personalInfo,
+  timelineData
+} from '../data/portfolioData';
+
+/**
+ * Fetch all projects from Firestore with local fallback
+ */
+export async function getProjects() {
+  if (!isFirebaseConfigured || !db) {
+    return { data: localProjects, error: null, isLive: false };
+  }
+
+  try {
+    const projectsRef = collection(db, COLLECTIONS.PROJECTS);
+    const snapshot = await getDocs(projectsRef);
+
+    if (snapshot.empty) {
+      // Gracefully fall back to verified static data if collection is not populated yet
+      return { data: localProjects, error: null, isLive: false };
+    }
+
+    const projects = snapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      ...docSnap.data()
+    }));
+
+    return { data: projects, error: null, isLive: true };
+  } catch (error) {
+    console.error('[Firebase] Error fetching projects:', error);
+    return { data: localProjects, error: error.message, isLive: false };
+  }
+}
+
+/**
+ * Fetch a single project by ID from Firestore with local fallback
+ */
+export async function getProjectById(projectId) {
+  if (!projectId) {
+    return { data: null, error: 'Project ID is required', isLive: false };
+  }
+
+  if (!isFirebaseConfigured || !db) {
+    const local = localProjects.find((p) => p.id === projectId) || null;
+    return { data: local, error: null, isLive: false };
+  }
+
+  try {
+    const docRef = doc(db, COLLECTIONS.PROJECTS, projectId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return {
+        data: { id: docSnap.id, ...docSnap.data() },
+        error: null,
+        isLive: true
+      };
+    }
+
+    // Fall back to local project if not found in Firestore
+    const local = localProjects.find((p) => p.id === projectId) || null;
+    return { data: local, error: null, isLive: false };
+  } catch (error) {
+    console.error(`[Firebase] Error fetching project ${projectId}:`, error);
+    const local = localProjects.find((p) => p.id === projectId) || null;
+    return { data: local, error: error.message, isLive: false };
+  }
+}
+
+/**
+ * Fetch categorized skills from Firestore with local fallback
+ */
+export async function getSkills() {
+  if (!isFirebaseConfigured || !db) {
+    return { data: localSkills, error: null, isLive: false };
+  }
+
+  try {
+    const skillsRef = collection(db, COLLECTIONS.SKILLS);
+    const snapshot = await getDocs(skillsRef);
+
+    if (snapshot.empty) {
+      return { data: localSkills, error: null, isLive: false };
+    }
+
+    const skills = snapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      ...docSnap.data()
+    }));
+
+    return { data: skills, error: null, isLive: true };
+  } catch (error) {
+    console.error('[Firebase] Error fetching skills:', error);
+    return { data: localSkills, error: error.message, isLive: false };
+  }
+}
+
+/**
+ * Fetch education records from Firestore with local fallback
+ */
+export async function getEducation() {
+  if (!isFirebaseConfigured || !db) {
+    return { data: personalInfo.education, error: null, isLive: false };
+  }
+
+  try {
+    const eduRef = collection(db, COLLECTIONS.EDUCATION);
+    const snapshot = await getDocs(eduRef);
+
+    if (snapshot.empty) {
+      return { data: personalInfo.education, error: null, isLive: false };
+    }
+
+    const education = snapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      ...docSnap.data()
+    }));
+
+    return { data: education, error: null, isLive: true };
+  } catch (error) {
+    console.error('[Firebase] Error fetching education:', error);
+    return { data: personalInfo.education, error: error.message, isLive: false };
+  }
+}
+
+/**
+ * Fetch experience timeline records from Firestore with local fallback
+ */
+export async function getExperience() {
+  if (!isFirebaseConfigured || !db) {
+    return { data: timelineData.experience, error: null, isLive: false };
+  }
+
+  try {
+    const expRef = collection(db, COLLECTIONS.EXPERIENCE);
+    const snapshot = await getDocs(expRef);
+
+    if (snapshot.empty) {
+      return { data: timelineData.experience, error: null, isLive: false };
+    }
+
+    const experience = snapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      ...docSnap.data()
+    }));
+
+    return { data: experience, error: null, isLive: true };
+  } catch (error) {
+    console.error('[Firebase] Error fetching experience:', error);
+    return { data: timelineData.experience, error: error.message, isLive: false };
+  }
+}
+
+/**
+ * Fetch achievements records from Firestore with local fallback
+ */
+export async function getAchievements() {
+  if (!isFirebaseConfigured || !db) {
+    return { data: timelineData.achievements, error: null, isLive: false };
+  }
+
+  try {
+    const achRef = collection(db, COLLECTIONS.ACHIEVEMENTS);
+    const snapshot = await getDocs(achRef);
+
+    if (snapshot.empty) {
+      return { data: timelineData.achievements, error: null, isLive: false };
+    }
+
+    const achievements = snapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      ...docSnap.data()
+    }));
+
+    return { data: achievements, error: null, isLive: true };
+  } catch (error) {
+    console.error('[Firebase] Error fetching achievements:', error);
+    return { data: timelineData.achievements, error: error.message, isLive: false };
+  }
+}
+
+/**
+ * Fetch certifications records from Firestore with local fallback
+ */
+export async function getCertifications() {
+  if (!isFirebaseConfigured || !db) {
+    return { data: timelineData.certifications, error: null, isLive: false };
+  }
+
+  try {
+    const certRef = collection(db, COLLECTIONS.CERTIFICATIONS);
+    const snapshot = await getDocs(certRef);
+
+    if (snapshot.empty) {
+      return { data: timelineData.certifications, error: null, isLive: false };
+    }
+
+    const certifications = snapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      ...docSnap.data()
+    }));
+
+    return { data: certifications, error: null, isLive: true };
+  } catch (error) {
+    console.error('[Firebase] Error fetching certifications:', error);
+    return { data: timelineData.certifications, error: error.message, isLive: false };
+  }
+}
