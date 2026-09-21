@@ -80,6 +80,14 @@ service cloud.firestore {
       allow update, delete: if isAuthenticated();
     }
 
+    // Analytics telemetry: anonymous event logging, admin-only read/delete
+    match /analytics/{analyticsId} {
+      allow create: if request.resource.data.keys().hasOnly(['name', 'properties', 'path', 'referrer', 'sessionId', 'date', 'timestamp', 'source', 'createdAt'])
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() <= 100;
+      allow read, update, delete: if isAuthenticated();
+    }
+
     // Default deny for unmapped documents
     match /{document=**} {
       allow read, write: if isAuthenticated();

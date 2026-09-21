@@ -1,0 +1,17 @@
+{
+  "name": "Harshit Rai | Developer Portfolio",
+  "short_name": "Harshit Rai",
+  "description": "Portfolio of Harshit Rai — Computer Engineering student and developer specializing in full-stack web applications and systems.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0284c7",
+  "theme_color": "#0284c7",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -13,6 +13,7 @@ const HomePage = lazy(() => import('./pages/HomePage'));
 const ProjectDetailPage = lazy(() => import('./pages/ProjectDetailPage'));
 const AdminLoginPage = lazy(() => import('./pages/AdminLoginPage'));
 const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 /**
  * Lightweight accessible route transition fallback
@@ -71,12 +72,12 @@ export default function App() {
                 element={<Navigate to="/admin" replace />}
               />
 
-              {/* Fallback */}
+              {/* 404 Fallback */}
               <Route
                 path="*"
                 element={
                   <MainLayout>
-                    <HomePage />
+                    <NotFoundPage />
                   </MainLayout>
                 }
               />
