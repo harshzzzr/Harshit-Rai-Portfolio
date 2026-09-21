@@ -61,48 +61,68 @@ export default function Experience() {
 
   const items = timelineData[activeTab] || [];
 
+  const handleTabKeyDown = (e, currentIndex) => {
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      const nextIndex = (currentIndex + 1) % tabs.length;
+      setActiveTab(tabs[nextIndex].id);
+      document.getElementById(`tab-${tabs[nextIndex].id}`)?.focus();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+      setActiveTab(tabs[prevIndex].id);
+      document.getElementById(`tab-${tabs[prevIndex].id}`)?.focus();
+    }
+  };
+
   return (
     <section id="experience" className="py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-200 dark:border-slate-800/60">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 mb-1">
-            <span className={`w-2 h-2 rounded-full ${isLive ? 'bg-emerald-500 animate-pulse' : 'bg-primary-500'}`} />
-            <span>{isLive ? 'Cloud Firestore Dynamic Timeline' : 'Verified Trajectory Track'}</span>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 mb-1">
+            <span className={`w-2 h-2 rounded-full ${isLive ? 'bg-emerald-500 animate-pulse' : 'bg-primary-500'}`} aria-hidden="true" />
+            <span>{isLive ? 'Cloud Firestore Verified Timeline' : 'Verified Career & Project Timeline'}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Experience & Achievements
+            Experience & Journey
           </h2>
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-            Practical development trajectory, collaborative initiatives, academic research tracks, and milestones.
+            Practical engineering experience, hackathons, academic research, and technical certifications.
           </p>
-          <div className="w-12 h-1 bg-primary-500 mx-auto rounded-full mt-2" />
+          <div className="w-12 h-1 bg-primary-500 mx-auto rounded-full mt-2" aria-hidden="true" />
         </div>
 
         {/* Category Navigation Tabs */}
         {!loading && (
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            {tabs.map((tab) => {
+          <div role="tablist" aria-label="Experience Categories" className="flex flex-wrap items-center justify-center gap-2">
+            {tabs.map((tab, idx) => {
               const Icon = tab.icon;
               const count = (timelineData[tab.id] || []).length;
               const isActive = activeTab === tab.id;
               return (
                 <button
                   key={tab.id}
+                  id={`tab-${tab.id}`}
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls="timeline-panel"
+                  tabIndex={isActive ? 0 : -1}
+                  onKeyDown={(e) => handleTabKeyDown(e, idx)}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all cursor-pointer ${
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 ${
                     isActive
                       ? 'bg-primary-600 text-white shadow-sm'
-                      : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                      : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`}
                 >
-                  <Icon size={16} />
+                  <Icon size={16} aria-hidden="true" />
                   <span>{tab.label}</span>
                   <span
                     className={`text-[11px] font-mono px-1.5 py-0.2 rounded-full ${
                       isActive
                         ? 'bg-primary-700 text-white'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                     }`}
                   >
                     {count}
@@ -170,7 +190,12 @@ export default function Experience() {
 
         {/* Timeline Content */}
         {!loading && !error && items.length > 0 && (
-          <div className="max-w-3xl mx-auto">
+          <div
+            id="timeline-panel"
+            role="tabpanel"
+            aria-labelledby={`tab-${activeTab}`}
+            className="max-w-3xl mx-auto"
+          >
             <div className="relative border-l-2 border-slate-200 dark:border-slate-800 ml-4 sm:ml-6 space-y-8 py-2">
               {items.map((item) => (
                 <div key={item.id} className="relative pl-6 sm:pl-8 group">

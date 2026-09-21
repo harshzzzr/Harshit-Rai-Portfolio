@@ -222,10 +222,11 @@ export default function SocialProfiles() {
                 href={GITHUB_PROFILE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-semibold text-xs transition-colors"
+                aria-label="View Full GitHub Profile of Harshit Rai (opens in new tab)"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-semibold text-xs transition-colors focus-visible:ring-2 focus-visible:ring-primary-500"
               >
                 <span>View Full GitHub Profile</span>
-                <ExternalLink size={13} />
+                <ExternalLink size={13} aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -257,10 +258,10 @@ export default function SocialProfiles() {
                   href={personalInfo.socials.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                  aria-label="Open LinkedIn Profile"
+                  className="p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:ring-2 focus-visible:ring-[#0A66C2]"
+                  aria-label="Open LinkedIn Profile of Harshit Rai in new tab"
                 >
-                  <ExternalLink size={16} />
+                  <ExternalLink size={16} aria-hidden="true" />
                 </a>
               </div>
 
@@ -281,18 +282,18 @@ export default function SocialProfiles() {
 
               {/* Engagement Highlights */}
               <div className="space-y-2">
-                <h4 className="text-[11px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1 font-semibold">
+                <h4 className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 font-semibold">
                   Professional Focus
                 </h4>
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="p-2.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800/80">
-                    <span className="text-slate-400 text-[10px] block font-mono">Opportunity</span>
+                    <span className="text-slate-500 dark:text-slate-400 text-[10px] block font-mono">Opportunity</span>
                     <span className="font-semibold text-slate-800 dark:text-slate-200">
                       Internships & Roles
                     </span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800/80">
-                    <span className="text-slate-400 text-[10px] block font-mono">Domain</span>
+                    <span className="text-slate-500 dark:text-slate-400 text-[10px] block font-mono">Domain</span>
                     <span className="font-semibold text-slate-800 dark:text-slate-200">
                       Software Engineering
                     </span>
@@ -307,10 +308,11 @@ export default function SocialProfiles() {
                 href={personalInfo.socials.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#0A66C2] hover:bg-[#004182] text-white font-semibold text-xs transition-colors shadow-xs"
+                aria-label="Connect with Harshit Rai on LinkedIn (opens in new tab)"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#0A66C2] hover:bg-[#004182] text-white font-semibold text-xs transition-colors shadow-xs focus-visible:ring-2 focus-visible:ring-[#0A66C2]"
               >
                 <span>Connect on LinkedIn</span>
-                <ExternalLink size={13} />
+                <ExternalLink size={13} aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -341,10 +343,10 @@ export default function SocialProfiles() {
                   href={LEETCODE_PROFILE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                  aria-label="Open LeetCode Profile"
+                  className="p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:ring-2 focus-visible:ring-amber-500"
+                  aria-label="Open LeetCode Profile of Harshit Rai in new tab"
                 >
-                  <ExternalLink size={16} />
+                  <ExternalLink size={16} aria-hidden="true" />
                 </a>
               </div>
 
@@ -352,7 +354,7 @@ export default function SocialProfiles() {
               {leetcodeData?.hasStats && leetcodeData?.data ? (
                 <div className="p-4 rounded-xl bg-white dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium text-slate-500">Verified Solved Problems</span>
+                    <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Verified Solved Problems</span>
                     <span className="text-lg font-bold font-mono text-amber-600 dark:text-amber-400">
                       {leetcodeData.data.totalSolved}
                     </span>
@@ -360,22 +362,22 @@ export default function SocialProfiles() {
                   <div className="grid grid-cols-3 gap-2 text-center text-xs font-mono">
                     <div className="p-2 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300">
                       <div className="font-bold">{leetcodeData.data.easySolved}</div>
-                      <div className="text-[10px] text-emerald-600/80">Easy</div>
+                      <div className="text-[10px] text-emerald-600/80 dark:text-emerald-400/80">Easy</div>
                     </div>
                     <div className="p-2 rounded bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300">
                       <div className="font-bold">{leetcodeData.data.mediumSolved}</div>
-                      <div className="text-[10px] text-amber-600/80">Medium</div>
+                      <div className="text-[10px] text-amber-600/80 dark:text-amber-400/80">Medium</div>
                     </div>
                     <div className="p-2 rounded bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300">
                       <div className="font-bold">{leetcodeData.data.hardSolved}</div>
-                      <div className="text-[10px] text-red-600/80">Hard</div>
+                      <div className="text-[10px] text-red-600/80 dark:text-red-400/80">Hard</div>
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className="p-4 rounded-xl bg-white dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-2">
                   <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200">
-                    <Code2 size={15} className="text-amber-500" />
+                    <Code2 size={15} className="text-amber-500" aria-hidden="true" />
                     <span>Algorithmic Competencies</span>
                   </div>
                   <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -386,7 +388,7 @@ export default function SocialProfiles() {
 
               {/* Topics Grid */}
               <div>
-                <h4 className="text-[11px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 font-semibold">
+                <h4 className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 font-semibold">
                   Core Problem Domains
                 </h4>
                 <div className="flex flex-wrap gap-1.5">
@@ -408,10 +410,11 @@ export default function SocialProfiles() {
                 href={LEETCODE_PROFILE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs transition-colors shadow-xs"
+                aria-label="View LeetCode Profile of Harshit Rai (opens in new tab)"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs transition-colors shadow-xs focus-visible:ring-2 focus-visible:ring-amber-500"
               >
                 <span>View LeetCode Profile</span>
-                <ExternalLink size={13} />
+                <ExternalLink size={13} aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -429,7 +432,7 @@ export default function SocialProfiles() {
                     <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                       <span>Spotify</span>
                       {/* Equalizer animation */}
-                      <span className="flex items-end gap-0.5 h-3 ml-1">
+                      <span className="flex items-end gap-0.5 h-3 ml-1" aria-hidden="true">
                         <span className="w-0.5 h-2 bg-emerald-500 animate-pulse" />
                         <span className="w-0.5 h-3 bg-emerald-500 animate-pulse delay-75" />
                         <span className="w-0.5 h-1.5 bg-emerald-500 animate-pulse delay-150" />
@@ -445,10 +448,10 @@ export default function SocialProfiles() {
                   href={SPOTIFY_PROFILE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                  aria-label="Open Spotify Profile"
+                  className="p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:ring-2 focus-visible:ring-[#1DB954]"
+                  aria-label="Open Spotify Profile of Harshit Rai in new tab"
                 >
-                  <ExternalLink size={16} />
+                  <ExternalLink size={16} aria-hidden="true" />
                 </a>
               </div>
 
@@ -456,39 +459,42 @@ export default function SocialProfiles() {
               <div className="p-4 rounded-xl bg-white dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Headphones size={15} className="text-emerald-500" />
+                    <Headphones size={15} className="text-emerald-500" aria-hidden="true" />
                     <span className="text-xs font-bold text-slate-900 dark:text-white">
-                      {spotifyData?.isPlaying ? 'Currently Playing' : 'Coding Session Audio'}
+                      Current Listening Track
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
-                    {spotifyData?.isPlaying ? 'Live on Spotify' : 'Focus Mode'}
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 font-semibold">
+                    {spotifyData?.isPlaying ? 'Streaming Now' : 'Focus Mode'}
                   </span>
                 </div>
 
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  {spotifyData?.isPlaying
-                    ? `Listening to ${spotifyData.title} by ${spotifyData.artist}`
-                    : 'Curated instrumental tracks, synthwave, and ambient soundscapes fueling deep coding sessions.'}
-                </p>
+                <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800">
+                  <div className="font-bold text-xs text-slate-900 dark:text-white truncate">
+                    {spotifyData?.title || 'Ambient Synthesizer & Algorithms'}
+                  </div>
+                  <div className="text-[11px] text-slate-500 truncate mt-0.5">
+                    {spotifyData?.artist || 'Harshit Rai Coding Flow Selection'}
+                  </div>
+                </div>
               </div>
 
-              {/* Focus Soundtracks */}
-              <div>
-                <h4 className="text-[11px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 font-semibold">
-                  Curated Flow Soundtracks
+              {/* Soundtracks List */}
+              <div className="space-y-2">
+                <h4 className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 font-semibold">
+                  Focus Soundtracks
                 </h4>
                 <div className="space-y-1.5">
-                  {(spotifyData?.soundtracks || []).slice(0, 2).map((item, idx) => (
+                  {(spotifyData?.soundtracks || []).slice(0, 2).map((item) => (
                     <div
-                      key={idx}
-                      className="p-2.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800/80 text-xs flex items-center justify-between"
+                      key={item.id}
+                      className="p-2 rounded-lg bg-white dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800/80 flex items-center justify-between text-xs"
                     >
-                      <div>
-                        <div className="font-semibold text-slate-800 dark:text-slate-200">
+                      <div className="min-w-0 pr-2">
+                        <div className="font-medium text-slate-800 dark:text-slate-200 truncate">
                           {item.title}
                         </div>
-                        <div className="text-[10px] text-slate-400 font-mono">{item.artist}</div>
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">{item.artist}</div>
                       </div>
                       <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded">
                         {item.genre}
@@ -505,10 +511,11 @@ export default function SocialProfiles() {
                 href={SPOTIFY_PROFILE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#1DB954] hover:bg-[#1aa34a] text-white font-semibold text-xs transition-colors shadow-xs"
+                aria-label="Open Spotify Profile of Harshit Rai (opens in new tab)"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#1DB954] hover:bg-[#1aa34a] text-white font-semibold text-xs transition-colors shadow-xs focus-visible:ring-2 focus-visible:ring-[#1DB954]"
               >
                 <span>Open Spotify Profile</span>
-                <ExternalLink size={13} />
+                <ExternalLink size={13} aria-hidden="true" />
               </a>
             </div>
           </div>

@@ -53,23 +53,31 @@ export default function Projects() {
 
         {/* Filter Controls & Actions */}
         {!loading && !error && projects.length > 0 && (
-          <div className="flex flex-wrap items-center justify-center gap-2">
+          <div role="tablist" aria-label="Project category filters" className="flex flex-wrap items-center justify-center gap-2">
             <button
+              id="tab-filter-all"
+              role="tab"
+              aria-selected={filter === 'all'}
+              aria-controls="projects-grid"
               onClick={() => setFilter('all')}
-              className={`px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+              className={`px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 ${
                 filter === 'all'
                   ? 'bg-primary-600 text-white shadow-sm'
-                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
               }`}
             >
               All Projects ({projects.length})
             </button>
             <button
+              id="tab-filter-featured"
+              role="tab"
+              aria-selected={filter === 'featured'}
+              aria-controls="projects-grid"
               onClick={() => setFilter('featured')}
-              className={`px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+              className={`px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 ${
                 filter === 'featured'
                   ? 'bg-primary-600 text-white shadow-sm'
-                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
               }`}
             >
               Featured Only ({projects.filter((p) => p.featured).length})
@@ -151,7 +159,12 @@ export default function Projects() {
 
         {/* Projects Grid */}
         {!loading && !error && filteredProjects.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div
+            id="projects-grid"
+            role="tabpanel"
+            aria-labelledby={`tab-filter-${filter}`}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
             {filteredProjects.map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}

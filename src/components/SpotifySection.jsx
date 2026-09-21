@@ -98,20 +98,21 @@ export default function SpotifySection() {
               <button
                 onClick={fetchPlayback}
                 disabled={loading}
-                title="Refresh Spotify status"
-                className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                aria-label="Refresh Spotify playback status"
+                className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-[#1DB954]"
               >
-                <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+                <RefreshCw size={14} className={loading ? 'animate-spin' : ''} aria-hidden="true" />
               </button>
 
               <a
                 href={SPOTIFY_PROFILE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1DB954] hover:bg-[#1aa34a] text-white font-semibold text-xs transition-colors shadow-sm shadow-[#1DB954]/25"
+                aria-label="Open Spotify Profile of Harshit Rai (opens in new tab)"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1DB954] hover:bg-[#1aa34a] text-white font-semibold text-xs transition-colors shadow-sm shadow-[#1DB954]/25 focus-visible:ring-2 focus-visible:ring-[#1DB954]"
               >
                 <span>Open Spotify Profile</span>
-                <ExternalLink size={13} />
+                <ExternalLink size={13} aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -125,10 +126,10 @@ export default function SpotifySection() {
               {/* Card Header with Animated Equalizer */}
               <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                 <div className="flex items-center gap-2">
-                  <Headphones size={18} className="text-[#1DB954]" />
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                  <Headphones size={18} className="text-[#1DB954]" aria-hidden="true" />
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                     {isLive ? 'Currently Listening' : 'Focus Audio Atmosphere'}
-                  </h4>
+                  </h3>
                 </div>
 
                 {/* Animated Soundwave Bars */}
@@ -148,11 +149,11 @@ export default function SpotifySection() {
                   {playback?.albumImageUrl ? (
                     <img
                       src={playback.albumImageUrl}
-                      alt={playback.title}
+                      alt={`Album artwork for ${playback.title || 'Track'} by ${playback.artist || 'Artist'}`}
                       className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl object-cover shadow-md border border-slate-200 dark:border-slate-800 group-hover:scale-105 transition-transform"
                     />
                   ) : (
-                    <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-gradient-to-br from-[#1DB954]/20 via-slate-900 to-slate-950 text-white flex flex-col items-center justify-center p-3 border border-slate-200 dark:border-slate-800 shadow-md">
+                    <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-gradient-to-br from-[#1DB954]/20 via-slate-900 to-slate-950 text-white flex flex-col items-center justify-center p-3 border border-slate-200 dark:border-slate-800 shadow-md" aria-hidden="true">
                       <Disc3 size={38} className="text-[#1DB954] animate-spin duration-3000" />
                       <span className="text-[10px] font-mono text-slate-400 mt-2">Spotify Audio</span>
                     </div>
@@ -210,12 +211,12 @@ export default function SpotifySection() {
           <div className="lg:col-span-6 space-y-4">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <Sparkles size={17} className="text-[#1DB954]" />
-                <h4 className="text-base font-bold text-slate-900 dark:text-white">
+                <Sparkles size={17} className="text-[#1DB954]" aria-hidden="true" />
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
                   Curated Coding Flow Playlists
-                </h4>
+                </h3>
               </div>
-              <span className="text-xs font-mono text-slate-400">Spotify Verified</span>
+              <span className="text-xs font-mono text-slate-500 dark:text-slate-400">Spotify Verified</span>
             </div>
 
             <div className="space-y-3">
@@ -225,21 +226,23 @@ export default function SpotifySection() {
                   href={item.songUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group block p-4 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm hover:shadow-md hover:border-[#1DB954]/50 transition-all duration-200"
+                  aria-label={`Listen to ${item.title} by ${item.artist} on Spotify (opens in new tab)`}
+                  className="group block p-4 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm hover:shadow-md hover:border-[#1DB954]/50 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-[#1DB954]"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3.5 min-w-0">
                       <div
                         className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.coverColor} text-white flex items-center justify-center shrink-0 shadow-xs`}
+                        aria-hidden="true"
                       >
                         <Music size={18} />
                       </div>
 
                       <div className="min-w-0">
-                        <h5 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#1DB954] transition-colors truncate">
+                        <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#1DB954] transition-colors truncate">
                           {item.title}
-                        </h5>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                        </h4>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 truncate">
                           {item.artist} • {item.album}
                         </p>
                       </div>
@@ -252,6 +255,7 @@ export default function SpotifySection() {
                       <ExternalLink
                         size={14}
                         className="text-slate-400 group-hover:text-[#1DB954] transition-colors"
+                        aria-hidden="true"
                       />
                     </div>
                   </div>

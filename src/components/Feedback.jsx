@@ -312,9 +312,9 @@ export default function Feedback() {
 
               {/* Success Notification State */}
               {submitted ? (
-                <div className="py-6 text-center space-y-4 animate-fade-in">
+                <div role="status" aria-live="polite" className="py-6 text-center space-y-4 animate-fade-in">
                   <div className="w-14 h-14 mx-auto rounded-full bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
-                    <CheckCircle2 size={30} />
+                    <CheckCircle2 size={30} aria-hidden="true" />
                   </div>
                   <div>
                     <h4 className="text-base font-bold text-slate-900 dark:text-white">
@@ -326,7 +326,7 @@ export default function Feedback() {
                   </div>
                   <button
                     onClick={handleResetForm}
-                    className="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 bg-primary-50 dark:bg-primary-950/40 hover:bg-primary-100 rounded-lg transition-colors cursor-pointer"
+                    className="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 bg-primary-50 dark:bg-primary-950/40 hover:bg-primary-100 rounded-lg transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500"
                   >
                     Submit Another Review
                   </button>
@@ -350,8 +350,8 @@ export default function Feedback() {
 
                   {/* General Error Banner */}
                   {submitError && (
-                    <div className="p-3 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-300 text-xs flex items-start gap-2">
-                      <AlertCircle size={15} className="mt-0.5 shrink-0" />
+                    <div role="alert" className="p-3 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-300 text-xs flex items-start gap-2">
+                      <AlertCircle size={15} className="mt-0.5 shrink-0" aria-hidden="true" />
                       <span>{submitError}</span>
                     </div>
                   )}
@@ -371,16 +371,20 @@ export default function Feedback() {
                       value={formData.name}
                       onChange={handleChange}
                       maxLength={100}
+                      required
+                      aria-required="true"
+                      aria-invalid={Boolean(errors.name)}
+                      aria-describedby={errors.name ? 'feedback-name-error' : undefined}
                       placeholder="e.g. Alex Rivera, Tech Lead"
                       className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 border ${
                         errors.name
                           ? 'border-red-500 focus:ring-red-500'
                           : 'border-slate-300 dark:border-slate-800 focus:ring-primary-500'
-                      } text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 transition-all`}
+                      } text-slate-900 dark:text-white placeholder-slate-400 focus-visible:ring-2 focus-visible:ring-primary-500 transition-all`}
                     />
                     {errors.name && (
-                      <p className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
-                        <AlertCircle size={12} />
+                      <p id="feedback-name-error" role="alert" className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
+                        <AlertCircle size={12} aria-hidden="true" />
                         <span>{errors.name}</span>
                       </p>
                     )}
@@ -389,7 +393,7 @@ export default function Feedback() {
                   {/* Star Rating Selection */}
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
-                      <label className="block text-xs font-medium text-slate-700 dark:text-slate-300">
+                      <label id="rating-label" className="block text-xs font-medium text-slate-700 dark:text-slate-300">
                         Rating <span className="text-red-500">*</span>
                       </label>
                       <span className="text-[11px] font-mono text-primary-600 dark:text-primary-400 font-medium">
@@ -397,16 +401,34 @@ export default function Feedback() {
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                    <div
+                      role="radiogroup"
+                      aria-labelledby="rating-label"
+                      className="flex items-center gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
+                    >
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
                           key={star}
                           type="button"
+                          role="radio"
+                          aria-checked={star === activeRating}
+                          tabIndex={star === activeRating ? 0 : -1}
                           onClick={() => handleRatingSelect(star)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                              e.preventDefault();
+                              const next = star < 5 ? star + 1 : 1;
+                              handleRatingSelect(next);
+                            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                              e.preventDefault();
+                              const prev = star > 1 ? star - 1 : 5;
+                              handleRatingSelect(prev);
+                            }
+                          }}
                           onMouseEnter={() => setHoveredStar(star)}
                           onMouseLeave={() => setHoveredStar(0)}
-                          className="p-1 rounded hover:scale-110 transition-transform cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-500"
-                          aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
+                          className="p-1 rounded hover:scale-110 transition-transform cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500"
+                          aria-label={`Rate ${star} star${star > 1 ? 's' : ''} — ${RATING_LABELS[star]}`}
                         >
                           <Star
                             size={24}
@@ -415,13 +437,14 @@ export default function Feedback() {
                                 ? 'text-amber-400 fill-amber-400'
                                 : 'text-slate-300 dark:text-slate-700'
                             }`}
+                            aria-hidden="true"
                           />
                         </button>
                       ))}
                     </div>
                     {errors.rating && (
-                      <p className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
-                        <AlertCircle size={12} />
+                      <p role="alert" className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
+                        <AlertCircle size={12} aria-hidden="true" />
                         <span>{errors.rating}</span>
                       </p>
                     )}
@@ -440,7 +463,7 @@ export default function Feedback() {
                         className={`text-[11px] font-mono ${
                           formData.feedback.length > 950
                             ? 'text-amber-600 dark:text-amber-400 font-bold'
-                            : 'text-slate-400'
+                            : 'text-slate-500 dark:text-slate-400'
                         }`}
                       >
                         {formData.feedback.length} / 1000
@@ -453,16 +476,20 @@ export default function Feedback() {
                       value={formData.feedback}
                       onChange={handleChange}
                       maxLength={1000}
+                      required
+                      aria-required="true"
+                      aria-invalid={Boolean(errors.feedback)}
+                      aria-describedby={errors.feedback ? 'feedback-text-error' : undefined}
                       placeholder="Share your thoughts on collaboration, engineering quality, communication, or project milestones..."
                       className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 border ${
                         errors.feedback
                           ? 'border-red-500 focus:ring-red-500'
                           : 'border-slate-300 dark:border-slate-800 focus:ring-primary-500'
-                      } text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 transition-all resize-none`}
+                      } text-slate-900 dark:text-white placeholder-slate-400 focus-visible:ring-2 focus-visible:ring-primary-500 transition-all resize-none`}
                     />
                     {errors.feedback && (
-                      <p className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
-                        <AlertCircle size={12} />
+                      <p id="feedback-text-error" role="alert" className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
+                        <AlertCircle size={12} aria-hidden="true" />
                         <span>{errors.feedback}</span>
                       </p>
                     )}

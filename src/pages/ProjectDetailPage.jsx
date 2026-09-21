@@ -169,9 +169,10 @@ export default function ProjectDetailPage() {
       <div>
         <Link
           to="/#projects"
-          className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors group"
+          aria-label="Back to projects list on homepage"
+          className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors group focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-1"
         >
-          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" aria-hidden="true" />
           <span>Back to Projects</span>
         </Link>
       </div>
@@ -179,18 +180,18 @@ export default function ProjectDetailPage() {
       {/* Hero Visual Header Banner */}
       <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-gradient-to-br from-slate-100 via-slate-50 to-slate-200 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 shadow-md">
         {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-25 dark:opacity-15 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:20px_20px]" />
+        <div className="absolute inset-0 opacity-25 dark:opacity-15 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:20px_20px]" aria-hidden="true" />
 
         <div className="relative p-6 sm:p-10 lg:p-12 space-y-6">
           <div className="flex flex-wrap items-center gap-3">
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800">
-              <FolderGit2 size={13} />
+              <FolderGit2 size={13} aria-hidden="true" />
               <span>{project.badge || 'Engineering Project'}</span>
             </span>
 
             {project.featured && (
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500 text-white shadow-sm">
-                <Sparkles size={12} />
+                <Sparkles size={12} aria-hidden="true" />
                 <span>Featured Project</span>
               </span>
             )}
@@ -201,7 +202,7 @@ export default function ProjectDetailPage() {
               {project.title}
             </h1>
             {(project.shortDescription || project.tagline) && (
-              <p className="text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
+              <p className="text-base sm:text-lg lg:text-xl text-slate-700 dark:text-slate-300 max-w-3xl leading-relaxed">
                 {project.shortDescription || project.tagline}
               </p>
             )}
@@ -214,7 +215,8 @@ export default function ProjectDetailPage() {
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-semibold hover:opacity-90 transition-all shadow-sm"
+                aria-label={`View source code for ${project.title} on GitHub (opens in new tab)`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-semibold hover:opacity-90 transition-all shadow-sm focus-visible:ring-2 focus-visible:ring-primary-500"
               >
                 <GithubIcon size={18} />
                 <span>View Repository</span>
@@ -226,9 +228,10 @@ export default function ProjectDetailPage() {
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold transition-all shadow-sm"
+                aria-label={`View live demonstration of ${project.title} (opens in new tab)`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold transition-all shadow-sm focus-visible:ring-2 focus-visible:ring-primary-500"
               >
-                <ExternalLink size={18} />
+                <ExternalLink size={18} aria-hidden="true" />
                 <span>Live Demonstration</span>
               </a>
             )}

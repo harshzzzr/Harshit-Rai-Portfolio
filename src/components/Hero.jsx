@@ -19,7 +19,7 @@ export default function Hero() {
           <div className="mx-auto w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-primary-500/60 shadow-md">
             <SafeImage
               src={personalInfo.profileImage}
-              alt={personalInfo.name}
+              alt={`Portrait of ${personalInfo.name}`}
               className="w-full h-full object-cover"
             />
           </div>
@@ -27,25 +27,25 @@ export default function Hero() {
 
         {/* Intro Tag */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-primary-700 dark:text-primary-400">
-          <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
           <span>Available for Developer Roles & Collaborations</span>
         </div>
 
         {/* Name and Titles */}
         <div className="space-y-3">
-          <p className="text-base sm:text-lg font-medium text-slate-500 dark:text-slate-400">
+          <p className="text-base sm:text-lg font-medium text-slate-600 dark:text-slate-400">
             Hi, I'm
           </p>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white">
             {personalInfo.name.toUpperCase()}
           </h1>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-primary-600 dark:text-primary-400">
+          <p className="text-xl sm:text-2xl md:text-3xl font-semibold text-primary-600 dark:text-primary-400">
             {personalInfo.role}
-          </h2>
+          </p>
         </div>
 
         {/* Short Bio */}
-        <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+        <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
           {personalInfo.shortBio}
         </p>
 
@@ -53,25 +53,26 @@ export default function Hero() {
         <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
           <a
             href="#projects"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm sm:text-base font-semibold shadow-md shadow-primary-500/20 hover:shadow-primary-500/30 transition-all transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-slate-950"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm sm:text-base font-semibold shadow-md shadow-primary-500/20 hover:shadow-primary-500/30 transition-all transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
           >
             <span>View Projects</span>
-            <ArrowDown size={16} />
+            <ArrowDown size={16} aria-hidden="true" />
           </a>
 
           <a
             href="/resume/resume.pdf"
             download="Harshit_Rai_Resume.pdf"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm sm:text-base font-semibold border border-slate-300 dark:border-slate-700 shadow-sm transition-all transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm sm:text-base font-semibold border border-slate-300 dark:border-slate-700 shadow-sm transition-all transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-primary-500"
+            aria-label="Download resume PDF of Harshit Rai"
           >
-            <FileText size={16} />
+            <FileText size={16} aria-hidden="true" />
             <span>Download Resume</span>
           </a>
         </div>
 
         {/* Social Links */}
         <div className="pt-6">
-          <p className="text-xs uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 font-semibold">
+          <p className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-3 font-semibold">
             Connect & Profiles
           </p>
           <div className="flex items-center justify-center gap-3">
@@ -80,8 +81,8 @@ export default function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               title="GitHub Profile"
-              className="p-3 rounded-full bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 border border-slate-200 dark:border-slate-800 transition-all hover:scale-110"
-              aria-label="GitHub"
+              className="p-3 rounded-full bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 border border-slate-200 dark:border-slate-800 transition-all hover:scale-110 focus-visible:ring-2 focus-visible:ring-primary-500"
+              aria-label="GitHub profile of Harshit Rai (opens in new tab)"
             >
               <GithubIcon size={20} />
             </a>
@@ -90,8 +91,8 @@ export default function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               title="LinkedIn Profile"
-              className="p-3 rounded-full bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 border border-slate-200 dark:border-slate-800 transition-all hover:scale-110"
-              aria-label="LinkedIn"
+              className="p-3 rounded-full bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 border border-slate-200 dark:border-slate-800 transition-all hover:scale-110 focus-visible:ring-2 focus-visible:ring-primary-500"
+              aria-label="LinkedIn profile of Harshit Rai (opens in new tab)"
             >
               <LinkedinIcon size={20} />
             </a>
@@ -100,8 +101,8 @@ export default function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               title="LeetCode Profile"
-              className="p-3 rounded-full bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 border border-slate-200 dark:border-slate-800 transition-all hover:scale-110"
-              aria-label="LeetCode"
+              className="p-3 rounded-full bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 border border-slate-200 dark:border-slate-800 transition-all hover:scale-110 focus-visible:ring-2 focus-visible:ring-primary-500"
+              aria-label="LeetCode profile of Harshit Rai (opens in new tab)"
             >
               <LeetcodeIcon size={20} />
             </a>
@@ -110,8 +111,8 @@ export default function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               title="Spotify Profile"
-              className="p-3 rounded-full bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 border border-slate-200 dark:border-slate-800 transition-all hover:scale-110"
-              aria-label="Spotify"
+              className="p-3 rounded-full bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 border border-slate-200 dark:border-slate-800 transition-all hover:scale-110 focus-visible:ring-2 focus-visible:ring-primary-500"
+              aria-label="Spotify profile of Harshit Rai (opens in new tab)"
             >
               <SpotifyIcon size={20} />
             </a>

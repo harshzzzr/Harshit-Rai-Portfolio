@@ -202,18 +202,18 @@ export default function Contact() {
                     setServerError(null);
                     setErrors((prev) => ({ ...prev, general: '' }));
                   }}
-                  className="text-rose-500 hover:text-rose-700 dark:hover:text-rose-300 p-1 cursor-pointer"
-                  title="Dismiss alert"
+                  className="text-rose-500 hover:text-rose-700 dark:hover:text-rose-300 p-1 cursor-pointer focus-visible:ring-2 focus-visible:ring-rose-500 rounded"
+                  aria-label="Dismiss alert"
                 >
-                  <X size={16} />
+                  <X size={16} aria-hidden="true" />
                 </button>
               </div>
             )}
 
             {isSubmitted ? (
-              <div className="text-center py-10 space-y-4 animate-fade-in">
+              <div role="status" aria-live="polite" className="text-center py-10 space-y-4 animate-fade-in">
                 <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center">
-                  <CheckCircle2 size={32} />
+                  <CheckCircle2 size={32} aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">
                   Message Delivered Successfully!
@@ -228,7 +228,7 @@ export default function Contact() {
                       setServerError(null);
                       setErrors({});
                     }}
-                    className="px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold transition-colors cursor-pointer shadow-sm"
+                    className="px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold transition-colors cursor-pointer shadow-sm focus-visible:ring-2 focus-visible:ring-primary-500"
                   >
                     Send Another Message
                   </button>
@@ -262,6 +262,10 @@ export default function Contact() {
                       name="name"
                       maxLength={100}
                       disabled={isSubmitting}
+                      required
+                      aria-required="true"
+                      aria-invalid={Boolean(errors.name)}
+                      aria-describedby={errors.name ? 'contact-name-error' : undefined}
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="e.g. John Doe"
@@ -269,11 +273,11 @@ export default function Contact() {
                         errors.name
                           ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
                           : 'border-slate-200 dark:border-slate-700 focus:border-primary-500 focus:ring-primary-500/20'
-                      } text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all disabled:opacity-60`}
+                      } text-slate-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-500 transition-all disabled:opacity-60`}
                     />
                     {errors.name && (
-                      <p className="flex items-center gap-1 text-xs text-rose-500">
-                        <AlertCircle size={12} />
+                      <p id="contact-name-error" role="alert" className="flex items-center gap-1 text-xs text-rose-500">
+                        <AlertCircle size={12} aria-hidden="true" />
                         <span>{errors.name}</span>
                       </p>
                     )}
@@ -290,6 +294,10 @@ export default function Contact() {
                       name="email"
                       maxLength={150}
                       disabled={isSubmitting}
+                      required
+                      aria-required="true"
+                      aria-invalid={Boolean(errors.email)}
+                      aria-describedby={errors.email ? 'contact-email-error' : undefined}
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="e.g. john@example.com"
@@ -297,11 +305,11 @@ export default function Contact() {
                         errors.email
                           ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
                           : 'border-slate-200 dark:border-slate-700 focus:border-primary-500 focus:ring-primary-500/20'
-                      } text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all disabled:opacity-60`}
+                      } text-slate-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-500 transition-all disabled:opacity-60`}
                     />
                     {errors.email && (
-                      <p className="flex items-center gap-1 text-xs text-rose-500">
-                        <AlertCircle size={12} />
+                      <p id="contact-email-error" role="alert" className="flex items-center gap-1 text-xs text-rose-500">
+                        <AlertCircle size={12} aria-hidden="true" />
                         <span>{errors.email}</span>
                       </p>
                     )}
@@ -319,6 +327,10 @@ export default function Contact() {
                     name="subject"
                     maxLength={200}
                     disabled={isSubmitting}
+                    required
+                    aria-required="true"
+                    aria-invalid={Boolean(errors.subject)}
+                    aria-describedby={errors.subject ? 'contact-subject-error' : undefined}
                     value={formData.subject}
                     onChange={handleChange}
                     placeholder="e.g. Software Engineering Opportunity"
@@ -326,11 +338,11 @@ export default function Contact() {
                       errors.subject
                         ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
                         : 'border-slate-200 dark:border-slate-700 focus:border-primary-500 focus:ring-primary-500/20'
-                    } text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all disabled:opacity-60`}
+                    } text-slate-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-500 transition-all disabled:opacity-60`}
                   />
                   {errors.subject && (
-                    <p className="flex items-center gap-1 text-xs text-rose-500">
-                      <AlertCircle size={12} />
+                    <p id="contact-subject-error" role="alert" className="flex items-center gap-1 text-xs text-rose-500">
+                      <AlertCircle size={12} aria-hidden="true" />
                       <span>{errors.subject}</span>
                     </p>
                   )}
@@ -344,7 +356,7 @@ export default function Contact() {
                     </label>
                     <span
                       className={`text-[11px] font-mono ${
-                        formData.message.length > 2800 ? 'text-amber-500 font-bold' : 'text-slate-400 dark:text-slate-500'
+                        formData.message.length > 2800 ? 'text-amber-500 font-bold' : 'text-slate-500 dark:text-slate-400'
                       }`}
                     >
                       {formData.message.length} / 3000
@@ -356,6 +368,10 @@ export default function Contact() {
                     rows={4}
                     maxLength={3000}
                     disabled={isSubmitting}
+                    required
+                    aria-required="true"
+                    aria-invalid={Boolean(errors.message)}
+                    aria-describedby={errors.message ? 'contact-message-error' : undefined}
                     value={formData.message}
                     onChange={handleChange}
                     placeholder="Hello Harshit, I'd like to discuss..."
@@ -363,11 +379,11 @@ export default function Contact() {
                       errors.message
                         ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
                         : 'border-slate-200 dark:border-slate-700 focus:border-primary-500 focus:ring-primary-500/20'
-                    } text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all resize-none disabled:opacity-60`}
+                    } text-slate-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-500 transition-all resize-none disabled:opacity-60`}
                   />
                   {errors.message && (
-                    <p className="flex items-center gap-1 text-xs text-rose-500">
-                      <AlertCircle size={12} />
+                    <p id="contact-message-error" role="alert" className="flex items-center gap-1 text-xs text-rose-500">
+                      <AlertCircle size={12} aria-hidden="true" />
                       <span>{errors.message}</span>
                     </p>
                   )}
@@ -377,16 +393,17 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 cursor-pointer"
+                  aria-busy={isSubmitting}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-primary-500 disabled:opacity-50 cursor-pointer"
                 >
                   {isSubmitting ? (
                     <>
-                      <RefreshCw size={16} className="animate-spin" />
+                      <RefreshCw size={16} className="animate-spin" aria-hidden="true" />
                       <span>Delivering Message...</span>
                     </>
                   ) : (
                     <>
-                      <Send size={16} />
+                      <Send size={16} aria-hidden="true" />
                       <span>Send Message</span>
                     </>
                   )}

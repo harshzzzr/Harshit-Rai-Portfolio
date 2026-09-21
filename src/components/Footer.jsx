@@ -96,8 +96,8 @@ export default function Footer() {
                 href={personalInfo.socials.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                aria-label="GitHub"
+                className="p-2 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500"
+                aria-label="GitHub profile of Harshit Rai (opens in new tab)"
               >
                 <GithubIcon size={16} />
               </a>
@@ -105,8 +105,8 @@ export default function Footer() {
                 href={personalInfo.socials.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                aria-label="LinkedIn"
+                className="p-2 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500"
+                aria-label="LinkedIn profile of Harshit Rai (opens in new tab)"
               >
                 <LinkedinIcon size={16} />
               </a>
@@ -114,8 +114,8 @@ export default function Footer() {
                 href={personalInfo.socials.leetcode}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                aria-label="LeetCode"
+                className="p-2 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500"
+                aria-label="LeetCode profile of Harshit Rai (opens in new tab)"
               >
                 <LeetcodeIcon size={16} />
               </a>
@@ -123,17 +123,17 @@ export default function Footer() {
                 href={personalInfo.socials.spotify}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                aria-label="Spotify"
+                className="p-2 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500"
+                aria-label="Spotify profile of Harshit Rai (opens in new tab)"
               >
                 <SpotifyIcon size={16} />
               </a>
             </div>
 
-            <div className="pt-2 text-xs text-slate-500">
+            <div className="pt-2 text-xs text-slate-600 dark:text-slate-400">
               <a
                 href="#contact"
-                className="inline-flex items-center gap-1.5 text-primary-600 dark:text-primary-400 hover:underline"
+                className="inline-flex items-center gap-1.5 text-primary-600 dark:text-primary-400 hover:underline focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
               >
                 <Mail size={13} />
                 <span>{personalInfo.contact.email}</span>
@@ -143,19 +143,19 @@ export default function Footer() {
         </div>
 
         {/* Bottom row */}
-        <div className="pt-8 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+        <div className="pt-8 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600 dark:text-slate-400">
           <p>
             © {new Date().getFullYear()} Harshit Rai. All rights reserved.
           </p>
 
           <div className="flex items-center gap-4">
-            <span className="font-mono text-[11px] text-slate-400 dark:text-slate-500">
+            <span className="font-mono text-[11px] text-slate-500 dark:text-slate-400">
               Version 1.1 Foundation
             </span>
             <button
               onClick={scrollToTop}
-              className="inline-flex items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-              title="Back to top"
+              className="inline-flex items-center gap-1 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-1 cursor-pointer"
+              aria-label="Scroll to top of page"
             >
               <span>Back to Top</span>
               <ArrowUp size={14} />

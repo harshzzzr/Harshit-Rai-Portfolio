@@ -32,13 +32,13 @@ function ProjectCard({ project }) {
       {/* Visual Header / Image Preview with Fallback */}
       <Link
         to={`/projects/${id}`}
-        className="block relative h-44 w-full border-b border-slate-200 dark:border-slate-800 overflow-hidden cursor-pointer"
-        title={`View details for ${title}`}
+        className="block relative h-44 w-full border-b border-slate-200 dark:border-slate-800 overflow-hidden cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500"
+        aria-label={`View details and architecture for ${title}`}
       >
         {image ? (
           <SafeImage
             src={image}
-            alt={title}
+            alt={`Screenshot preview of ${title} application`}
             className="w-full h-44"
             fallbackComponent={fallbackBanner}
           />
@@ -49,7 +49,7 @@ function ProjectCard({ project }) {
         {/* Featured Tag */}
         {featured && (
           <div className="absolute top-3 right-3 z-20 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-primary-500 text-white shadow-sm">
-            <Sparkles size={12} />
+            <Sparkles size={12} aria-hidden="true" />
             <span>Featured</span>
           </div>
         )}
@@ -61,12 +61,12 @@ function ProjectCard({ project }) {
           <h3 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
             <Link
               to={`/projects/${id}`}
-              className="block hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              className="block hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
             >
               {title}
             </Link>
           </h3>
-          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+          <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
             {description}
           </p>
         </div>
@@ -94,8 +94,8 @@ function ProjectCard({ project }) {
                   href={githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                  title="View Source Code"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-0.5"
+                  aria-label={`View source code for ${title} on GitHub (opens in new tab)`}
                 >
                   <GithubIcon size={15} />
                   <span>Source</span>
@@ -107,20 +107,20 @@ function ProjectCard({ project }) {
                   href={liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
-                  title="View Live Application"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-0.5"
+                  aria-label={`View live demo of ${title} (opens in new tab)`}
                 >
                   <ExternalLink size={15} />
                   <span>Demo</span>
                 </a>
               ) : (
-                <span className="text-xs font-mono text-slate-400 dark:text-slate-500">
+                <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
                   Offline Build
                 </span>
               )}
             </div>
 
-            <span className="text-[11px] font-mono text-slate-400 dark:text-slate-500">
+            <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
               {featured ? 'Priority' : 'Standard'}
             </span>
           </div>
@@ -128,10 +128,11 @@ function ProjectCard({ project }) {
           {/* View Details Route Link */}
           <Link
             to={`/projects/${id}`}
-            className="w-full inline-flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold bg-slate-50 dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-950 text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 border border-slate-200 dark:border-slate-700 transition-colors group/btn"
+            aria-label={`View architecture and full details for ${title}`}
+            className="w-full inline-flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold bg-slate-50 dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-950 text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 border border-slate-200 dark:border-slate-700 transition-colors group/btn focus-visible:ring-2 focus-visible:ring-primary-500"
           >
             <span>Project Details & Architecture</span>
-            <ArrowRight size={13} className="group-hover/btn:translate-x-1 transition-transform" />
+            <ArrowRight size={13} className="group-hover/btn:translate-x-1 transition-transform" aria-hidden="true" />
           </Link>
         </div>
       </div>

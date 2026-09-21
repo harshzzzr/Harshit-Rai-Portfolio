@@ -187,20 +187,21 @@ export default function GitHubSection() {
               <button
                 onClick={() => loadGitHubData(true)}
                 disabled={loading}
-                title="Force refresh from GitHub API"
-                className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                aria-label="Force refresh GitHub data from API"
+                className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500"
               >
-                <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+                <RefreshCw size={14} className={loading ? 'animate-spin' : ''} aria-hidden="true" />
               </button>
 
               <a
                 href={GITHUB_PROFILE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-semibold text-xs transition-colors shadow-xs"
+                aria-label="View Harshit Rai GitHub profile (opens in new tab)"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-semibold text-xs transition-colors shadow-xs focus-visible:ring-2 focus-visible:ring-primary-500"
               >
                 <span>View on GitHub</span>
-                <ExternalLink size={13} />
+                <ExternalLink size={13} aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -208,16 +209,16 @@ export default function GitHubSection() {
 
         {/* Rate-Limit / Fallback Notice Banner */}
         {isRateLimited && (
-          <div className="mb-6 p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-xs flex items-center justify-between gap-3 animate-fade-in">
+          <div role="status" className="mb-6 p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-xs flex items-center justify-between gap-3 animate-fade-in">
             <div className="flex items-center gap-2">
-              <AlertCircle size={15} className="shrink-0 text-amber-500" />
+              <AlertCircle size={15} className="shrink-0 text-amber-500" aria-hidden="true" />
               <span>
                 GitHub API rate limit reached (60 unauthenticated requests/hr). Displaying verified catalog repositories with direct links.
               </span>
             </div>
             <button
               onClick={() => loadGitHubData(true)}
-              className="font-semibold underline hover:no-underline shrink-0 cursor-pointer"
+              className="font-semibold underline hover:no-underline shrink-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
             >
               Retry Sync
             </button>
@@ -227,21 +228,23 @@ export default function GitHubSection() {
         {/* Search & Language Filters */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           {/* Language filter pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+          <div role="group" aria-label="Filter repositories by language" className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
             {languages.map((lang) => (
               <button
                 key={lang}
                 onClick={() => setSelectedLanguage(lang)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
+                aria-pressed={selectedLanguage === lang}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 ${
                   selectedLanguage === lang
                     ? 'bg-primary-600 text-white shadow-xs'
-                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
                 {lang !== 'All' && (
                   <span
                     className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: getLanguageColor(lang) }}
+                    aria-hidden="true"
                   />
                 )}
                 <span>{lang}</span>
@@ -251,18 +254,20 @@ export default function GitHubSection() {
 
           {/* Search box */}
           <div className="relative sm:w-64">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
             <input
               type="text"
+              aria-label="Search repositories by name or description"
               placeholder="Search repositories..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-8 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full pl-9 pr-8 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus-visible:ring-2 focus-visible:ring-primary-500"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                aria-label="Clear repository search query"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
               >
                 <X size={12} />
               </button>

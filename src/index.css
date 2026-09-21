@@ -7,17 +7,28 @@
     scroll-behavior: smooth;
   }
 
-  /* Respect reduced motion preference */
+  /* Accessibility: Respect reduced motion preference */
   @media (prefers-reduced-motion: reduce) {
     html {
-      scroll-behavior: auto;
-    }
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Accessibility: Global high-contrast visible focus rings for keyboard navigation */
+  *:focus-visible {
+    outline: 2px solid #0284c7 !important;
+    outline-offset: 2px !important;
+  }
+
+  .dark *:focus-visible {
+    outline: 2px solid #38bdf8 !important;
+    outline-offset: 2px !important;
   }
 
   body {
