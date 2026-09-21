@@ -216,49 +216,77 @@ export default function Feedback() {
                 {approvedList.map((item) => (
                   <div
                     key={item.id}
-                    className="p-5 sm:p-6 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm transition-all hover:shadow-md"
+                    className={`p-6 rounded-2xl border transition-all duration-200 hover:-translate-y-0.5 ${
+                      item.featured
+                        ? 'border-amber-300 dark:border-amber-500/60 bg-gradient-to-br from-amber-500/[0.04] via-white to-transparent dark:from-amber-500/[0.08] dark:via-slate-950 dark:to-transparent shadow-md shadow-amber-500/5 ring-1 ring-amber-400/20'
+                        : 'border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm hover:shadow-md'
+                    }`}
                   >
-                    <div className="flex items-center justify-between mb-3">
-                      {/* Rating Stars */}
-                      <div className="flex items-center gap-1" aria-label={`${item.rating} out of 5 stars`}>
-                        {[1, 2, 3, 4, 5].map((s) => (
-                          <Star
-                            key={s}
-                            size={16}
-                            className={`${
-                              s <= item.rating
-                                ? 'text-amber-400 fill-amber-400'
-                                : 'text-slate-200 dark:text-slate-800'
-                            }`}
-                          />
-                        ))}
+                    {/* Top Row: Stars, Featured Pill, and Date */}
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                      <div className="flex items-center gap-1.5" aria-label={`${item.rating} out of 5 stars`}>
+                        <div className="flex items-center gap-0.5">
+                          {[1, 2, 3, 4, 5].map((s) => (
+                            <Star
+                              key={s}
+                              size={15}
+                              className={`${
+                                s <= item.rating
+                                  ? 'text-amber-400 fill-amber-400'
+                                  : 'text-slate-200 dark:text-slate-800'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-[11px] font-mono font-semibold text-slate-600 dark:text-slate-400">
+                          {item.rating}.0
+                        </span>
                       </div>
 
-                      {/* Date */}
-                      {item.createdAt && (
-                        <div className="flex items-center gap-1 text-[11px] font-mono text-slate-400 dark:text-slate-500">
-                          <Clock size={11} />
-                          <span>
-                            {new Date(item.createdAt).toLocaleDateString(undefined, {
-                              year: 'numeric',
-                              month: 'short',
-                              day: 'numeric'
-                            })}
+                      <div className="flex items-center gap-2">
+                        {item.featured && (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-mono font-medium px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-700/60 shadow-xs">
+                            <Sparkles size={11} className="text-amber-500 fill-amber-500" />
+                            <span>Featured</span>
                           </span>
-                        </div>
-                      )}
+                        )}
+
+                        {item.createdAt && (
+                          <div className="flex items-center gap-1 text-[11px] font-mono text-slate-400 dark:text-slate-500">
+                            <Clock size={11} />
+                            <span>
+                              {new Date(item.createdAt).toLocaleDateString(undefined, {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric'
+                              })}
+                            </span>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
-                    {/* Feedback Quote */}
-                    <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-4 italic">
-                      "{item.feedback}"
-                    </p>
+                    {/* Feedback Quote Body */}
+                    <div className="relative my-3">
+                      <span className="text-3xl font-serif text-primary-300 dark:text-primary-800 leading-none select-none absolute -top-2 -left-1 opacity-60">
+                        “
+                      </span>
+                      <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed pl-4 italic">
+                        {item.feedback}
+                      </p>
+                    </div>
 
                     {/* Author Signature */}
-                    <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-900 text-xs">
-                      <span className="font-semibold text-slate-900 dark:text-white">
-                        {item.name}
-                      </span>
+                    <div className="flex items-center justify-between pt-3 mt-2 border-t border-slate-100 dark:border-slate-800/80 text-xs">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary-600 to-sky-500 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
+                          {(item.name || 'U').charAt(0).toUpperCase()}
+                        </div>
+                        <span className="font-semibold text-slate-900 dark:text-white">
+                          {item.name}
+                        </span>
+                      </div>
+
                       <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded">
                         <ShieldCheck size={11} />
                         <span>Verified Review</span>

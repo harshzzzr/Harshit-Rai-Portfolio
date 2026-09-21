@@ -22,6 +22,7 @@ export const defaultSampleFeedback = [
     rating: 5,
     feedback: 'Harshit exhibits exceptional analytical and problem-solving skills. His coursework in Data Structures, Algorithms, and Operating Systems has consistently stood out.',
     status: 'approved',
+    featured: true,
     createdAt: new Date(Date.now() - 3600000 * 24 * 7).toISOString(),
     createdAtIso: new Date(Date.now() - 3600000 * 24 * 7).toISOString()
   },
@@ -31,8 +32,19 @@ export const defaultSampleFeedback = [
     rating: 5,
     feedback: 'Collaborated with Harshit during the 36-hour hackathon. His ability to rapidly architect full-stack prototypes under tight deadlines was instrumental to our team winning 1st place.',
     status: 'approved',
+    featured: false,
     createdAt: new Date(Date.now() - 3600000 * 24 * 14).toISOString(),
     createdAtIso: new Date(Date.now() - 3600000 * 24 * 14).toISOString()
+  },
+  {
+    id: 'fb-sample-3',
+    name: 'Karan Verma',
+    rating: 4,
+    feedback: 'Great understanding of C++ fundamentals and systems architecture. Clear communication and dependable contributions throughout collaborative engineering projects.',
+    status: 'pending',
+    featured: false,
+    createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
+    createdAtIso: new Date(Date.now() - 3600000 * 5).toISOString()
   }
 ];
 
@@ -176,6 +188,7 @@ export async function submitFeedback({ name, rating, feedback, honeypot = '' }) 
 /**
  * Fetch ONLY approved feedback for public display
  * Pending and rejected feedback items are strictly filtered out
+ * Featured items are prioritized first, followed by newest
  */
 export async function getApprovedFeedback() {
   if (isFirebaseConfigured && db) {
@@ -199,9 +212,18 @@ export async function getApprovedFeedback() {
           rating: data.rating,
           feedback: data.feedback,
           status: 'approved',
+          featured: Boolean(data.featured),
           createdAt: dateVal || new Date().toISOString()
         });
       });
+
+      // Sort featured first, then newest
+      items.sort((a, b) => {
+        if (a.featured && !b.featured) return -1;
+        if (!a.featured && b.featured) return 1;
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+
       return { success: true, data: items };
     } catch (err) {
       console.warn('[FeedbackService] Failed to query approved feedback from Firestore, trying local cache:', err);
@@ -210,7 +232,16 @@ export async function getApprovedFeedback() {
 
   // Fallback to local cache approved items
   const localList = getStoredLocalFeedback();
-  const approvedOnly = localList.filter((item) => item.status === 'approved');
+  const approvedOnly = localList
+    .filter((item) => item.status === 'approved')
+    .map((item) => ({ ...item, featured: Boolean(item.featured) }));
+
+  approvedOnly.sort((a, b) => {
+    if (a.featured && !b.featured) return -1;
+    if (!a.featured && b.featured) return 1;
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+
   return { success: true, data: approvedOnly };
 }
 
@@ -234,16 +265,23 @@ export async function getAllFeedback() {
           rating: data.rating || 5,
           feedback: data.feedback || '',
           status: data.status || 'pending',
+          featured: Boolean(data.featured),
           createdAt: dateVal || new Date().toISOString()
         });
       });
+
+      items.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       return { success: true, data: items };
     } catch (err) {
       console.warn('[FeedbackService] Failed to fetch all feedback from Firestore, using local cache:', err);
     }
   }
 
-  const localList = getStoredLocalFeedback();
+  const localList = getStoredLocalFeedback().map((item) => ({
+    ...item,
+    featured: Boolean(item.featured)
+  }));
+  localList.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   return { success: true, data: localList };
 }
 
@@ -273,6 +311,45 @@ export async function updateFeedbackStatus(id, newStatus) {
   }
 
   return { success: true };
+}
+
+/**
+ * Admin: Quick helper to approve feedback
+ */
+export async function approveFeedback(id) {
+  return updateFeedbackStatus(id, 'approved');
+}
+
+/**
+ * Admin: Quick helper to reject feedback
+ */
+export async function rejectFeedback(id) {
+  return updateFeedbackStatus(id, 'rejected');
+}
+
+/**
+ * Admin: Toggle featured testimonial status
+ */
+export async function toggleFeaturedFeedback(id, currentFeatured) {
+  const newFeatured = !currentFeatured;
+
+  if (isFirebaseConfigured && db) {
+    try {
+      const ref = doc(db, COLLECTIONS.FEEDBACK, id);
+      await updateDoc(ref, { featured: newFeatured });
+    } catch (err) {
+      console.warn('[FeedbackService] Firestore toggleFeatured failed:', err);
+    }
+  }
+
+  const localList = getStoredLocalFeedback();
+  const index = localList.findIndex((item) => item.id === id);
+  if (index !== -1) {
+    localList[index].featured = newFeatured;
+    saveStoredLocalFeedback(localList);
+  }
+
+  return { success: true, featured: newFeatured };
 }
 
 /**

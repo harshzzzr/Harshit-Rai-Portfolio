@@ -22,6 +22,9 @@ export {
   getApprovedFeedback,
   getAllFeedback,
   updateFeedbackStatus,
+  approveFeedback,
+  rejectFeedback,
+  toggleFeaturedFeedback,
   deleteFeedback
 } from './feedbackService';
 

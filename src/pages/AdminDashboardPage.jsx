@@ -29,6 +29,7 @@ import SkillManager from '../components/admin/SkillManager';
 import EducationManager from '../components/admin/EducationManager';
 import TimelineManager from '../components/admin/TimelineManager';
 import MessageManager from '../components/admin/MessageManager';
+import FeedbackManager from '../components/admin/FeedbackManager';
 
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -348,7 +349,12 @@ export default function AdminDashboardPage() {
           <MessageManager onMessageChanged={fetchDashboardData} />
         )}
 
-        {/* Dedicated Section Placeholders for remaining sidebar tabs (feedback, settings) */}
+        {/* Feedback Moderation View */}
+        {activeTab === 'feedback' && (
+          <FeedbackManager onFeedbackChanged={fetchDashboardData} />
+        )}
+
+        {/* Dedicated Section Placeholders for remaining sidebar tabs (settings) */}
         {activeTab !== 'dashboard' &&
           activeTab !== 'projects' &&
           activeTab !== 'skills' &&
@@ -358,7 +364,8 @@ export default function AdminDashboardPage() {
           activeTab !== 'research' &&
           activeTab !== 'achievements' &&
           activeTab !== 'certifications' &&
-          activeTab !== 'messages' && (
+          activeTab !== 'messages' &&
+          activeTab !== 'feedback' && (
           <div className="p-8 sm:p-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-6 shadow-sm animate-fade-in">
             <div className="w-16 h-16 rounded-2xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 mx-auto flex items-center justify-center">
               <Sliders size={32} />
@@ -369,7 +376,6 @@ export default function AdminDashboardPage() {
                 {activeTab} Management
               </h2>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                {activeTab === 'feedback' && 'Testimonial moderation and feedback approval controls will be activated in Version 5.1.'}
                 {activeTab === 'settings' && 'Administrator preferences and Firebase environment status settings.'}
               </p>
             </div>
