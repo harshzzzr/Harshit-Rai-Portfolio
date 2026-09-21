@@ -21,7 +21,9 @@ import {
   ShieldCheck,
   CheckCircle2,
   ArrowRight,
-  Sliders
+  Sliders,
+  BarChart3,
+  Eye
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProjectManager from '../components/admin/ProjectManager';
@@ -30,6 +32,8 @@ import EducationManager from '../components/admin/EducationManager';
 import TimelineManager from '../components/admin/TimelineManager';
 import MessageManager from '../components/admin/MessageManager';
 import FeedbackManager from '../components/admin/FeedbackManager';
+import AnalyticsManager from '../components/admin/AnalyticsManager';
+import { getAnalyticsSummary } from '../services/analyticsService';
 
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -46,6 +50,8 @@ export default function AdminDashboardPage() {
     certifications: 0,
     messages: 0,
     feedback: 0,
+    pageViews: 0,
+    uniqueSessions: 0,
   });
   const [recentProjects, setRecentProjects] = useState([]);
   const [skillCategoriesList, setSkillCategoriesList] = useState([]);
@@ -77,6 +83,9 @@ export default function AdminDashboardPage() {
       const fbRes = await getAllFeedback();
       const feedbackCount = (fbRes.data || []).length;
 
+      // 6. Analytics summary
+      const analyticsSummary = await getAnalyticsSummary(14);
+
       setCounts({
         projects: projectList.length,
         featuredProjects: featuredCount,
@@ -90,6 +99,8 @@ export default function AdminDashboardPage() {
         certifications: (timeData.certifications || []).length,
         messages: messagesCount,
         feedback: feedbackCount,
+        pageViews: analyticsSummary?.totalPageViews || 0,
+        uniqueSessions: analyticsSummary?.uniqueSessions || 0,
       });
 
       setRecentProjects(projectList.slice(0, 4));
@@ -147,7 +158,30 @@ export default function AdminDashboardPage() {
         {activeTab === 'dashboard' && (
           <div className="space-y-8">
             {/* Primary Counts Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-5">
+              {/* Analytics Card */}
+              <div
+                onClick={() => setActiveTab('analytics')}
+                className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all cursor-pointer group"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    Page Views
+                  </span>
+                  <div className="p-2 rounded-xl bg-violet-50 dark:bg-violet-950 text-violet-600 dark:text-violet-400 group-hover:scale-110 transition-transform">
+                    <BarChart3 size={20} />
+                  </div>
+                </div>
+                <div className="mt-4 space-y-1">
+                  <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+                    {loading ? '...' : counts.pageViews.toLocaleString()}
+                  </div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <span className="font-semibold text-violet-600 dark:text-violet-400">{counts.uniqueSessions}</span> tab sessions
+                  </p>
+                </div>
+              </div>
+
               {/* Projects Card */}
               <div
                 onClick={() => setActiveTab('projects')}
@@ -314,6 +348,31 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
             </div>
+
+            {/* Quick Analytics Inbound Banner */}
+            <div className="p-5 rounded-2xl bg-gradient-to-r from-violet-500/10 via-primary-500/10 to-transparent border border-violet-200 dark:border-violet-900/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-violet-100 dark:bg-violet-950 text-violet-600 dark:text-violet-400">
+                  <BarChart3 size={20} />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                    Privacy-Conscious Visitor Telemetry Active
+                  </h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Tracking anonymous page views, project popularity, and referral channels with zero PII.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setActiveTab('analytics')}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-xs transition-colors cursor-pointer shrink-0"
+              >
+                <span>Open Analytics Console</span>
+                <ArrowRight size={14} className="text-primary-600 dark:text-primary-400" />
+              </button>
+            </div>
           </div>
         )}
 
@@ -354,8 +413,14 @@ export default function AdminDashboardPage() {
           <FeedbackManager onFeedbackChanged={fetchDashboardData} />
         )}
 
+        {/* Analytics Console View */}
+        {activeTab === 'analytics' && (
+          <AnalyticsManager onDataChanged={fetchDashboardData} />
+        )}
+
         {/* Dedicated Section Placeholders for remaining sidebar tabs (settings) */}
         {activeTab !== 'dashboard' &&
+          activeTab !== 'analytics' &&
           activeTab !== 'projects' &&
           activeTab !== 'skills' &&
           activeTab !== 'education' &&

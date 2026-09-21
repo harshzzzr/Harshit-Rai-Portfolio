@@ -50,5 +50,11 @@ export {
   SPOTIFY_USERNAME,
   SPOTIFY_PROFILE_URL
 } from './spotifyService';
+export {
+  recordPageView,
+  getAnalyticsSummary,
+  seedDemoAnalytics,
+  clearAnalytics
+} from './analyticsService';
 
 

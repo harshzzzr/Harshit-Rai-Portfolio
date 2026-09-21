@@ -9,12 +9,14 @@ import AdminLoginPage from './pages/AdminLoginPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
+import AnalyticsTracker from './components/AnalyticsTracker';
 
 export default function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
         <Router>
+          <AnalyticsTracker />
           <ScrollToTop />
           <Routes>
             {/* Public Portfolio Routes */}

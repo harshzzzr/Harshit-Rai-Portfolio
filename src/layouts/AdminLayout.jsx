@@ -14,6 +14,7 @@ import {
   BookOpen,
   Mail,
   MessageSquareQuote,
+  BarChart3,
   Settings,
   LogOut,
   Menu,
@@ -24,8 +25,9 @@ import {
   ShieldCheck
 } from 'lucide-react';
 
-export const ADMIN_TABS = [
+const ADMIN_TABS = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   { id: 'projects', label: 'Projects', icon: FolderGit2 },
   { id: 'skills', label: 'Skills', icon: Code },
   { id: 'education', label: 'Education', icon: GraduationCap },

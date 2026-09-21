@@ -11,4 +11,5 @@ export const COLLECTIONS = {
   CERTIFICATIONS: 'certifications',
   MESSAGES: 'messages',
   FEEDBACK: 'feedback',
+  ANALYTICS: 'analytics',
 };
