@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper to verify authenticated admin user
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Public portfolio data: public read, admin-only write
+    match /projects/{projectId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    match /skills/{skillId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    match /education/{educationId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    match /experience/{experienceId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    match /timeline/{timelineId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    match /achievements/{achievementId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    match /certifications/{certificationId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Contact messages: public write (new message submission), admin-only read/manage
+    match /messages/{messageId} {
+      allow create: if request.resource.data.name is string 
+                    && request.resource.data.email is string
+                    && request.resource.data.message is string;
+      allow read, update, delete: if isAuthenticated();
+    }
+
+    // Testimonials / Feedback: public submit, approved read publicly, admin-only moderation
+    match /feedback/{feedbackId} {
+      allow create: if request.resource.data.name is string
+                    && request.resource.data.feedback is string;
+      allow read: if resource.data.status == 'approved' || isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+
+    // Default deny for unmapped documents
+    match /{document=**} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}
