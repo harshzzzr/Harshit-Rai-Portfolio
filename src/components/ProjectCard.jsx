@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { ExternalLink, Sparkles, FolderGit2, ArrowRight } from 'lucide-react';
 import { GithubIcon } from './Icons';
 import SafeImage from './SafeImage';
 
-export default function ProjectCard({ project }) {
+function ProjectCard({ project }) {
   const { id, title, description, technologies, featured, githubUrl, liveUrl, badge, image } = project;
 
   const fallbackBanner = (
@@ -138,3 +138,5 @@ export default function ProjectCard({ project }) {
     </article>
   );
 }
+
+export default memo(ProjectCard);

@@ -53,7 +53,16 @@ export const CODING_SOUNDTRACKS = [
  * - Displays a clean, attractive Spotify profile card with curated coding flow soundtracks.
  * - Zero mandatory authentication or login wall for site visitors.
  */
+let memoryCacheSpotify = null;
+let memoryCacheSpotifyTime = 0;
+const SPOTIFY_CACHE_TTL = 20 * 1000; // 20 seconds
+
 export async function getCurrentlyPlaying() {
+  const now = Date.now();
+  if (memoryCacheSpotify && now - memoryCacheSpotifyTime < SPOTIFY_CACHE_TTL) {
+    return memoryCacheSpotify;
+  }
+
   const customEndpoint = import.meta.env.VITE_SPOTIFY_NOW_PLAYING_ENDPOINT;
 
   if (customEndpoint) {
@@ -66,18 +75,21 @@ export async function getCurrentlyPlaying() {
 
       // 204: No Content (Nothing currently playing)
       if (res.status === 204) {
-        return {
+        const result = {
           isPlaying: false,
           status: 'idle',
           profileUrl: SPOTIFY_PROFILE_URL,
           soundtracks: CODING_SOUNDTRACKS
         };
+        memoryCacheSpotify = result;
+        memoryCacheSpotifyTime = now;
+        return result;
       }
 
       if (res.ok) {
         const data = await res.json();
         if (data && data.item) {
-          return {
+          const result = {
             isPlaying: Boolean(data.is_playing),
             title: data.item.name || 'Coding Track',
             artist: (data.item.artists || []).map((a) => a.name).join(', ') || 'Various Artists',
@@ -89,9 +101,12 @@ export async function getCurrentlyPlaying() {
             profileUrl: SPOTIFY_PROFILE_URL,
             soundtracks: CODING_SOUNDTRACKS
           };
+          memoryCacheSpotify = result;
+          memoryCacheSpotifyTime = now;
+          return result;
         } else if (data && data.title) {
           // Custom formatted response from serverless function
-          return {
+          const result = {
             isPlaying: Boolean(data.isPlaying),
             title: data.title,
             artist: data.artist || 'Various Artists',
@@ -101,6 +116,9 @@ export async function getCurrentlyPlaying() {
             profileUrl: SPOTIFY_PROFILE_URL,
             soundtracks: CODING_SOUNDTRACKS
           };
+          memoryCacheSpotify = result;
+          memoryCacheSpotifyTime = now;
+          return result;
         }
       }
     } catch {
@@ -109,7 +127,7 @@ export async function getCurrentlyPlaying() {
   }
 
   // Clean offline / curated focus listening mode
-  return {
+  const fallback = {
     isPlaying: false,
     status: 'idle',
     title: 'Focused Development Soundtracks',
@@ -120,4 +138,7 @@ export async function getCurrentlyPlaying() {
     profileUrl: SPOTIFY_PROFILE_URL,
     soundtracks: CODING_SOUNDTRACKS
   };
+  memoryCacheSpotify = fallback;
+  memoryCacheSpotifyTime = now;
+  return fallback;
 }

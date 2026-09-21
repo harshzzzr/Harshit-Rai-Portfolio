@@ -153,6 +153,20 @@ export function groupTimelineByType(items) {
 const LOCAL_EDUCATION_KEY = 'harshit_portfolio_custom_education';
 const LOCAL_TIMELINE_KEY = 'harshit_portfolio_custom_timeline';
 
+// High-performance in-memory cache with 3-minute TTL
+let memoryEduCache = null;
+let memoryEduTimestamp = 0;
+let memoryTimelineCache = null;
+let memoryTimelineTimestamp = 0;
+const TIMELINE_CACHE_TTL_MS = 3 * 60 * 1000;
+
+export function invalidateTimelineCache() {
+  memoryEduCache = null;
+  memoryEduTimestamp = 0;
+  memoryTimelineCache = null;
+  memoryTimelineTimestamp = 0;
+}
+
 /**
  * Local storage cache helpers for Education
  */
@@ -207,15 +221,24 @@ function saveStoredLocalTimeline(list) {
 export async function getEducation(options = {}) {
   const { includeHidden = false } = options;
 
+  if (!includeHidden && memoryEduCache && (Date.now() - memoryEduTimestamp < TIMELINE_CACHE_TTL_MS)) {
+    return memoryEduCache;
+  }
+
   if (!isFirebaseConfigured || !db) {
     const local = getStoredLocalEducation().sort((a, b) => (a.order || 99) - (b.order || 99));
     const filtered = includeHidden ? local : local.filter((item) => item.visible !== false);
-    return {
+    const result = {
       data: filtered,
       rawList: local,
       error: null,
       isLive: false,
     };
+    if (!includeHidden) {
+      memoryEduCache = result;
+      memoryEduTimestamp = Date.now();
+    }
+    return result;
   }
 
   try {
@@ -232,12 +255,17 @@ export async function getEducation(options = {}) {
     if (snapshot.empty) {
       const local = getStoredLocalEducation().sort((a, b) => (a.order || 99) - (b.order || 99));
       const filtered = includeHidden ? local : local.filter((item) => item.visible !== false);
-      return {
+      const result = {
         data: filtered,
         rawList: local,
         error: null,
         isLive: false,
       };
+      if (!includeHidden) {
+        memoryEduCache = result;
+        memoryEduTimestamp = Date.now();
+      }
+      return result;
     }
 
     const list = snapshot.docs
@@ -251,22 +279,32 @@ export async function getEducation(options = {}) {
 
     const filtered = includeHidden ? list : list.filter((item) => item.visible !== false);
 
-    return {
+    const result = {
       data: filtered,
       rawList: list,
       error: null,
       isLive: true,
     };
+    if (!includeHidden) {
+      memoryEduCache = result;
+      memoryEduTimestamp = Date.now();
+    }
+    return result;
   } catch (err) {
     console.warn('[Firebase] Firestore getEducation error, using fallback:', err.message);
     const local = getStoredLocalEducation().sort((a, b) => (a.order || 99) - (b.order || 99));
     const filtered = includeHidden ? local : local.filter((item) => item.visible !== false);
-    return {
+    const result = {
       data: filtered,
       rawList: local,
       error: `Operating in fallback mode (${err.message})`,
       isLive: false,
     };
+    if (!includeHidden) {
+      memoryEduCache = result;
+      memoryEduTimestamp = Date.now();
+    }
+    return result;
   }
 }
 
@@ -305,6 +343,7 @@ export async function createEducation(eduInput) {
     localList.push(newEdu);
   }
   saveStoredLocalEducation(localList);
+  invalidateTimelineCache();
 
   if (!isFirebaseConfigured || !db) {
     return { success: true, data: newEdu, isLive: false };
@@ -317,6 +356,7 @@ export async function createEducation(eduInput) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
+    invalidateTimelineCache();
     return { success: true, data: newEdu, isLive: true };
   } catch (err) {
     console.error('[Firebase] createEducation error:', err);
@@ -350,6 +390,7 @@ export async function updateEducation(eduId, updateData) {
     };
     localList[index] = updatedRecord;
     saveStoredLocalEducation(localList);
+    invalidateTimelineCache();
   }
 
   if (!isFirebaseConfigured || !db) {
@@ -362,6 +403,7 @@ export async function updateEducation(eduId, updateData) {
       ...updateData,
       updatedAt: serverTimestamp(),
     });
+    invalidateTimelineCache();
     return { success: true, data: updatedRecord, isLive: true };
   } catch (err) {
     console.error('[Firebase] updateEducation error:', err);
@@ -378,6 +420,7 @@ export async function deleteEducation(eduId) {
   const localList = getStoredLocalEducation();
   const filtered = localList.filter((e) => e.id !== eduId);
   saveStoredLocalEducation(filtered);
+  invalidateTimelineCache();
 
   if (!isFirebaseConfigured || !db) {
     return { success: true, isLive: false };
@@ -386,6 +429,7 @@ export async function deleteEducation(eduId) {
   try {
     const docRef = doc(db, COLLECTIONS.EDUCATION, eduId);
     await deleteDoc(docRef);
+    invalidateTimelineCache();
     return { success: true, isLive: true };
   } catch (err) {
     console.error('[Firebase] deleteEducation error:', err);
@@ -406,15 +450,24 @@ export async function toggleEducationVisibility(eduId, currentVisible) {
 export async function getTimelineData(options = {}) {
   const { includeHidden = false } = options;
 
+  if (!includeHidden && memoryTimelineCache && (Date.now() - memoryTimelineTimestamp < TIMELINE_CACHE_TTL_MS)) {
+    return memoryTimelineCache;
+  }
+
   if (!isFirebaseConfigured || !db) {
     const local = getStoredLocalTimeline().sort((a, b) => (a.order || 99) - (b.order || 99));
     const items = includeHidden ? local : local.filter((item) => item.visible !== false);
-    return {
+    const result = {
       data: groupTimelineByType(items),
       rawList: local,
       error: null,
       isLive: false,
     };
+    if (!includeHidden) {
+      memoryTimelineCache = result;
+      memoryTimelineTimestamp = Date.now();
+    }
+    return result;
   }
 
   try {
@@ -429,12 +482,17 @@ export async function getTimelineData(options = {}) {
     if (snapshot.empty) {
       const local = getStoredLocalTimeline().sort((a, b) => (a.order || 99) - (b.order || 99));
       const items = includeHidden ? local : local.filter((item) => item.visible !== false);
-      return {
+      const result = {
         data: groupTimelineByType(items),
         rawList: local,
         error: null,
         isLive: false,
       };
+      if (!includeHidden) {
+        memoryTimelineCache = result;
+        memoryTimelineTimestamp = Date.now();
+      }
+      return result;
     }
 
     const items = snapshot.docs.map((docSnap) => ({
@@ -446,22 +504,32 @@ export async function getTimelineData(options = {}) {
 
     const filtered = includeHidden ? items : items.filter((item) => item.visible !== false);
 
-    return {
+    const result = {
       data: groupTimelineByType(filtered),
       rawList: items,
       error: null,
       isLive: true,
     };
+    if (!includeHidden) {
+      memoryTimelineCache = result;
+      memoryTimelineTimestamp = Date.now();
+    }
+    return result;
   } catch (err) {
     console.warn('[Firebase] Firestore getTimelineData error, using fallback:', err.message);
     const local = getStoredLocalTimeline().sort((a, b) => (a.order || 99) - (b.order || 99));
     const items = includeHidden ? local : local.filter((item) => item.visible !== false);
-    return {
+    const result = {
       data: groupTimelineByType(items),
       rawList: local,
       error: `Operating in fallback mode (${err.message})`,
       isLive: false,
     };
+    if (!includeHidden) {
+      memoryTimelineCache = result;
+      memoryTimelineTimestamp = Date.now();
+    }
+    return result;
   }
 }
 
@@ -497,6 +565,7 @@ export async function createTimelineItem(itemInput) {
     localList.push(newItem);
   }
   saveStoredLocalTimeline(localList);
+  invalidateTimelineCache();
 
   if (!isFirebaseConfigured || !db) {
     return { success: true, data: newItem, isLive: false };
@@ -509,6 +578,7 @@ export async function createTimelineItem(itemInput) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
+    invalidateTimelineCache();
     return { success: true, data: newItem, isLive: true };
   } catch (err) {
     console.error('[Firebase] createTimelineItem error:', err);
@@ -536,6 +606,7 @@ export async function updateTimelineItem(itemId, updateData) {
     };
     localList[index] = updatedItem;
     saveStoredLocalTimeline(localList);
+    invalidateTimelineCache();
   }
 
   if (!isFirebaseConfigured || !db) {
@@ -548,6 +619,7 @@ export async function updateTimelineItem(itemId, updateData) {
       ...updateData,
       updatedAt: serverTimestamp(),
     });
+    invalidateTimelineCache();
     return { success: true, data: updatedItem, isLive: true };
   } catch (err) {
     console.error('[Firebase] updateTimelineItem error:', err);
@@ -564,6 +636,7 @@ export async function deleteTimelineItem(itemId) {
   const localList = getStoredLocalTimeline();
   const filtered = localList.filter((i) => i.id !== itemId);
   saveStoredLocalTimeline(filtered);
+  invalidateTimelineCache();
 
   if (!isFirebaseConfigured || !db) {
     return { success: true, isLive: false };
@@ -572,6 +645,7 @@ export async function deleteTimelineItem(itemId) {
   try {
     const docRef = doc(db, 'timeline', itemId);
     await deleteDoc(docRef);
+    invalidateTimelineCache();
     return { success: true, isLive: true };
   } catch (err) {
     console.error('[Firebase] deleteTimelineItem error:', err);

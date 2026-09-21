@@ -23,7 +23,15 @@
   body {
     margin: 0;
     min-height: 100vh;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
   }
+}
+
+/* Performance: Skip layout/paint computations for off-screen sections until scrolled near */
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 700px;
 }
 
 /* Custom scrollbar for modern browsers */

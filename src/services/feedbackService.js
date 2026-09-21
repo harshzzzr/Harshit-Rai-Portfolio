@@ -15,6 +15,16 @@ import { COLLECTIONS } from '../firebase/collections';
 
 const LOCAL_FEEDBACK_KEY = 'harshit_portfolio_feedback';
 
+// In-memory cache for public approved feedback to reduce redundant queries
+let memoryCacheApprovedFeedback = null;
+let memoryCacheApprovedTime = 0;
+const FEEDBACK_CACHE_TTL = 3 * 60 * 1000; // 3 minutes
+
+export function invalidateFeedbackCache() {
+  memoryCacheApprovedFeedback = null;
+  memoryCacheApprovedTime = 0;
+}
+
 export const defaultSampleFeedback = [
   {
     id: 'fb-sample-1',
@@ -191,6 +201,11 @@ export async function submitFeedback({ name, rating, feedback, honeypot = '' }) 
  * Featured items are prioritized first, followed by newest
  */
 export async function getApprovedFeedback() {
+  const now = Date.now();
+  if (memoryCacheApprovedFeedback && now - memoryCacheApprovedTime < FEEDBACK_CACHE_TTL) {
+    return { success: true, data: memoryCacheApprovedFeedback };
+  }
+
   if (isFirebaseConfigured && db) {
     try {
       const q = query(
@@ -224,6 +239,9 @@ export async function getApprovedFeedback() {
         return new Date(b.createdAt) - new Date(a.createdAt);
       });
 
+      memoryCacheApprovedFeedback = items;
+      memoryCacheApprovedTime = now;
+
       return { success: true, data: items };
     } catch (err) {
       console.warn('[FeedbackService] Failed to query approved feedback from Firestore, trying local cache:', err);
@@ -241,6 +259,9 @@ export async function getApprovedFeedback() {
     if (!a.featured && b.featured) return 1;
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
+
+  memoryCacheApprovedFeedback = approvedOnly;
+  memoryCacheApprovedTime = now;
 
   return { success: true, data: approvedOnly };
 }
@@ -293,6 +314,8 @@ export async function updateFeedbackStatus(id, newStatus) {
     return { success: false, error: 'Invalid status value.' };
   }
 
+  invalidateFeedbackCache();
+
   if (isFirebaseConfigured && db) {
     try {
       const ref = doc(db, COLLECTIONS.FEEDBACK, id);
@@ -331,6 +354,7 @@ export async function rejectFeedback(id) {
  * Admin: Toggle featured testimonial status
  */
 export async function toggleFeaturedFeedback(id, currentFeatured) {
+  invalidateFeedbackCache();
   const newFeatured = !currentFeatured;
 
   if (isFirebaseConfigured && db) {
@@ -356,6 +380,7 @@ export async function toggleFeaturedFeedback(id, currentFeatured) {
  * Admin: Delete feedback record
  */
 export async function deleteFeedback(id) {
+  invalidateFeedbackCache();
   if (isFirebaseConfigured && db) {
     try {
       const ref = doc(db, COLLECTIONS.FEEDBACK, id);

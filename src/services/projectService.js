@@ -18,6 +18,16 @@ import { uploadAsset, STORAGE_PATHS } from './storageService';
 
 const LOCAL_PROJECTS_KEY = 'harshit_portfolio_custom_projects';
 
+// High-performance in-memory cache with 3-minute TTL
+let memoryProjectsCache = null;
+let memoryProjectsTimestamp = 0;
+const PROJECTS_CACHE_TTL_MS = 3 * 60 * 1000;
+
+export function invalidateProjectsCache() {
+  memoryProjectsCache = null;
+  memoryProjectsTimestamp = 0;
+}
+
 /**
  * Standardize project object ensuring all Version 3.2 required fields are present
  */
@@ -99,8 +109,19 @@ function saveStoredLocalProjects(projects) {
  * Falls back safely to cached/default projects if Firebase is unconfigured or collection is empty
  */
 export async function getProjects() {
+  // Check fast in-memory cache first
+  if (memoryProjectsCache && (Date.now() - memoryProjectsTimestamp < PROJECTS_CACHE_TTL_MS)) {
+    return {
+      data: memoryProjectsCache,
+      error: null,
+      isLive: Boolean(isFirebaseConfigured && db),
+    };
+  }
+
   if (!isFirebaseConfigured || !db) {
     const local = getStoredLocalProjects().sort((a, b) => (a.order || 99) - (b.order || 99));
+    memoryProjectsCache = local;
+    memoryProjectsTimestamp = Date.now();
     return {
       data: local,
       error: null,
@@ -121,6 +142,8 @@ export async function getProjects() {
 
     if (snapshot.empty) {
       const local = getStoredLocalProjects().sort((a, b) => (a.order || 99) - (b.order || 99));
+      memoryProjectsCache = local;
+      memoryProjectsTimestamp = Date.now();
       return {
         data: local,
         error: null,
@@ -132,7 +155,9 @@ export async function getProjects() {
       .map((docSnap) => normalizeProject(docSnap.data(), docSnap.id))
       .sort((a, b) => (a.order || 99) - (b.order || 99));
 
-    // Keep local cache synced
+    // Keep memory and local storage synced
+    memoryProjectsCache = projects;
+    memoryProjectsTimestamp = Date.now();
     saveStoredLocalProjects(projects);
 
     return {
@@ -143,6 +168,8 @@ export async function getProjects() {
   } catch (err) {
     console.warn('[Firebase] Firestore getProjects error, using fallback:', err.message);
     const local = getStoredLocalProjects().sort((a, b) => (a.order || 99) - (b.order || 99));
+    memoryProjectsCache = local;
+    memoryProjectsTimestamp = Date.now();
     return {
       data: local,
       error: `Notice: Operating in fallback mode (${err.message})`,
@@ -157,6 +184,16 @@ export async function getProjects() {
 export async function getProjectById(projectIdOrSlug) {
   if (!projectIdOrSlug) {
     return { data: null, error: 'Project identifier is required', isLive: false };
+  }
+
+  // Fast memory lookup
+  if (memoryProjectsCache) {
+    const found = memoryProjectsCache.find(
+      (p) => p.id === projectIdOrSlug || p.slug === projectIdOrSlug
+    );
+    if (found) {
+      return { data: found, error: null, isLive: Boolean(isFirebaseConfigured && db) };
+    }
   }
 
   if (!isFirebaseConfigured || !db) {
@@ -237,6 +274,7 @@ export async function createProject(projectInput) {
     localList.push(normalized);
   }
   saveStoredLocalProjects(localList);
+  invalidateProjectsCache();
 
   if (!isFirebaseConfigured || !db) {
     return {
@@ -295,6 +333,7 @@ export async function updateProject(projectId, updateData) {
     );
     localList[existingIdx] = updatedRecord;
     saveStoredLocalProjects(localList);
+    invalidateProjectsCache();
   }
 
   if (!isFirebaseConfigured || !db) {
@@ -312,6 +351,7 @@ export async function updateProject(projectId, updateData) {
       ...updateData,
       updatedAt: serverTimestamp(),
     });
+    invalidateProjectsCache();
 
     return {
       success: true,
@@ -340,6 +380,7 @@ export async function deleteProject(projectId) {
   const localList = getStoredLocalProjects();
   const filtered = localList.filter((p) => p.id !== projectId && p.slug !== projectId);
   saveStoredLocalProjects(filtered);
+  invalidateProjectsCache();
 
   if (!isFirebaseConfigured || !db) {
     return {
@@ -352,6 +393,7 @@ export async function deleteProject(projectId) {
   try {
     const docRef = doc(db, COLLECTIONS.PROJECTS, projectId);
     await deleteDoc(docRef);
+    invalidateProjectsCache();
 
     return {
       success: true,

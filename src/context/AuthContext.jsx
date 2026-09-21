@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { loginAdmin, logoutAdmin, subscribeToAuthChanges } from '../services/authService';
 
 const AuthContext = createContext(null);
@@ -20,27 +20,30 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
-  const login = async (email, password) => {
+  const login = useCallback(async (email, password) => {
     const result = await loginAdmin(email, password);
     if (result.success && result.user) {
       setCurrentUser(result.user);
     }
     return result;
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     const result = await logoutAdmin();
     setCurrentUser(null);
     return result;
-  };
+  }, []);
 
-  const value = {
-    currentUser,
-    loading,
-    isAuthenticated: Boolean(currentUser),
-    login,
-    logout,
-  };
+  const value = useMemo(
+    () => ({
+      currentUser,
+      loading,
+      isAuthenticated: Boolean(currentUser),
+      login,
+      logout,
+    }),
+    [currentUser, loading, login, logout]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

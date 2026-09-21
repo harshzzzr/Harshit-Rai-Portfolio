@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 
-export default function SafeImage({
+function SafeImage({
   src,
   alt,
   className = '',
@@ -23,6 +23,7 @@ export default function SafeImage({
         src={src}
         alt={alt || 'Image asset'}
         loading="lazy"
+        decoding="async"
         onLoad={() => setIsLoaded(true)}
         onError={() => setHasError(true)}
         className={`w-full h-full object-cover transition-opacity duration-300 ${
@@ -33,3 +34,5 @@ export default function SafeImage({
     </div>
   );
 }
+
+export default memo(SafeImage);

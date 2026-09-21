@@ -46,10 +46,20 @@ export const defaultSkillsList = [
 
   // Other
   { id: 'skill-arduino', name: 'Arduino', category: 'Other', icon: 'Cpu', order: 17, visible: true },
-  { id: 'skill-unity', name: 'Unity', category: 'Other', icon: 'Layers', order: 18, visible: true },
+  { id: 'skill-unity', name: 'Unity', category: 'Other', icon: 'Layers', order: 18, visible: true }
 ];
 
 const LOCAL_SKILLS_KEY = 'harshit_portfolio_custom_skills';
+
+// High-performance in-memory cache with 3-minute TTL
+let memorySkillsCache = null;
+let memorySkillsTimestamp = 0;
+const SKILLS_CACHE_TTL_MS = 3 * 60 * 1000;
+
+export function invalidateSkillsCache() {
+  memorySkillsCache = null;
+  memorySkillsTimestamp = 0;
+}
 
 /**
  * Get stored local skills from localStorage
@@ -119,14 +129,21 @@ export function groupSkillsByCategory(skillsArray) {
  * Returns { data, rawList, error, isLive }
  */
 export async function getSkills() {
+  if (memorySkillsCache && (Date.now() - memorySkillsTimestamp < SKILLS_CACHE_TTL_MS)) {
+    return memorySkillsCache;
+  }
+
   if (!isFirebaseConfigured || !db) {
     const local = getStoredLocalSkills().sort((a, b) => (a.order || 99) - (b.order || 99));
-    return {
+    const result = {
       data: groupSkillsByCategory(local),
       rawList: local,
       error: null,
       isLive: false,
     };
+    memorySkillsCache = result;
+    memorySkillsTimestamp = Date.now();
+    return result;
   }
 
   try {
@@ -142,12 +159,15 @@ export async function getSkills() {
 
     if (snapshot.empty) {
       const local = getStoredLocalSkills().sort((a, b) => (a.order || 99) - (b.order || 99));
-      return {
+      const result = {
         data: groupSkillsByCategory(local),
         rawList: local,
         error: null,
         isLive: false,
       };
+      memorySkillsCache = result;
+      memorySkillsTimestamp = Date.now();
+      return result;
     }
 
     const skills = snapshot.docs.map((docSnap) => ({
@@ -162,21 +182,27 @@ export async function getSkills() {
 
     saveStoredLocalSkills(skills);
 
-    return {
+    const result = {
       data: groupSkillsByCategory(skills),
       rawList: skills,
       error: null,
       isLive: true,
     };
+    memorySkillsCache = result;
+    memorySkillsTimestamp = Date.now();
+    return result;
   } catch (err) {
     console.warn('[Firebase] Firestore getSkills error, using fallback:', err.message);
     const local = getStoredLocalSkills().sort((a, b) => (a.order || 99) - (b.order || 99));
-    return {
+    const result = {
       data: groupSkillsByCategory(local),
       rawList: local,
       error: `Operating in fallback mode (${err.message})`,
       isLive: false,
     };
+    memorySkillsCache = result;
+    memorySkillsTimestamp = Date.now();
+    return result;
   }
 }
 
@@ -209,6 +235,7 @@ export async function createSkill(skillInput) {
     localList.push(newSkill);
   }
   saveStoredLocalSkills(localList);
+  invalidateSkillsCache();
 
   if (!isFirebaseConfigured || !db) {
     return { success: true, data: newSkill, isLive: false };
@@ -221,6 +248,7 @@ export async function createSkill(skillInput) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
+    invalidateSkillsCache();
     return { success: true, data: newSkill, isLive: true };
   } catch (err) {
     console.error('[Firebase] createSkill error:', err);
@@ -248,6 +276,7 @@ export async function updateSkill(skillId, updateData) {
     };
     localList[index] = updatedSkill;
     saveStoredLocalSkills(localList);
+    invalidateSkillsCache();
   }
 
   if (!isFirebaseConfigured || !db) {
@@ -260,6 +289,7 @@ export async function updateSkill(skillId, updateData) {
       ...updateData,
       updatedAt: serverTimestamp(),
     });
+    invalidateSkillsCache();
     return { success: true, data: updatedSkill, isLive: true };
   } catch (err) {
     console.error('[Firebase] updateSkill error:', err);
@@ -276,6 +306,7 @@ export async function deleteSkill(skillId) {
   const localList = getStoredLocalSkills();
   const filtered = localList.filter((s) => s.id !== skillId);
   saveStoredLocalSkills(filtered);
+  invalidateSkillsCache();
 
   if (!isFirebaseConfigured || !db) {
     return { success: true, isLive: false };
@@ -284,6 +315,7 @@ export async function deleteSkill(skillId) {
   try {
     const docRef = doc(db, COLLECTIONS.SKILLS, skillId);
     await deleteDoc(docRef);
+    invalidateSkillsCache();
     return { success: true, isLive: true };
   } catch (err) {
     console.error('[Firebase] deleteSkill error:', err);
