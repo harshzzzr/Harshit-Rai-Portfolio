@@ -49,6 +49,11 @@ export default function Footer() {
                 </a>
               </li>
               <li>
+                <a href="#github" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  GitHub Repositories
+                </a>
+              </li>
+              <li>
                 <a href="#education" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                   Education
                 </a>

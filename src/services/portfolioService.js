@@ -30,6 +30,9 @@ export {
 export {
   fetchGitHubProfile,
   fetchGitHubRepos,
+  clearGitHubCache,
+  getLanguageColor,
+  GITHUB_LANG_COLORS,
   GITHUB_USERNAME,
   GITHUB_PROFILE_URL
 } from './githubService';
