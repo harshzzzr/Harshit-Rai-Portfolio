@@ -1,76 +1,14 @@
-import { collection, getDocs, doc, getDoc, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db, isFirebaseConfigured } from '../firebase/config';
 import { COLLECTIONS } from '../firebase/collections';
 import {
-  projectsData as localProjects,
   skillsData as localSkills,
   personalInfo,
   timelineData
 } from '../data/portfolioData';
 
-/**
- * Fetch all projects from Firestore with local fallback
- */
-export async function getProjects() {
-  if (!isFirebaseConfigured || !db) {
-    return { data: localProjects, error: null, isLive: false };
-  }
-
-  try {
-    const projectsRef = collection(db, COLLECTIONS.PROJECTS);
-    const snapshot = await getDocs(projectsRef);
-
-    if (snapshot.empty) {
-      // Gracefully fall back to verified static data if collection is not populated yet
-      return { data: localProjects, error: null, isLive: false };
-    }
-
-    const projects = snapshot.docs.map((docSnap) => ({
-      id: docSnap.id,
-      ...docSnap.data()
-    }));
-
-    return { data: projects, error: null, isLive: true };
-  } catch (error) {
-    console.error('[Firebase] Error fetching projects:', error);
-    return { data: localProjects, error: error.message, isLive: false };
-  }
-}
-
-/**
- * Fetch a single project by ID from Firestore with local fallback
- */
-export async function getProjectById(projectId) {
-  if (!projectId) {
-    return { data: null, error: 'Project ID is required', isLive: false };
-  }
-
-  if (!isFirebaseConfigured || !db) {
-    const local = localProjects.find((p) => p.id === projectId) || null;
-    return { data: local, error: null, isLive: false };
-  }
-
-  try {
-    const docRef = doc(db, COLLECTIONS.PROJECTS, projectId);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      return {
-        data: { id: docSnap.id, ...docSnap.data() },
-        error: null,
-        isLive: true
-      };
-    }
-
-    // Fall back to local project if not found in Firestore
-    const local = localProjects.find((p) => p.id === projectId) || null;
-    return { data: local, error: null, isLive: false };
-  } catch (error) {
-    console.error(`[Firebase] Error fetching project ${projectId}:`, error);
-    const local = localProjects.find((p) => p.id === projectId) || null;
-    return { data: local, error: error.message, isLive: false };
-  }
-}
+// Re-export Firestore project services
+export { getProjects, getProjectById } from './projectService';
 
 /**
  * Fetch categorized skills from Firestore with local fallback
