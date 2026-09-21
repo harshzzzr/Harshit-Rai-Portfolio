@@ -59,6 +59,11 @@ export default function Footer() {
                 </a>
               </li>
               <li>
+                <a href="#profiles" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  Social & Coding Profiles
+                </a>
+              </li>
+              <li>
                 <a href="#feedback" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                   Feedback & Reviews
                 </a>

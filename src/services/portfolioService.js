@@ -27,4 +27,20 @@ export {
   toggleFeaturedFeedback,
   deleteFeedback
 } from './feedbackService';
+export {
+  fetchGitHubProfile,
+  fetchGitHubRepos,
+  GITHUB_USERNAME,
+  GITHUB_PROFILE_URL
+} from './githubService';
+export {
+  fetchLeetCodeStats,
+  LEETCODE_USERNAME,
+  LEETCODE_PROFILE_URL
+} from './leetcodeService';
+export {
+  getCurrentlyPlaying,
+  SPOTIFY_PROFILE_URL
+} from './spotifyService';
+
 

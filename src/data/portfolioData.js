@@ -20,10 +20,14 @@ export const personalInfo = {
     }
   ],
   socials: {
-    github: 'https://github.com/#',
-    linkedin: 'https://linkedin.com/in/#',
-    leetcode: 'https://leetcode.com/#',
-    spotify: 'https://open.spotify.com/user/#'
+    github: 'https://github.com/harshitrai',
+    githubUsername: 'harshitrai',
+    linkedin: 'https://linkedin.com/in/harshit-rai',
+    linkedinUsername: 'harshit-rai',
+    leetcode: 'https://leetcode.com/u/harshitrai',
+    leetcodeUsername: 'harshitrai',
+    spotify: 'https://open.spotify.com/user/harshitrai',
+    spotifyUsername: 'harshitrai'
   },
   contact: {
     email: 'harshit.rai@example.com',
