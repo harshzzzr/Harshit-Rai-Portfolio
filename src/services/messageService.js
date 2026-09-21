@@ -14,18 +14,42 @@ import { COLLECTIONS } from '../firebase/collections';
 
 const LOCAL_MESSAGES_KEY = 'harshit_portfolio_messages';
 
+export const defaultSampleMessages = [
+  {
+    id: 'msg-sample-1',
+    name: 'Sarah Chen',
+    email: 'sarah.chen@techinnovate.io',
+    subject: 'Full Stack Engineering Opportunity',
+    message: 'Hi Harshit,\n\nI reviewed your portfolio and was impressed with your algorithms foundation, C++ systems work, and full-stack projects. We have an upcoming software engineering role on our platform team and would love to discuss your background.\n\nBest,\nSarah Chen\nEngineering Talent Partner',
+    status: 'unread',
+    createdAt: new Date(Date.now() - 3600000 * 4).toISOString(),
+  },
+  {
+    id: 'msg-sample-2',
+    name: 'David Miller',
+    email: 'david.m@devcommunity.org',
+    subject: 'Open Source Collaboration Inquiry',
+    message: 'Hello Harshit, I came across your portfolio projects and noticed your Arduino and microcontrollers projects. We are organizing a student open-source sprint next month and would love to have you participate or share insights.\n\nCheers,\nDavid',
+    status: 'read',
+    createdAt: new Date(Date.now() - 3600000 * 28).toISOString(),
+  }
+];
+
 /**
  * Local storage cache helpers for messages (used for fallback/offline testing)
  */
 function getStoredLocalMessages() {
-  if (typeof window === 'undefined') return [];
+  if (typeof window === 'undefined') return defaultSampleMessages;
   try {
     const raw = localStorage.getItem(LOCAL_MESSAGES_KEY);
-    if (!raw) return [];
+    if (!raw) {
+      saveStoredLocalMessages(defaultSampleMessages);
+      return defaultSampleMessages;
+    }
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultSampleMessages;
   } catch {
-    return [];
+    return defaultSampleMessages;
   }
 }
 
@@ -268,3 +292,23 @@ export async function deleteMessage(messageId) {
     return { success: false, error: err.message };
   }
 }
+
+/**
+ * Convenience shortcuts
+ */
+export async function markMessageRead(messageId) {
+  return updateMessageStatus(messageId, 'read');
+}
+
+export async function markMessageUnread(messageId) {
+  return updateMessageStatus(messageId, 'unread');
+}
+
+export async function archiveMessage(messageId) {
+  return updateMessageStatus(messageId, 'archived');
+}
+
+export async function unarchiveMessage(messageId) {
+  return updateMessageStatus(messageId, 'read');
+}
+

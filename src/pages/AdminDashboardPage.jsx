@@ -27,6 +27,7 @@ import ProjectManager from '../components/admin/ProjectManager';
 import SkillManager from '../components/admin/SkillManager';
 import EducationManager from '../components/admin/EducationManager';
 import TimelineManager from '../components/admin/TimelineManager';
+import MessageManager from '../components/admin/MessageManager';
 
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -349,7 +350,12 @@ export default function AdminDashboardPage() {
           />
         )}
 
-        {/* Dedicated Section Placeholders for remaining sidebar tabs */}
+        {/* Messages Inbox View */}
+        {activeTab === 'messages' && (
+          <MessageManager onMessageChanged={fetchDashboardData} />
+        )}
+
+        {/* Dedicated Section Placeholders for remaining sidebar tabs (feedback, settings) */}
         {activeTab !== 'dashboard' &&
           activeTab !== 'projects' &&
           activeTab !== 'skills' &&
@@ -358,7 +364,8 @@ export default function AdminDashboardPage() {
           activeTab !== 'hackathons' &&
           activeTab !== 'research' &&
           activeTab !== 'achievements' &&
-          activeTab !== 'certifications' && (
+          activeTab !== 'certifications' &&
+          activeTab !== 'messages' && (
           <div className="p-8 sm:p-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-6 shadow-sm animate-fade-in">
             <div className="w-16 h-16 rounded-2xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 mx-auto flex items-center justify-center">
               <Sliders size={32} />
@@ -369,7 +376,6 @@ export default function AdminDashboardPage() {
                 {activeTab} Management
               </h2>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                {activeTab === 'messages' && 'Message Inbox, mark read, archive, and delete operations will be activated in Version 4.1.'}
                 {activeTab === 'feedback' && 'Testimonial moderation and feedback approval controls will be activated in Version 5.1.'}
                 {activeTab === 'settings' && 'Administrator preferences and Firebase environment status settings.'}
               </p>
@@ -377,7 +383,7 @@ export default function AdminDashboardPage() {
 
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-mono text-slate-600 dark:text-slate-300">
               <CheckCircle2 size={14} className="text-emerald-500" />
-              <span>Section verified in v3.3 navigation</span>
+              <span>Section verified in v4.1 navigation</span>
             </div>
 
             <div className="pt-2">
