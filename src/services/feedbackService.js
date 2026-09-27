@@ -25,54 +25,27 @@ export function invalidateFeedbackCache() {
   memoryCacheApprovedTime = 0;
 }
 
-export const defaultSampleFeedback = [
-  {
-    id: 'fb-sample-1',
-    name: 'Prof. Ramesh Sharma',
-    rating: 5,
-    feedback: 'Harshit exhibits exceptional analytical and problem-solving skills. His coursework in Data Structures, Algorithms, and Operating Systems has consistently stood out.',
-    status: 'approved',
-    featured: true,
-    createdAt: new Date(Date.now() - 3600000 * 24 * 7).toISOString(),
-    createdAtIso: new Date(Date.now() - 3600000 * 24 * 7).toISOString()
-  },
-  {
-    id: 'fb-sample-2',
-    name: 'Ananya Gupta',
-    rating: 5,
-    feedback: 'Collaborated with Harshit during the 36-hour hackathon. His ability to rapidly architect full-stack prototypes under tight deadlines was instrumental to our team winning 1st place.',
-    status: 'approved',
-    featured: false,
-    createdAt: new Date(Date.now() - 3600000 * 24 * 14).toISOString(),
-    createdAtIso: new Date(Date.now() - 3600000 * 24 * 14).toISOString()
-  },
-  {
-    id: 'fb-sample-3',
-    name: 'Karan Verma',
-    rating: 4,
-    feedback: 'Great understanding of C++ fundamentals and systems architecture. Clear communication and dependable contributions throughout collaborative engineering projects.',
-    status: 'pending',
-    featured: false,
-    createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
-    createdAtIso: new Date(Date.now() - 3600000 * 5).toISOString()
-  }
-];
+// Zero fake reviews policy: Feedback must be authentic and approved through moderation.
+export const defaultSampleFeedback = [];
 
 /**
  * Local storage cache helpers for feedback (used for fallback/offline testing)
  */
 function getStoredLocalFeedback() {
-  if (typeof window === 'undefined') return defaultSampleFeedback;
+  if (typeof window === 'undefined') return [];
   try {
     const raw = localStorage.getItem(LOCAL_FEEDBACK_KEY);
     if (!raw) {
-      saveStoredLocalFeedback(defaultSampleFeedback);
-      return defaultSampleFeedback;
+      if (import.meta.env.VITE_ENABLE_DEMO_DATA === 'true') {
+        saveStoredLocalFeedback(defaultSampleFeedback);
+        return defaultSampleFeedback;
+      }
+      return [];
     }
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultSampleFeedback;
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
-    return defaultSampleFeedback;
+    return [];
   }
 }
 
@@ -167,8 +140,11 @@ export async function submitFeedback({ name, rating, feedback, honeypot = '' }) 
         message: 'Thank you! Your feedback has been submitted for moderation and will appear publicly once approved.'
       };
     } catch (err) {
-      console.warn('[FeedbackService] Firestore submission failed, using local cache fallback:', err);
-      // Fall through to local fallback
+      console.error('[FeedbackService] Firestore submission failed:', err);
+      return {
+        success: false,
+        error: err.message || 'Failed to submit feedback to the server. Please try again later.'
+      };
     }
   }
 
@@ -244,11 +220,12 @@ export async function getApprovedFeedback() {
 
       return { success: true, data: items };
     } catch (err) {
-      console.warn('[FeedbackService] Failed to query approved feedback from Firestore, trying local cache:', err);
+      console.warn('[FeedbackService] Failed to query approved feedback from Firestore:', err);
+      return { success: false, error: err.message, data: [] };
     }
   }
 
-  // Fallback to local cache approved items
+  // Fallback only when Firebase is unconfigured
   const localList = getStoredLocalFeedback();
   const approvedOnly = localList
     .filter((item) => item.status === 'approved')
@@ -294,7 +271,8 @@ export async function getAllFeedback() {
       items.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       return { success: true, data: items };
     } catch (err) {
-      console.warn('[FeedbackService] Failed to fetch all feedback from Firestore, using local cache:', err);
+      console.warn('[FeedbackService] Failed to fetch all feedback from Firestore:', err);
+      return { success: false, error: err.message, data: [] };
     }
   }
 
@@ -321,11 +299,12 @@ export async function updateFeedbackStatus(id, newStatus) {
       const ref = doc(db, COLLECTIONS.FEEDBACK, id);
       await updateDoc(ref, { status: newStatus });
     } catch (err) {
-      console.warn('[FeedbackService] Firestore updateStatus failed:', err);
+      console.error('[FeedbackService] Firestore updateStatus failed:', err);
+      return { success: false, error: err.message };
     }
   }
 
-  // Update local cache
+  // Update local cache on success
   const localList = getStoredLocalFeedback();
   const index = localList.findIndex((item) => item.id === id);
   if (index !== -1) {
@@ -362,7 +341,8 @@ export async function toggleFeaturedFeedback(id, currentFeatured) {
       const ref = doc(db, COLLECTIONS.FEEDBACK, id);
       await updateDoc(ref, { featured: newFeatured });
     } catch (err) {
-      console.warn('[FeedbackService] Firestore toggleFeatured failed:', err);
+      console.error('[FeedbackService] Firestore toggleFeatured failed:', err);
+      return { success: false, error: err.message };
     }
   }
 
@@ -381,16 +361,18 @@ export async function toggleFeaturedFeedback(id, currentFeatured) {
  */
 export async function deleteFeedback(id) {
   invalidateFeedbackCache();
+
   if (isFirebaseConfigured && db) {
     try {
       const ref = doc(db, COLLECTIONS.FEEDBACK, id);
       await deleteDoc(ref);
     } catch (err) {
-      console.warn('[FeedbackService] Firestore delete failed:', err);
+      console.error('[FeedbackService] Firestore delete failed:', err);
+      return { success: false, error: err.message };
     }
   }
 
-  // Update local cache
+  // Update local cache on success
   const localList = getStoredLocalFeedback();
   const updated = localList.filter((item) => item.id !== id);
   saveStoredLocalFeedback(updated);

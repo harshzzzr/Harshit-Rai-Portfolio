@@ -52,6 +52,7 @@ export function normalizeProject(data, id) {
     githubUrl: data.githubUrl || null,
     liveUrl: data.liveUrl || null,
     featured: Boolean(data.featured),
+    visible: data.visible !== false,
     badge: data.badge || (data.featured ? 'Featured Project' : 'Project Architecture'),
     tagline: data.tagline || '',
     order: typeof data.order === 'number' ? data.order : 99,
@@ -68,6 +69,7 @@ export const defaultProjects = localProjects.map((p, index) =>
     {
       ...p,
       order: index + 1,
+      visible: true,
       shortDescription: p.description,
       fullDescription: p.overview,
       createdAt: '2026-01-01T00:00:00.000Z',
@@ -106,13 +108,16 @@ function saveStoredLocalProjects(projects) {
 
 /**
  * Fetch all projects from Firestore (ordered by `order` asc)
- * Falls back safely to cached/default projects if Firebase is unconfigured or collection is empty
+ * Supports { includeHidden = false } to strictly protect drafts from public view
  */
-export async function getProjects() {
+export async function getProjects(options = {}) {
+  const { includeHidden = false } = options;
+
   // Check fast in-memory cache first
   if (memoryProjectsCache && (Date.now() - memoryProjectsTimestamp < PROJECTS_CACHE_TTL_MS)) {
+    const cachedList = includeHidden ? memoryProjectsCache : memoryProjectsCache.filter((p) => p.visible !== false);
     return {
-      data: memoryProjectsCache,
+      data: cachedList,
       error: null,
       isLive: Boolean(isFirebaseConfigured && db),
     };
@@ -120,10 +125,13 @@ export async function getProjects() {
 
   if (!isFirebaseConfigured || !db) {
     const local = getStoredLocalProjects().sort((a, b) => (a.order || 99) - (b.order || 99));
-    memoryProjectsCache = local;
-    memoryProjectsTimestamp = Date.now();
+    const filtered = includeHidden ? local : local.filter((p) => p.visible !== false);
+    if (includeHidden) {
+      memoryProjectsCache = local;
+      memoryProjectsTimestamp = Date.now();
+    }
     return {
-      data: local,
+      data: filtered,
       error: null,
       isLive: false,
     };
@@ -132,22 +140,20 @@ export async function getProjects() {
   try {
     const projectsRef = collection(db, COLLECTIONS.PROJECTS);
     let q;
-    try {
-      q = query(projectsRef, orderBy('order', 'asc'));
-    } catch {
+    if (!includeHidden) {
+      // Must query where('visible', '==', true) to match firestore.rules public read security
+      q = query(projectsRef, where('visible', '==', true));
+    } else {
       q = projectsRef;
     }
 
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
-      const local = getStoredLocalProjects().sort((a, b) => (a.order || 99) - (b.order || 99));
-      memoryProjectsCache = local;
-      memoryProjectsTimestamp = Date.now();
       return {
-        data: local,
+        data: [],
         error: null,
-        isLive: false,
+        isLive: true,
       };
     }
 
@@ -155,23 +161,26 @@ export async function getProjects() {
       .map((docSnap) => normalizeProject(docSnap.data(), docSnap.id))
       .sort((a, b) => (a.order || 99) - (b.order || 99));
 
-    // Keep memory and local storage synced
-    memoryProjectsCache = projects;
-    memoryProjectsTimestamp = Date.now();
-    saveStoredLocalProjects(projects);
+    if (includeHidden) {
+      // Keep memory and local storage synced with full dataset
+      memoryProjectsCache = projects;
+      memoryProjectsTimestamp = Date.now();
+      saveStoredLocalProjects(projects);
+    }
+
+    const finalResult = includeHidden ? projects : projects.filter((p) => p.visible !== false);
 
     return {
-      data: projects,
+      data: finalResult,
       error: null,
       isLive: true,
     };
   } catch (err) {
     console.warn('[Firebase] Firestore getProjects error, using fallback:', err.message);
     const local = getStoredLocalProjects().sort((a, b) => (a.order || 99) - (b.order || 99));
-    memoryProjectsCache = local;
-    memoryProjectsTimestamp = Date.now();
+    const filtered = includeHidden ? local : local.filter((p) => p.visible !== false);
     return {
-      data: local,
+      data: filtered,
       error: `Notice: Operating in fallback mode (${err.message})`,
       isLive: false,
     };
@@ -180,8 +189,11 @@ export async function getProjects() {
 
 /**
  * Fetch a single project by ID or slug
+ * Returns not-found error if project is marked visible: false and includeHidden is false
  */
-export async function getProjectById(projectIdOrSlug) {
+export async function getProjectById(projectIdOrSlug, options = {}) {
+  const { includeHidden = false } = options;
+
   if (!projectIdOrSlug) {
     return { data: null, error: 'Project identifier is required', isLive: false };
   }
@@ -192,6 +204,9 @@ export async function getProjectById(projectIdOrSlug) {
       (p) => p.id === projectIdOrSlug || p.slug === projectIdOrSlug
     );
     if (found) {
+      if (!includeHidden && found.visible === false) {
+        return { data: null, error: 'Project not found', isLive: Boolean(isFirebaseConfigured && db) };
+      }
       return { data: found, error: null, isLive: Boolean(isFirebaseConfigured && db) };
     }
   }
@@ -201,7 +216,10 @@ export async function getProjectById(projectIdOrSlug) {
     const local = localList.find(
       (p) => p.id === projectIdOrSlug || p.slug === projectIdOrSlug
     );
-    return { data: local || null, error: null, isLive: false };
+    if (local && !includeHidden && local.visible === false) {
+      return { data: null, error: 'Project not found', isLive: false };
+    }
+    return { data: local || null, error: local ? null : 'Project not found', isLive: false };
   }
 
   try {
@@ -209,37 +227,49 @@ export async function getProjectById(projectIdOrSlug) {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
+      const project = normalizeProject(docSnap.data(), docSnap.id);
+      if (!includeHidden && project.visible === false) {
+        return { data: null, error: 'Project not found', isLive: true };
+      }
       return {
-        data: normalizeProject(docSnap.data(), docSnap.id),
+        data: project,
         error: null,
         isLive: true,
       };
     }
 
     const projectsRef = collection(db, COLLECTIONS.PROJECTS);
-    const q = query(projectsRef, where('slug', '==', projectIdOrSlug));
+    let q;
+    if (!includeHidden) {
+      q = query(projectsRef, where('slug', '==', projectIdOrSlug), where('visible', '==', true));
+    } else {
+      q = query(projectsRef, where('slug', '==', projectIdOrSlug));
+    }
     const querySnap = await getDocs(q);
 
     if (!querySnap.empty) {
       const firstDoc = querySnap.docs[0];
+      const project = normalizeProject(firstDoc.data(), firstDoc.id);
+      if (!includeHidden && project.visible === false) {
+        return { data: null, error: 'Project not found', isLive: true };
+      }
       return {
-        data: normalizeProject(firstDoc.data(), firstDoc.id),
+        data: project,
         error: null,
         isLive: true,
       };
     }
 
-    const localList = getStoredLocalProjects();
-    const local = localList.find(
-      (p) => p.id === projectIdOrSlug || p.slug === projectIdOrSlug
-    );
-    return { data: local || null, error: null, isLive: false };
+    return { data: null, error: 'Project not found', isLive: true };
   } catch (err) {
     console.warn(`[Firebase] Firestore getProjectById(${projectIdOrSlug}) error, using fallback:`, err.message);
     const localList = getStoredLocalProjects();
     const local = localList.find(
       (p) => p.id === projectIdOrSlug || p.slug === projectIdOrSlug
     );
+    if (local && !includeHidden && local.visible === false) {
+      return { data: null, error: 'Project not found', isLive: false };
+    }
     return { data: local || null, error: err.message, isLive: false };
   }
 }
@@ -265,18 +295,17 @@ export async function createProject(projectInput) {
     id
   );
 
-  // Update local storage cache immediately
-  const localList = getStoredLocalProjects();
-  const existingIdx = localList.findIndex((p) => p.id === id);
-  if (existingIdx >= 0) {
-    localList[existingIdx] = normalized;
-  } else {
-    localList.push(normalized);
-  }
-  saveStoredLocalProjects(localList);
-  invalidateProjectsCache();
-
   if (!isFirebaseConfigured || !db) {
+    const localList = getStoredLocalProjects();
+    const existingIdx = localList.findIndex((p) => p.id === id);
+    if (existingIdx >= 0) {
+      localList[existingIdx] = normalized;
+    } else {
+      localList.push(normalized);
+    }
+    saveStoredLocalProjects(localList);
+    invalidateProjectsCache();
+
     return {
       success: true,
       data: normalized,
@@ -292,6 +321,16 @@ export async function createProject(projectInput) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
+
+    const localList = getStoredLocalProjects();
+    const existingIdx = localList.findIndex((p) => p.id === id);
+    if (existingIdx >= 0) {
+      localList[existingIdx] = normalized;
+    } else {
+      localList.push(normalized);
+    }
+    saveStoredLocalProjects(localList);
+    invalidateProjectsCache();
 
     return {
       success: true,
@@ -317,26 +356,25 @@ export async function updateProject(projectId, updateData) {
     return { success: false, error: 'Project ID is required' };
   }
 
-  // Update local storage cache
-  const localList = getStoredLocalProjects();
-  const existingIdx = localList.findIndex((p) => p.id === projectId || p.slug === projectId);
-  let updatedRecord = null;
-
-  if (existingIdx >= 0) {
-    updatedRecord = normalizeProject(
-      {
-        ...localList[existingIdx],
-        ...updateData,
-        updatedAt: new Date().toISOString(),
-      },
-      localList[existingIdx].id
-    );
-    localList[existingIdx] = updatedRecord;
-    saveStoredLocalProjects(localList);
-    invalidateProjectsCache();
-  }
-
   if (!isFirebaseConfigured || !db) {
+    const localList = getStoredLocalProjects();
+    const existingIdx = localList.findIndex((p) => p.id === projectId || p.slug === projectId);
+    let updatedRecord = null;
+
+    if (existingIdx >= 0) {
+      updatedRecord = normalizeProject(
+        {
+          ...localList[existingIdx],
+          ...updateData,
+          updatedAt: new Date().toISOString(),
+        },
+        localList[existingIdx].id
+      );
+      localList[existingIdx] = updatedRecord;
+      saveStoredLocalProjects(localList);
+      invalidateProjectsCache();
+    }
+
     return {
       success: true,
       data: updatedRecord,
@@ -351,6 +389,22 @@ export async function updateProject(projectId, updateData) {
       ...updateData,
       updatedAt: serverTimestamp(),
     });
+
+    const localList = getStoredLocalProjects();
+    const existingIdx = localList.findIndex((p) => p.id === projectId || p.slug === projectId);
+    let updatedRecord = null;
+    if (existingIdx >= 0) {
+      updatedRecord = normalizeProject(
+        {
+          ...localList[existingIdx],
+          ...updateData,
+          updatedAt: new Date().toISOString(),
+        },
+        localList[existingIdx].id
+      );
+      localList[existingIdx] = updatedRecord;
+      saveStoredLocalProjects(localList);
+    }
     invalidateProjectsCache();
 
     return {
@@ -376,13 +430,12 @@ export async function deleteProject(projectId) {
     return { success: false, error: 'Project ID is required' };
   }
 
-  // Remove from local storage cache
-  const localList = getStoredLocalProjects();
-  const filtered = localList.filter((p) => p.id !== projectId && p.slug !== projectId);
-  saveStoredLocalProjects(filtered);
-  invalidateProjectsCache();
-
   if (!isFirebaseConfigured || !db) {
+    const localList = getStoredLocalProjects();
+    const filtered = localList.filter((p) => p.id !== projectId && p.slug !== projectId);
+    saveStoredLocalProjects(filtered);
+    invalidateProjectsCache();
+
     return {
       success: true,
       isLive: false,
@@ -393,6 +446,10 @@ export async function deleteProject(projectId) {
   try {
     const docRef = doc(db, COLLECTIONS.PROJECTS, projectId);
     await deleteDoc(docRef);
+
+    const localList = getStoredLocalProjects();
+    const filtered = localList.filter((p) => p.id !== projectId && p.slug !== projectId);
+    saveStoredLocalProjects(filtered);
     invalidateProjectsCache();
 
     return {
@@ -417,12 +474,19 @@ export async function toggleProjectFeatured(projectId, currentStatus) {
 }
 
 /**
+ * Quick toggle visibility status (published vs draft)
+ */
+export async function toggleProjectVisibility(projectId, currentStatus) {
+  return updateProject(projectId, { visible: !currentStatus });
+}
+
+/**
  * Upload project image asset via Firebase Storage
  */
 export async function uploadProjectImage(file, projectId) {
   const safeId = projectId || 'temp';
-  const extension = file.name.split('.').pop() || 'webp';
-  const destination = `${STORAGE_PATHS.PROJECTS}/${safeId}_${Date.now()}.${extension}`;
+  const originalExt = (file.name && file.name.split('.').pop()) || 'png';
+  const destination = `${STORAGE_PATHS.PROJECTS}/${safeId}_${Date.now()}.${originalExt}`;
   return uploadAsset(file, destination, { optimize: true });
 }
 

@@ -80,7 +80,7 @@ export default function Experience() {
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 mb-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-mono font-medium bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 mb-1">
             <span className={`w-2 h-2 rounded-full ${isLive ? 'bg-emerald-500 animate-pulse' : 'bg-primary-500'}`} aria-hidden="true" />
             <span>{isLive ? 'Cloud Firestore Verified Timeline' : 'Verified Career & Project Timeline'}</span>
           </div>
@@ -90,7 +90,7 @@ export default function Experience() {
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
             Practical engineering experience, hackathons, academic research, and technical certifications.
           </p>
-          <div className="w-12 h-1 bg-primary-500 mx-auto rounded-full mt-2" aria-hidden="true" />
+          <div className="w-12 h-1 bg-primary-500 mx-auto rounded-sm mt-2" aria-hidden="true" />
         </div>
 
         {/* Category Navigation Tabs */}
@@ -119,7 +119,7 @@ export default function Experience() {
                   <Icon size={15} aria-hidden="true" />
                   <span>{tab.label}</span>
                   <span
-                    className={`text-[11px] font-mono px-1.5 py-0.2 rounded-full ${
+                    className={`text-[11px] font-mono px-1.5 py-0.2 rounded-md ${
                       isActive
                         ? 'bg-primary-700 text-white'
                         : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
@@ -200,7 +200,7 @@ export default function Experience() {
               {items.map((item) => (
                 <div key={item.id} className="relative pl-4 sm:pl-8 group">
                   {/* Timeline Dot */}
-                  <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-white dark:bg-slate-950 border-2 border-primary-500 group-hover:scale-125 transition-transform" />
+                  <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-white dark:bg-slate-950 border-2 border-primary-500" />
 
                   {/* Card */}
                   <div className="p-4 sm:p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all">

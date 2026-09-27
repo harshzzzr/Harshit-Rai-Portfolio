@@ -129,7 +129,7 @@ export default function Contact() {
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
             Have a project idea, question, or looking to collaborate? Drop a message below.
           </p>
-          <div className="w-12 h-1 bg-primary-500 mx-auto rounded-full mt-2" />
+          <div className="w-12 h-1 bg-primary-500 mx-auto rounded-sm mt-2" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -212,7 +212,7 @@ export default function Contact() {
 
             {isSubmitted ? (
               <div role="status" aria-live="polite" className="text-center py-10 space-y-4 animate-fade-in">
-                <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center">
+                <div className="w-14 h-14 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center">
                   <CheckCircle2 size={32} aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">
@@ -389,25 +389,38 @@ export default function Contact() {
                   )}
                 </div>
 
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  aria-busy={isSubmitting}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-primary-500 disabled:opacity-50 cursor-pointer"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <RefreshCw size={16} className="animate-spin" aria-hidden="true" />
-                      <span>Delivering Message...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Send size={16} aria-hidden="true" />
-                      <span>Send Message</span>
-                    </>
-                  )}
-                </button>
+                {/* Submit Button & Legal Note */}
+                <div className="pt-2 space-y-3">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    aria-busy={isSubmitting}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 disabled:opacity-50 cursor-pointer"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <RefreshCw size={16} className="animate-spin" aria-hidden="true" />
+                        <span>Delivering Message...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send size={16} aria-hidden="true" />
+                        <span>Send Message</span>
+                      </>
+                    )}
+                  </button>
+
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Your contact information is protected in accordance with our{' '}
+                    <a href="/privacy" className="text-primary-600 dark:text-primary-400 hover:underline">
+                      Privacy Policy
+                    </a>{' '}
+                    and{' '}
+                    <a href="/terms" className="text-primary-600 dark:text-primary-400 hover:underline">
+                      Terms
+                    </a>.
+                  </p>
+                </div>
               </form>
             )}
           </div>

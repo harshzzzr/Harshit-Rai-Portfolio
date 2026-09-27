@@ -35,7 +35,7 @@ export const CODING_SOUNDTRACKS = [
     genre: 'Downtempo / Electronic',
     songUrl: SPOTIFY_PROFILE_URL,
     duration: 'Night Session',
-    coverColor: 'from-purple-600 to-slate-900'
+    coverColor: 'from-slate-700 to-slate-900'
   }
 ];
 
@@ -130,7 +130,7 @@ export async function getCurrentlyPlaying() {
   const fallback = {
     isPlaying: false,
     status: 'idle',
-    title: 'Focused Development Soundtracks',
+    title: 'Curated Coding Soundtrack',
     artist: 'Instrumental & Electronic Lo-Fi',
     album: 'Deep Work Atmosphere',
     albumImageUrl: null,

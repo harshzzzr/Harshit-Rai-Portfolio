@@ -51,14 +51,18 @@ export const defaultSkillsList = [
 
 const LOCAL_SKILLS_KEY = 'harshit_portfolio_custom_skills';
 
-// High-performance in-memory cache with 3-minute TTL
-let memorySkillsCache = null;
-let memorySkillsTimestamp = 0;
+// High-performance in-memory caches with 3-minute TTL
+let memorySkillsPublic = null;
+let memorySkillsAdmin = null;
+let memorySkillsPublicTime = 0;
+let memorySkillsAdminTime = 0;
 const SKILLS_CACHE_TTL_MS = 3 * 60 * 1000;
 
 export function invalidateSkillsCache() {
-  memorySkillsCache = null;
-  memorySkillsTimestamp = 0;
+  memorySkillsPublic = null;
+  memorySkillsAdmin = null;
+  memorySkillsPublicTime = 0;
+  memorySkillsAdminTime = 0;
 }
 
 /**
@@ -128,49 +132,76 @@ export function groupSkillsByCategory(skillsArray) {
  * Fetch all skills from Firestore
  * Returns { data, rawList, error, isLive }
  */
-export async function getSkills() {
-  if (memorySkillsCache && (Date.now() - memorySkillsTimestamp < SKILLS_CACHE_TTL_MS)) {
-    return memorySkillsCache;
+export async function getSkills({ includeHidden = false } = {}) {
+  const now = Date.now();
+  if (includeHidden) {
+    if (memorySkillsAdmin && (now - memorySkillsAdminTime < SKILLS_CACHE_TTL_MS)) {
+      return memorySkillsAdmin;
+    }
+  } else {
+    if (memorySkillsPublic && (now - memorySkillsPublicTime < SKILLS_CACHE_TTL_MS)) {
+      return memorySkillsPublic;
+    }
   }
 
   if (!isFirebaseConfigured || !db) {
-    const local = getStoredLocalSkills().sort((a, b) => (a.order || 99) - (b.order || 99));
+    let local = getStoredLocalSkills().sort((a, b) => (a.order || 99) - (b.order || 99));
+    if (!includeHidden) {
+      local = local.filter((s) => s.visible !== false);
+    }
     const result = {
       data: groupSkillsByCategory(local),
       rawList: local,
       error: null,
       isLive: false,
     };
-    memorySkillsCache = result;
-    memorySkillsTimestamp = Date.now();
+    if (includeHidden) {
+      memorySkillsAdmin = result;
+      memorySkillsAdminTime = now;
+    } else {
+      memorySkillsPublic = result;
+      memorySkillsPublicTime = now;
+    }
     return result;
   }
 
   try {
     const skillsRef = collection(db, COLLECTIONS.SKILLS);
     let q;
-    try {
-      q = query(skillsRef, orderBy('order', 'asc'));
-    } catch {
-      q = skillsRef;
+    if (includeHidden) {
+      try {
+        q = query(skillsRef, orderBy('order', 'asc'));
+      } catch {
+        q = skillsRef;
+      }
+    } else {
+      try {
+        q = query(skillsRef, where('visible', '==', true), orderBy('order', 'asc'));
+      } catch {
+        q = query(skillsRef, where('visible', '==', true));
+      }
     }
 
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
-      const local = getStoredLocalSkills().sort((a, b) => (a.order || 99) - (b.order || 99));
       const result = {
-        data: groupSkillsByCategory(local),
-        rawList: local,
+        data: [],
+        rawList: [],
         error: null,
-        isLive: false,
+        isLive: true,
       };
-      memorySkillsCache = result;
-      memorySkillsTimestamp = Date.now();
+      if (includeHidden) {
+        memorySkillsAdmin = result;
+        memorySkillsAdminTime = now;
+      } else {
+        memorySkillsPublic = result;
+        memorySkillsPublicTime = now;
+      }
       return result;
     }
 
-    const skills = snapshot.docs.map((docSnap) => ({
+    let skills = snapshot.docs.map((docSnap) => ({
       id: docSnap.id,
       name: docSnap.data().name || '',
       category: docSnap.data().category || 'Other',
@@ -180,7 +211,13 @@ export async function getSkills() {
       ...docSnap.data()
     })).sort((a, b) => (a.order || 99) - (b.order || 99));
 
-    saveStoredLocalSkills(skills);
+    if (!includeHidden) {
+      skills = skills.filter((s) => s.visible !== false);
+    }
+
+    if (includeHidden) {
+      saveStoredLocalSkills(skills);
+    }
 
     const result = {
       data: groupSkillsByCategory(skills),
@@ -188,20 +225,33 @@ export async function getSkills() {
       error: null,
       isLive: true,
     };
-    memorySkillsCache = result;
-    memorySkillsTimestamp = Date.now();
+    if (includeHidden) {
+      memorySkillsAdmin = result;
+      memorySkillsAdminTime = now;
+    } else {
+      memorySkillsPublic = result;
+      memorySkillsPublicTime = now;
+    }
     return result;
   } catch (err) {
     console.warn('[Firebase] Firestore getSkills error, using fallback:', err.message);
-    const local = getStoredLocalSkills().sort((a, b) => (a.order || 99) - (b.order || 99));
+    let local = getStoredLocalSkills().sort((a, b) => (a.order || 99) - (b.order || 99));
+    if (!includeHidden) {
+      local = local.filter((s) => s.visible !== false);
+    }
     const result = {
       data: groupSkillsByCategory(local),
       rawList: local,
       error: `Operating in fallback mode (${err.message})`,
       isLive: false,
     };
-    memorySkillsCache = result;
-    memorySkillsTimestamp = Date.now();
+    if (includeHidden) {
+      memorySkillsAdmin = result;
+      memorySkillsAdminTime = now;
+    } else {
+      memorySkillsPublic = result;
+      memorySkillsPublicTime = now;
+    }
     return result;
   }
 }
@@ -227,17 +277,16 @@ export async function createSkill(skillInput) {
     updatedAt: new Date().toISOString(),
   };
 
-  const localList = getStoredLocalSkills();
-  const existingIdx = localList.findIndex((s) => s.id === id);
-  if (existingIdx >= 0) {
-    localList[existingIdx] = newSkill;
-  } else {
-    localList.push(newSkill);
-  }
-  saveStoredLocalSkills(localList);
-  invalidateSkillsCache();
-
   if (!isFirebaseConfigured || !db) {
+    const localList = getStoredLocalSkills();
+    const existingIdx = localList.findIndex((s) => s.id === id);
+    if (existingIdx >= 0) {
+      localList[existingIdx] = newSkill;
+    } else {
+      localList.push(newSkill);
+    }
+    saveStoredLocalSkills(localList);
+    invalidateSkillsCache();
     return { success: true, data: newSkill, isLive: false };
   }
 
@@ -248,7 +297,17 @@ export async function createSkill(skillInput) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
+
+    const localList = getStoredLocalSkills();
+    const existingIdx = localList.findIndex((s) => s.id === id);
+    if (existingIdx >= 0) {
+      localList[existingIdx] = newSkill;
+    } else {
+      localList.push(newSkill);
+    }
+    saveStoredLocalSkills(localList);
     invalidateSkillsCache();
+
     return { success: true, data: newSkill, isLive: true };
   } catch (err) {
     console.error('[Firebase] createSkill error:', err);
@@ -262,24 +321,23 @@ export async function createSkill(skillInput) {
 export async function updateSkill(skillId, updateData) {
   if (!skillId) return { success: false, error: 'Skill ID is required' };
 
-  const localList = getStoredLocalSkills();
-  const index = localList.findIndex((s) => s.id === skillId);
-  let updatedSkill = null;
-
-  if (index >= 0) {
-    updatedSkill = {
-      ...localList[index],
-      ...updateData,
-      order: updateData.order !== undefined ? Number(updateData.order) : localList[index].order,
-      visible: updateData.visible !== undefined ? Boolean(updateData.visible) : localList[index].visible,
-      updatedAt: new Date().toISOString(),
-    };
-    localList[index] = updatedSkill;
-    saveStoredLocalSkills(localList);
-    invalidateSkillsCache();
-  }
-
   if (!isFirebaseConfigured || !db) {
+    const localList = getStoredLocalSkills();
+    const index = localList.findIndex((s) => s.id === skillId);
+    let updatedSkill = null;
+
+    if (index >= 0) {
+      updatedSkill = {
+        ...localList[index],
+        ...updateData,
+        order: updateData.order !== undefined ? Number(updateData.order) : localList[index].order,
+        visible: updateData.visible !== undefined ? Boolean(updateData.visible) : localList[index].visible,
+        updatedAt: new Date().toISOString(),
+      };
+      localList[index] = updatedSkill;
+      saveStoredLocalSkills(localList);
+      invalidateSkillsCache();
+    }
     return { success: true, data: updatedSkill, isLive: false };
   }
 
@@ -289,7 +347,23 @@ export async function updateSkill(skillId, updateData) {
       ...updateData,
       updatedAt: serverTimestamp(),
     });
+
+    const localList = getStoredLocalSkills();
+    const index = localList.findIndex((s) => s.id === skillId);
+    let updatedSkill = null;
+    if (index >= 0) {
+      updatedSkill = {
+        ...localList[index],
+        ...updateData,
+        order: updateData.order !== undefined ? Number(updateData.order) : localList[index].order,
+        visible: updateData.visible !== undefined ? Boolean(updateData.visible) : localList[index].visible,
+        updatedAt: new Date().toISOString(),
+      };
+      localList[index] = updatedSkill;
+      saveStoredLocalSkills(localList);
+    }
     invalidateSkillsCache();
+
     return { success: true, data: updatedSkill, isLive: true };
   } catch (err) {
     console.error('[Firebase] updateSkill error:', err);
@@ -303,19 +377,23 @@ export async function updateSkill(skillId, updateData) {
 export async function deleteSkill(skillId) {
   if (!skillId) return { success: false, error: 'Skill ID is required' };
 
-  const localList = getStoredLocalSkills();
-  const filtered = localList.filter((s) => s.id !== skillId);
-  saveStoredLocalSkills(filtered);
-  invalidateSkillsCache();
-
   if (!isFirebaseConfigured || !db) {
+    const localList = getStoredLocalSkills();
+    const filtered = localList.filter((s) => s.id !== skillId);
+    saveStoredLocalSkills(filtered);
+    invalidateSkillsCache();
     return { success: true, isLive: false };
   }
 
   try {
     const docRef = doc(db, COLLECTIONS.SKILLS, skillId);
     await deleteDoc(docRef);
+
+    const localList = getStoredLocalSkills();
+    const filtered = localList.filter((s) => s.id !== skillId);
+    saveStoredLocalSkills(filtered);
     invalidateSkillsCache();
+
     return { success: true, isLive: true };
   } catch (err) {
     console.error('[Firebase] deleteSkill error:', err);

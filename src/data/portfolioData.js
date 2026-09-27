@@ -1,8 +1,8 @@
 export const personalInfo = {
   name: 'Harshit Rai',
   role: 'Computer Engineering Student & Developer',
-  tagline: 'Developer • Problem Solver • Technology Enthusiast',
-  shortBio: 'Computer Engineering student with a passion for software engineering, algorithmic problem-solving, and building high-performance web applications and system solutions.',
+  tagline: 'Computer Engineering • C++ Systems • Full-Stack Web Development',
+  shortBio: 'Computer Engineering student specializing in software engineering, algorithmic problem solving in C++, and building reliable full-stack web applications.',
   about: [
     'I am a Computer Engineering student driven by a strong curiosity for how computing systems and software architectures operate at scale. My core interests center on full-stack web engineering, systems development, and data-driven applications.',
     'With a rigorous foundation in algorithms and object-oriented paradigms, I focus on writing clean, modular, and maintainable code. I enjoy exploring emerging technologies, building practical tools, and collaborating on impactful engineering problems.'
@@ -10,7 +10,7 @@ export const personalInfo = {
   education: [
     {
       degree: 'Bachelor of Engineering in Computer Engineering',
-      institution: 'Computer Engineering Academy / University',
+      institution: 'Computer Engineering Department',
       status: 'Undergraduate Student',
       highlights: [
         'Core curriculum in Computer Science & Engineering fundamentals',
@@ -100,7 +100,7 @@ export const projectsData = [
     technologies: ['JavaScript', 'Node.js', 'Express', 'MongoDB', 'CSS', 'HTML'],
     featured: true,
     githubUrl: 'https://github.com/harshzzzr',
-    liveUrl: 'https://#',
+    liveUrl: null,
     badge: 'Featured Project',
     screenshots: []
   },
@@ -208,15 +208,7 @@ export const timelineData = {
       description: 'Building tools, experimenting with full-stack web stacks, microcontrollers, and modern framework architectures.'
     }
   ],
-  hackathons: [
-    {
-      title: 'Engineering Hackathon Participant',
-      role: 'Developer & Team Member',
-      period: 'Hackathon Track',
-      organization: 'Student Technical Community',
-      description: 'Collaborated under rapid turnaround constraints to prototype software solutions addressing real-world problem statements.'
-    }
-  ],
+  hackathons: [],
   research: [
     {
       title: 'Systems & Computing Exploration',
@@ -235,13 +227,5 @@ export const timelineData = {
       description: 'Consistently practicing core algorithmic topics, data structures, and computational optimization in C++ and Java.'
     }
   ],
-  certifications: [
-    {
-      title: 'Foundational Software Engineering Track',
-      role: 'Certified Learner',
-      period: 'Verified Coursework',
-      organization: 'Technical Learning Platform',
-      description: 'Completed comprehensive technical modules covering core programming, database normalization, and web fundamentals.'
-    }
-  ]
+  certifications: []
 };

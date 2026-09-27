@@ -314,7 +314,7 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
               >
                 <Icon size={13} />
                 <span>{typeObj.label}</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-md ${
                   isActive ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
                 }`}>
                   {count}
@@ -383,7 +383,7 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
 
                       {/* Type Badge */}
                       <td className="py-3.5 px-4">
-                        <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                           <Icon size={12} className="text-primary-500" />
                           <span className="capitalize">{item.type}</span>
                         </span>
@@ -392,7 +392,7 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
                       {/* Role & Organization */}
                       <td className="py-3.5 px-4">
                         <div className="text-xs font-semibold text-slate-800 dark:text-slate-200">
-                          {item.role || '—'}
+                          {item.role || 'N/A'}
                         </div>
                         <div className="text-xs text-slate-500 dark:text-slate-400">
                           {item.organization || 'Independent'}
@@ -418,7 +418,7 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
                       <td className="py-3.5 px-4 text-center">
                         <button
                           onClick={() => handleToggleVisibility(item)}
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
                             item.visible !== false
                               ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
                               : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700'

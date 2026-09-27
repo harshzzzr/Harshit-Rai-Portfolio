@@ -207,19 +207,18 @@ export async function getAnalyticsSummary(days = 14) {
       if (remoteEvents.length > 0) {
         allEvents = remoteEvents;
       } else {
-        // If Firestore is empty, fall back to local buffer
-        allEvents = getLocalEvents();
+        allEvents = [];
       }
     } catch (err) {
-      console.warn('[Analytics] Error reading from Firestore, using local events buffer:', err);
-      allEvents = getLocalEvents();
+      console.warn('[Analytics] Error reading from Firestore:', err);
+      allEvents = [];
     }
   } else {
     allEvents = getLocalEvents();
   }
 
-  // If no events exist yet, automatically initialize realistic seed dataset so admin can preview trends
-  if (allEvents.length === 0) {
+  // Only generate demo dataset in development if explicitly enabled via VITE_ENABLE_DEMO_DATA=true
+  if (allEvents.length === 0 && import.meta.env.VITE_ENABLE_DEMO_DATA === 'true') {
     allEvents = generateRealisticDemoEvents();
     saveLocalEvents(allEvents);
   }
@@ -236,9 +235,9 @@ export async function getAnalyticsSummary(days = 14) {
   const projectViewEvents = filteredEvents.filter((ev) => ev.isProjectView);
   const totalProjectViews = projectViewEvents.length;
 
-  // 2. Unique Ephemeral Sessions
+  // 2. Unique Ephemeral Sessions (0 if no traffic)
   const sessionSet = new Set(filteredEvents.map((ev) => ev.sessionId).filter(Boolean));
-  const uniqueSessions = Math.max(sessionSet.size, 1);
+  const uniqueSessions = sessionSet.size;
 
   // 3. Daily Traffic Trends (Continuous timeline for the last N days)
   const daysList = getLastNDays(days);
@@ -254,7 +253,7 @@ export async function getAnalyticsSummary(days = 14) {
   });
 
   // Calculate peak day
-  const maxDailyViews = Math.max(...dailyTrends.map((d) => d.views), 1);
+  const maxDailyViews = Math.max(...dailyTrends.map((d) => d.views), 0);
 
   // 4. Project Views Breakdown
   const projectCounts = {};

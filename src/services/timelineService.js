@@ -22,7 +22,7 @@ export const defaultEducation = [
   {
     id: 'edu-btech-ce',
     degree: 'Bachelor of Engineering in Computer Engineering',
-    institution: 'Computer Engineering Academy / University',
+    institution: 'Computer Engineering Department',
     status: 'Undergraduate Student',
     highlights: [
       'Core curriculum in Computer Science & Engineering fundamentals',
@@ -72,19 +72,6 @@ export const defaultTimelineItems = [
     visible: true,
   },
 
-  // Hackathons
-  {
-    id: 'hack-1',
-    type: 'hackathons',
-    title: 'Engineering Hackathon Participant',
-    role: 'Developer & Team Member',
-    period: 'Hackathon Track',
-    organization: 'Student Technical Community',
-    description: 'Collaborated under rapid turnaround constraints to prototype software solutions addressing real-world problem statements.',
-    order: 1,
-    visible: true,
-  },
-
   // Research
   {
     id: 'res-1',
@@ -107,19 +94,6 @@ export const defaultTimelineItems = [
     period: 'Active Practice',
     organization: 'Competitive Programming Tracks',
     description: 'Consistently practicing core algorithmic topics, data structures, and computational optimization in C++ and Java.',
-    order: 1,
-    visible: true,
-  },
-
-  // Certifications
-  {
-    id: 'cert-1',
-    type: 'certifications',
-    title: 'Foundational Software Engineering Track',
-    role: 'Certified Learner',
-    period: 'Verified Coursework',
-    organization: 'Technical Learning Platform',
-    description: 'Completed comprehensive technical modules covering core programming, database normalization, and web fundamentals.',
     order: 1,
     visible: true,
   },
@@ -153,18 +127,27 @@ export function groupTimelineByType(items) {
 const LOCAL_EDUCATION_KEY = 'harshit_portfolio_custom_education';
 const LOCAL_TIMELINE_KEY = 'harshit_portfolio_custom_timeline';
 
-// High-performance in-memory cache with 3-minute TTL
-let memoryEduCache = null;
-let memoryEduTimestamp = 0;
-let memoryTimelineCache = null;
-let memoryTimelineTimestamp = 0;
+// High-performance in-memory caches with 3-minute TTL
+let memoryEduPublic = null;
+let memoryEduAdmin = null;
+let memoryEduPublicTime = 0;
+let memoryEduAdminTime = 0;
+
+let memoryTimelinePublic = null;
+let memoryTimelineAdmin = null;
+let memoryTimelinePublicTime = 0;
+let memoryTimelineAdminTime = 0;
 const TIMELINE_CACHE_TTL_MS = 3 * 60 * 1000;
 
 export function invalidateTimelineCache() {
-  memoryEduCache = null;
-  memoryEduTimestamp = 0;
-  memoryTimelineCache = null;
-  memoryTimelineTimestamp = 0;
+  memoryEduPublic = null;
+  memoryEduAdmin = null;
+  memoryEduPublicTime = 0;
+  memoryEduAdminTime = 0;
+  memoryTimelinePublic = null;
+  memoryTimelineAdmin = null;
+  memoryTimelinePublicTime = 0;
+  memoryTimelineAdminTime = 0;
 }
 
 /**
@@ -220,9 +203,16 @@ function saveStoredLocalTimeline(list) {
  */
 export async function getEducation(options = {}) {
   const { includeHidden = false } = options;
+  const now = Date.now();
 
-  if (!includeHidden && memoryEduCache && (Date.now() - memoryEduTimestamp < TIMELINE_CACHE_TTL_MS)) {
-    return memoryEduCache;
+  if (includeHidden) {
+    if (memoryEduAdmin && now - memoryEduAdminTime < TIMELINE_CACHE_TTL_MS) {
+      return memoryEduAdmin;
+    }
+  } else {
+    if (memoryEduPublic && now - memoryEduPublicTime < TIMELINE_CACHE_TTL_MS) {
+      return memoryEduPublic;
+    }
   }
 
   if (!isFirebaseConfigured || !db) {
@@ -234,9 +224,12 @@ export async function getEducation(options = {}) {
       error: null,
       isLive: false,
     };
-    if (!includeHidden) {
-      memoryEduCache = result;
-      memoryEduTimestamp = Date.now();
+    if (includeHidden) {
+      memoryEduAdmin = result;
+      memoryEduAdminTime = now;
+    } else {
+      memoryEduPublic = result;
+      memoryEduPublicTime = now;
     }
     return result;
   }
@@ -244,26 +237,35 @@ export async function getEducation(options = {}) {
   try {
     const eduRef = collection(db, COLLECTIONS.EDUCATION);
     let q;
-    try {
-      q = query(eduRef, orderBy('order', 'asc'));
-    } catch {
-      q = eduRef;
+    if (includeHidden) {
+      try {
+        q = query(eduRef, orderBy('order', 'asc'));
+      } catch {
+        q = eduRef;
+      }
+    } else {
+      try {
+        q = query(eduRef, where('visible', '==', true), orderBy('order', 'asc'));
+      } catch {
+        q = query(eduRef, where('visible', '==', true));
+      }
     }
 
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
-      const local = getStoredLocalEducation().sort((a, b) => (a.order || 99) - (b.order || 99));
-      const filtered = includeHidden ? local : local.filter((item) => item.visible !== false);
       const result = {
-        data: filtered,
-        rawList: local,
+        data: [],
+        rawList: [],
         error: null,
-        isLive: false,
+        isLive: true,
       };
-      if (!includeHidden) {
-        memoryEduCache = result;
-        memoryEduTimestamp = Date.now();
+      if (includeHidden) {
+        memoryEduAdmin = result;
+        memoryEduAdminTime = now;
+      } else {
+        memoryEduPublic = result;
+        memoryEduPublicTime = now;
       }
       return result;
     }
@@ -271,11 +273,14 @@ export async function getEducation(options = {}) {
     const list = snapshot.docs
       .map((docSnap) => ({
         id: docSnap.id,
+        visible: docSnap.data().visible !== false,
         ...docSnap.data(),
       }))
       .sort((a, b) => (a.order || 99) - (b.order || 99));
 
-    saveStoredLocalEducation(list);
+    if (includeHidden) {
+      saveStoredLocalEducation(list);
+    }
 
     const filtered = includeHidden ? list : list.filter((item) => item.visible !== false);
 
@@ -285,9 +290,12 @@ export async function getEducation(options = {}) {
       error: null,
       isLive: true,
     };
-    if (!includeHidden) {
-      memoryEduCache = result;
-      memoryEduTimestamp = Date.now();
+    if (includeHidden) {
+      memoryEduAdmin = result;
+      memoryEduAdminTime = now;
+    } else {
+      memoryEduPublic = result;
+      memoryEduPublicTime = now;
     }
     return result;
   } catch (err) {
@@ -300,9 +308,12 @@ export async function getEducation(options = {}) {
       error: `Operating in fallback mode (${err.message})`,
       isLive: false,
     };
-    if (!includeHidden) {
-      memoryEduCache = result;
-      memoryEduTimestamp = Date.now();
+    if (includeHidden) {
+      memoryEduAdmin = result;
+      memoryEduAdminTime = now;
+    } else {
+      memoryEduPublic = result;
+      memoryEduPublicTime = now;
     }
     return result;
   }
@@ -335,17 +346,16 @@ export async function createEducation(eduInput) {
     updatedAt: new Date().toISOString(),
   };
 
-  const localList = getStoredLocalEducation();
-  const existingIdx = localList.findIndex((e) => e.id === id);
-  if (existingIdx >= 0) {
-    localList[existingIdx] = newEdu;
-  } else {
-    localList.push(newEdu);
-  }
-  saveStoredLocalEducation(localList);
-  invalidateTimelineCache();
-
   if (!isFirebaseConfigured || !db) {
+    const localList = getStoredLocalEducation();
+    const existingIdx = localList.findIndex((e) => e.id === id);
+    if (existingIdx >= 0) {
+      localList[existingIdx] = newEdu;
+    } else {
+      localList.push(newEdu);
+    }
+    saveStoredLocalEducation(localList);
+    invalidateTimelineCache();
     return { success: true, data: newEdu, isLive: false };
   }
 
@@ -356,7 +366,17 @@ export async function createEducation(eduInput) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
+
+    const localList = getStoredLocalEducation();
+    const existingIdx = localList.findIndex((e) => e.id === id);
+    if (existingIdx >= 0) {
+      localList[existingIdx] = newEdu;
+    } else {
+      localList.push(newEdu);
+    }
+    saveStoredLocalEducation(localList);
     invalidateTimelineCache();
+
     return { success: true, data: newEdu, isLive: true };
   } catch (err) {
     console.error('[Firebase] createEducation error:', err);
@@ -370,30 +390,29 @@ export async function createEducation(eduInput) {
 export async function updateEducation(eduId, updateData) {
   if (!eduId) return { success: false, error: 'Education ID is required' };
 
-  const localList = getStoredLocalEducation();
-  const index = localList.findIndex((e) => e.id === eduId);
-  let updatedRecord = null;
-
-  if (index >= 0) {
-    updatedRecord = {
-      ...localList[index],
-      ...updateData,
-      order: updateData.order !== undefined ? Number(updateData.order) : localList[index].order,
-      visible: updateData.visible !== undefined ? Boolean(updateData.visible) : localList[index].visible,
-      highlights: updateData.highlights !== undefined
-        ? (Array.isArray(updateData.highlights) ? updateData.highlights : updateData.highlights.split('\n').map(s => s.trim()).filter(Boolean))
-        : localList[index].highlights,
-      courses: updateData.courses !== undefined
-        ? (Array.isArray(updateData.courses) ? updateData.courses : updateData.courses.split(',').map(s => s.trim()).filter(Boolean))
-        : localList[index].courses,
-      updatedAt: new Date().toISOString(),
-    };
-    localList[index] = updatedRecord;
-    saveStoredLocalEducation(localList);
-    invalidateTimelineCache();
-  }
-
   if (!isFirebaseConfigured || !db) {
+    const localList = getStoredLocalEducation();
+    const index = localList.findIndex((e) => e.id === eduId);
+    let updatedRecord = null;
+
+    if (index >= 0) {
+      updatedRecord = {
+        ...localList[index],
+        ...updateData,
+        order: updateData.order !== undefined ? Number(updateData.order) : localList[index].order,
+        visible: updateData.visible !== undefined ? Boolean(updateData.visible) : localList[index].visible,
+        highlights: updateData.highlights !== undefined
+          ? (Array.isArray(updateData.highlights) ? updateData.highlights : updateData.highlights.split('\n').map(s => s.trim()).filter(Boolean))
+          : localList[index].highlights,
+        courses: updateData.courses !== undefined
+          ? (Array.isArray(updateData.courses) ? updateData.courses : updateData.courses.split(',').map(s => s.trim()).filter(Boolean))
+          : localList[index].courses,
+        updatedAt: new Date().toISOString(),
+      };
+      localList[index] = updatedRecord;
+      saveStoredLocalEducation(localList);
+      invalidateTimelineCache();
+    }
     return { success: true, data: updatedRecord, isLive: false };
   }
 
@@ -403,7 +422,29 @@ export async function updateEducation(eduId, updateData) {
       ...updateData,
       updatedAt: serverTimestamp(),
     });
+
+    const localList = getStoredLocalEducation();
+    const index = localList.findIndex((e) => e.id === eduId);
+    let updatedRecord = null;
+    if (index >= 0) {
+      updatedRecord = {
+        ...localList[index],
+        ...updateData,
+        order: updateData.order !== undefined ? Number(updateData.order) : localList[index].order,
+        visible: updateData.visible !== undefined ? Boolean(updateData.visible) : localList[index].visible,
+        highlights: updateData.highlights !== undefined
+          ? (Array.isArray(updateData.highlights) ? updateData.highlights : updateData.highlights.split('\n').map(s => s.trim()).filter(Boolean))
+          : localList[index].highlights,
+        courses: updateData.courses !== undefined
+          ? (Array.isArray(updateData.courses) ? updateData.courses : updateData.courses.split(',').map(s => s.trim()).filter(Boolean))
+          : localList[index].courses,
+        updatedAt: new Date().toISOString(),
+      };
+      localList[index] = updatedRecord;
+      saveStoredLocalEducation(localList);
+    }
     invalidateTimelineCache();
+
     return { success: true, data: updatedRecord, isLive: true };
   } catch (err) {
     console.error('[Firebase] updateEducation error:', err);
@@ -417,19 +458,23 @@ export async function updateEducation(eduId, updateData) {
 export async function deleteEducation(eduId) {
   if (!eduId) return { success: false, error: 'Education ID is required' };
 
-  const localList = getStoredLocalEducation();
-  const filtered = localList.filter((e) => e.id !== eduId);
-  saveStoredLocalEducation(filtered);
-  invalidateTimelineCache();
-
   if (!isFirebaseConfigured || !db) {
+    const localList = getStoredLocalEducation();
+    const filtered = localList.filter((e) => e.id !== eduId);
+    saveStoredLocalEducation(filtered);
+    invalidateTimelineCache();
     return { success: true, isLive: false };
   }
 
   try {
     const docRef = doc(db, COLLECTIONS.EDUCATION, eduId);
     await deleteDoc(docRef);
+
+    const localList = getStoredLocalEducation();
+    const filtered = localList.filter((e) => e.id !== eduId);
+    saveStoredLocalEducation(filtered);
     invalidateTimelineCache();
+
     return { success: true, isLive: true };
   } catch (err) {
     console.error('[Firebase] deleteEducation error:', err);
@@ -449,9 +494,16 @@ export async function toggleEducationVisibility(eduId, currentVisible) {
  */
 export async function getTimelineData(options = {}) {
   const { includeHidden = false } = options;
+  const now = Date.now();
 
-  if (!includeHidden && memoryTimelineCache && (Date.now() - memoryTimelineTimestamp < TIMELINE_CACHE_TTL_MS)) {
-    return memoryTimelineCache;
+  if (includeHidden) {
+    if (memoryTimelineAdmin && now - memoryTimelineAdminTime < TIMELINE_CACHE_TTL_MS) {
+      return memoryTimelineAdmin;
+    }
+  } else {
+    if (memoryTimelinePublic && now - memoryTimelinePublicTime < TIMELINE_CACHE_TTL_MS) {
+      return memoryTimelinePublic;
+    }
   }
 
   if (!isFirebaseConfigured || !db) {
@@ -463,44 +515,79 @@ export async function getTimelineData(options = {}) {
       error: null,
       isLive: false,
     };
-    if (!includeHidden) {
-      memoryTimelineCache = result;
-      memoryTimelineTimestamp = Date.now();
+    if (includeHidden) {
+      memoryTimelineAdmin = result;
+      memoryTimelineAdminTime = now;
+    } else {
+      memoryTimelinePublic = result;
+      memoryTimelinePublicTime = now;
     }
     return result;
   }
 
   try {
     const timelineRef = collection(db, 'timeline');
-    let snapshot = await getDocs(timelineRef);
+    let q;
+    if (includeHidden) {
+      try {
+        q = query(timelineRef, orderBy('order', 'asc'));
+      } catch {
+        q = timelineRef;
+      }
+    } else {
+      try {
+        q = query(timelineRef, where('visible', '==', true), orderBy('order', 'asc'));
+      } catch {
+        q = query(timelineRef, where('visible', '==', true));
+      }
+    }
+    let snapshot = await getDocs(q);
 
     if (snapshot.empty) {
       const expRef = collection(db, COLLECTIONS.EXPERIENCE);
-      snapshot = await getDocs(expRef);
+      let expQ;
+      if (includeHidden) {
+        try {
+          expQ = query(expRef, orderBy('order', 'asc'));
+        } catch {
+          expQ = expRef;
+        }
+      } else {
+        try {
+          expQ = query(expRef, where('visible', '==', true), orderBy('order', 'asc'));
+        } catch {
+          expQ = query(expRef, where('visible', '==', true));
+        }
+      }
+      snapshot = await getDocs(expQ);
     }
 
     if (snapshot.empty) {
-      const local = getStoredLocalTimeline().sort((a, b) => (a.order || 99) - (b.order || 99));
-      const items = includeHidden ? local : local.filter((item) => item.visible !== false);
       const result = {
-        data: groupTimelineByType(items),
-        rawList: local,
+        data: groupTimelineByType([]),
+        rawList: [],
         error: null,
-        isLive: false,
+        isLive: true,
       };
-      if (!includeHidden) {
-        memoryTimelineCache = result;
-        memoryTimelineTimestamp = Date.now();
+      if (includeHidden) {
+        memoryTimelineAdmin = result;
+        memoryTimelineAdminTime = now;
+      } else {
+        memoryTimelinePublic = result;
+        memoryTimelinePublicTime = now;
       }
       return result;
     }
 
     const items = snapshot.docs.map((docSnap) => ({
       id: docSnap.id,
+      visible: docSnap.data().visible !== false,
       ...docSnap.data(),
     })).sort((a, b) => (a.order || 99) - (b.order || 99));
 
-    saveStoredLocalTimeline(items);
+    if (includeHidden) {
+      saveStoredLocalTimeline(items);
+    }
 
     const filtered = includeHidden ? items : items.filter((item) => item.visible !== false);
 
@@ -510,9 +597,12 @@ export async function getTimelineData(options = {}) {
       error: null,
       isLive: true,
     };
-    if (!includeHidden) {
-      memoryTimelineCache = result;
-      memoryTimelineTimestamp = Date.now();
+    if (includeHidden) {
+      memoryTimelineAdmin = result;
+      memoryTimelineAdminTime = now;
+    } else {
+      memoryTimelinePublic = result;
+      memoryTimelinePublicTime = now;
     }
     return result;
   } catch (err) {
@@ -525,9 +615,12 @@ export async function getTimelineData(options = {}) {
       error: `Operating in fallback mode (${err.message})`,
       isLive: false,
     };
-    if (!includeHidden) {
-      memoryTimelineCache = result;
-      memoryTimelineTimestamp = Date.now();
+    if (includeHidden) {
+      memoryTimelineAdmin = result;
+      memoryTimelineAdminTime = now;
+    } else {
+      memoryTimelinePublic = result;
+      memoryTimelinePublicTime = now;
     }
     return result;
   }
@@ -557,17 +650,16 @@ export async function createTimelineItem(itemInput) {
     updatedAt: new Date().toISOString(),
   };
 
-  const localList = getStoredLocalTimeline();
-  const existingIdx = localList.findIndex((i) => i.id === id);
-  if (existingIdx >= 0) {
-    localList[existingIdx] = newItem;
-  } else {
-    localList.push(newItem);
-  }
-  saveStoredLocalTimeline(localList);
-  invalidateTimelineCache();
-
   if (!isFirebaseConfigured || !db) {
+    const localList = getStoredLocalTimeline();
+    const existingIdx = localList.findIndex((i) => i.id === id);
+    if (existingIdx >= 0) {
+      localList[existingIdx] = newItem;
+    } else {
+      localList.push(newItem);
+    }
+    saveStoredLocalTimeline(localList);
+    invalidateTimelineCache();
     return { success: true, data: newItem, isLive: false };
   }
 
@@ -578,7 +670,17 @@ export async function createTimelineItem(itemInput) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
+
+    const localList = getStoredLocalTimeline();
+    const existingIdx = localList.findIndex((i) => i.id === id);
+    if (existingIdx >= 0) {
+      localList[existingIdx] = newItem;
+    } else {
+      localList.push(newItem);
+    }
+    saveStoredLocalTimeline(localList);
     invalidateTimelineCache();
+
     return { success: true, data: newItem, isLive: true };
   } catch (err) {
     console.error('[Firebase] createTimelineItem error:', err);
@@ -592,24 +694,23 @@ export async function createTimelineItem(itemInput) {
 export async function updateTimelineItem(itemId, updateData) {
   if (!itemId) return { success: false, error: 'Timeline Item ID is required' };
 
-  const localList = getStoredLocalTimeline();
-  const index = localList.findIndex((i) => i.id === itemId);
-  let updatedItem = null;
-
-  if (index >= 0) {
-    updatedItem = {
-      ...localList[index],
-      ...updateData,
-      order: updateData.order !== undefined ? Number(updateData.order) : localList[index].order,
-      visible: updateData.visible !== undefined ? Boolean(updateData.visible) : localList[index].visible,
-      updatedAt: new Date().toISOString(),
-    };
-    localList[index] = updatedItem;
-    saveStoredLocalTimeline(localList);
-    invalidateTimelineCache();
-  }
-
   if (!isFirebaseConfigured || !db) {
+    const localList = getStoredLocalTimeline();
+    const index = localList.findIndex((i) => i.id === itemId);
+    let updatedItem = null;
+
+    if (index >= 0) {
+      updatedItem = {
+        ...localList[index],
+        ...updateData,
+        order: updateData.order !== undefined ? Number(updateData.order) : localList[index].order,
+        visible: updateData.visible !== undefined ? Boolean(updateData.visible) : localList[index].visible,
+        updatedAt: new Date().toISOString(),
+      };
+      localList[index] = updatedItem;
+      saveStoredLocalTimeline(localList);
+      invalidateTimelineCache();
+    }
     return { success: true, data: updatedItem, isLive: false };
   }
 
@@ -619,7 +720,23 @@ export async function updateTimelineItem(itemId, updateData) {
       ...updateData,
       updatedAt: serverTimestamp(),
     });
+
+    const localList = getStoredLocalTimeline();
+    const index = localList.findIndex((i) => i.id === itemId);
+    let updatedItem = null;
+    if (index >= 0) {
+      updatedItem = {
+        ...localList[index],
+        ...updateData,
+        order: updateData.order !== undefined ? Number(updateData.order) : localList[index].order,
+        visible: updateData.visible !== undefined ? Boolean(updateData.visible) : localList[index].visible,
+        updatedAt: new Date().toISOString(),
+      };
+      localList[index] = updatedItem;
+      saveStoredLocalTimeline(localList);
+    }
     invalidateTimelineCache();
+
     return { success: true, data: updatedItem, isLive: true };
   } catch (err) {
     console.error('[Firebase] updateTimelineItem error:', err);
@@ -633,19 +750,23 @@ export async function updateTimelineItem(itemId, updateData) {
 export async function deleteTimelineItem(itemId) {
   if (!itemId) return { success: false, error: 'Timeline Item ID is required' };
 
-  const localList = getStoredLocalTimeline();
-  const filtered = localList.filter((i) => i.id !== itemId);
-  saveStoredLocalTimeline(filtered);
-  invalidateTimelineCache();
-
   if (!isFirebaseConfigured || !db) {
+    const localList = getStoredLocalTimeline();
+    const filtered = localList.filter((i) => i.id !== itemId);
+    saveStoredLocalTimeline(filtered);
+    invalidateTimelineCache();
     return { success: true, isLive: false };
   }
 
   try {
     const docRef = doc(db, 'timeline', itemId);
     await deleteDoc(docRef);
+
+    const localList = getStoredLocalTimeline();
+    const filtered = localList.filter((i) => i.id !== itemId);
+    saveStoredLocalTimeline(filtered);
     invalidateTimelineCache();
+
     return { success: true, isLive: true };
   } catch (err) {
     console.error('[Firebase] deleteTimelineItem error:', err);

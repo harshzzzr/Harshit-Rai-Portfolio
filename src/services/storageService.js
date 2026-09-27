@@ -107,13 +107,22 @@ export async function uploadAsset(file, destinationPath, options = { optimize: t
 
   try {
     let fileToUpload = file;
+    let finalPath = destinationPath;
+    let contentType = (file && file.type) || 'application/octet-stream';
+
     if (options.optimize && file instanceof File && file.type.startsWith('image/')) {
-      fileToUpload = await optimizeImage(file, options);
+      const optimized = await optimizeImage(file, options);
+      if (optimized !== file) {
+        fileToUpload = optimized;
+        contentType = 'image/webp';
+        // Ensure destination ends with .webp
+        finalPath = finalPath.replace(/\.[a-zA-Z0-9]+$/, '') + '.webp';
+      }
     }
 
-    const storageRef = ref(storage, destinationPath);
+    const storageRef = ref(storage, finalPath);
     const metadata = {
-      contentType: file.type || 'application/octet-stream',
+      contentType,
       customMetadata: {
         uploadedAt: new Date().toISOString(),
       }
@@ -125,7 +134,7 @@ export async function uploadAsset(file, destinationPath, options = { optimize: t
     return {
       success: true,
       url: downloadURL,
-      path: destinationPath,
+      path: finalPath,
       size: snapshot.metadata.size,
     };
   } catch (error) {

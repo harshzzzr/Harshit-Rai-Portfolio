@@ -62,7 +62,7 @@ export default function SkillManager({ onSkillChanged }) {
   const fetchSkillsList = async () => {
     setLoading(true);
     try {
-      const res = await getSkills();
+      const res = await getSkills({ includeHidden: true });
       setSkills(res.rawList || []);
       if (typeof onSkillChanged === 'function') {
         onSkillChanged();
@@ -336,7 +336,7 @@ export default function SkillManager({ onSkillChanged }) {
 
                     {/* Category */}
                     <td className="py-3.5 px-4">
-                      <span className="inline-block text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                      <span className="inline-block text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                         {skill.category}
                       </span>
                     </td>
@@ -360,7 +360,7 @@ export default function SkillManager({ onSkillChanged }) {
                     <td className="py-3.5 px-4 text-center">
                       <button
                         onClick={() => handleToggleVisibility(skill)}
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
                           skill.visible !== false
                             ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
                             : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700'

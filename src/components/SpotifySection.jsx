@@ -48,7 +48,7 @@ export default function SpotifySection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-medium bg-[#1DB954]/10 text-[#1DB954] border border-[#1DB954]/30 mb-3 shadow-xs">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-mono font-medium bg-[#1DB954]/10 text-[#1DB954] border border-[#1DB954]/30 mb-3 shadow-xs">
             <SpotifyIcon size={14} className="text-[#1DB954]" />
             <span>Audio Atmosphere & Focus</span>
           </div>
@@ -128,7 +128,7 @@ export default function SpotifySection() {
                 <div className="flex items-center gap-2">
                   <Headphones size={18} className="text-[#1DB954]" aria-hidden="true" />
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                    {isLive ? 'Currently Listening' : 'Focus Audio Atmosphere'}
+                    {isLive ? 'Currently Listening' : 'Curated Coding Soundtrack'}
                   </h3>
                 </div>
 
@@ -166,9 +166,9 @@ export default function SpotifySection() {
 
                 {/* Track Details */}
                 <div className="flex-1 text-center sm:text-left space-y-2">
-                  <div className="inline-flex items-center gap-1.5 text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                  <div className="inline-flex items-center gap-1.5 text-[11px] font-mono px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
                     <Radio size={11} className={isLive ? 'animate-pulse' : ''} />
-                    <span>{isLive ? 'Streaming Now on Spotify' : 'Curated Coding Session'}</span>
+                    <span>{isLive ? 'Streaming Now on Spotify' : 'Coding Soundtrack'}</span>
                   </div>
 
                   <div>

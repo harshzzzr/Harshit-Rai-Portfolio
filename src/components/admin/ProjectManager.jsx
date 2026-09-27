@@ -5,6 +5,7 @@ import {
   updateProject,
   deleteProject,
   toggleProjectFeatured,
+  toggleProjectVisibility,
   uploadProjectImage
 } from '../../services/projectService';
 import SafeImage from '../SafeImage';
@@ -22,7 +23,9 @@ import {
   X,
   RefreshCw,
   ArrowUpDown,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -52,6 +55,7 @@ export default function ProjectManager({ onProjectChanged }) {
     badge: 'Featured Project',
     order: 1,
     featured: false,
+    visible: true,
     githubUrl: '',
     liveUrl: '',
     image: '',
@@ -62,11 +66,11 @@ export default function ProjectManager({ onProjectChanged }) {
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  // Load Projects
+  // Load Projects (Admin retrieves all including drafts)
   const fetchProjects = async () => {
     setLoading(true);
     try {
-      const res = await getProjects();
+      const res = await getProjects({ includeHidden: true });
       setProjects(res.data || []);
       if (typeof onProjectChanged === 'function') {
         onProjectChanged();
@@ -88,6 +92,7 @@ export default function ProjectManager({ onProjectChanged }) {
     setFormData({
       ...initialForm,
       order: projects.length + 1,
+      visible: true,
     });
     setFormErrors({});
     setModalOpen(true);
@@ -109,6 +114,7 @@ export default function ProjectManager({ onProjectChanged }) {
       badge: project.badge || 'Engineering',
       order: typeof project.order === 'number' ? project.order : 99,
       featured: Boolean(project.featured),
+      visible: project.visible !== false,
       githubUrl: project.githubUrl || '',
       liveUrl: project.liveUrl || '',
       image: project.image || '',
@@ -232,6 +238,28 @@ export default function ProjectManager({ onProjectChanged }) {
       if (typeof onProjectChanged === 'function') onProjectChanged();
     } catch (err) {
       setFeedback({ type: 'error', message: 'Could not toggle featured state.' });
+    }
+  };
+
+  // Handle Quick Toggle Visibility (Publish / Draft)
+  const handleToggleVisibility = async (project) => {
+    try {
+      const currentVis = project.visible !== false;
+      const res = await toggleProjectVisibility(project.id, currentVis);
+      if (res.success) {
+        setProjects((prev) =>
+          prev.map((p) => (p.id === project.id ? { ...p, visible: !currentVis } : p))
+        );
+        setFeedback({
+          type: 'success',
+          message: `Project "${project.title}" is now ${!currentVis ? 'Visible on portfolio' : 'Hidden from public view'}.`,
+        });
+        if (typeof onProjectChanged === 'function') onProjectChanged();
+      } else {
+        setFeedback({ type: 'error', message: res.error || 'Failed to update visibility.' });
+      }
+    } catch (err) {
+      setFeedback({ type: 'error', message: 'Could not toggle visibility state.' });
     }
   };
 
@@ -377,6 +405,7 @@ export default function ProjectManager({ onProjectChanged }) {
                   <th className="py-3.5 px-4 font-semibold">Project</th>
                   <th className="py-3.5 px-4 font-semibold">Technologies</th>
                   <th className="py-3.5 px-4 font-semibold">Featured</th>
+                  <th className="py-3.5 px-4 font-semibold">Visibility</th>
                   <th className="py-3.5 px-4 font-semibold text-right">Actions</th>
                 </tr>
               </thead>
@@ -449,7 +478,7 @@ export default function ProjectManager({ onProjectChanged }) {
                     <td className="py-3 px-4">
                       <button
                         onClick={() => handleToggleFeatured(project)}
-                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold cursor-pointer transition-colors ${
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold cursor-pointer transition-colors ${
                           project.featured
                             ? 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-800'
                             : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'
@@ -458,6 +487,31 @@ export default function ProjectManager({ onProjectChanged }) {
                       >
                         <Sparkles size={12} className={project.featured ? 'fill-current' : ''} />
                         <span>{project.featured ? 'Featured' : 'Standard'}</span>
+                      </button>
+                    </td>
+
+                    {/* Visibility Toggle */}
+                    <td className="py-3 px-4">
+                      <button
+                        onClick={() => handleToggleVisibility(project)}
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold cursor-pointer transition-colors ${
+                          project.visible !== false
+                            ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700'
+                        }`}
+                        title="Click to toggle public visibility"
+                      >
+                        {project.visible !== false ? (
+                          <>
+                            <Eye size={12} className="text-emerald-600 dark:text-emerald-400" />
+                            <span>Visible</span>
+                          </>
+                        ) : (
+                          <>
+                            <EyeOff size={12} className="text-slate-400" />
+                            <span>Hidden</span>
+                          </>
+                        )}
                       </button>
                     </td>
 
@@ -629,17 +683,32 @@ export default function ProjectManager({ onProjectChanged }) {
                   />
                 </div>
 
-                <div className="flex items-center gap-3 pt-4">
-                  <input
-                    type="checkbox"
-                    id="featured-toggle"
-                    checked={formData.featured}
-                    onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-                    className="w-4 h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
-                  />
-                  <label htmlFor="featured-toggle" className="text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer">
-                    Feature on Homepage Highlight
-                  </label>
+                <div className="flex flex-wrap items-center gap-6 pt-4">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="visible-toggle"
+                      checked={formData.visible}
+                      onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
+                      className="w-4 h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+                    />
+                    <label htmlFor="visible-toggle" className="text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer">
+                      Visible on Portfolio
+                    </label>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="featured-toggle"
+                      checked={formData.featured}
+                      onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                      className="w-4 h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+                    />
+                    <label htmlFor="featured-toggle" className="text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer">
+                      Feature on Homepage Highlight
+                    </label>
+                  </div>
                 </div>
               </div>
 

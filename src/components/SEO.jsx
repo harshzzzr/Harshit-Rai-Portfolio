@@ -37,7 +37,7 @@ function setLinkTag(rel, href) {
  */
 export default function SEO({
   title = 'Harshit Rai | Developer Portfolio',
-  description = 'Explore the portfolio of Harshit Rai — Computer Engineering student and developer specializing in C++, React, Node.js, and high-performance software systems.',
+  description = 'Explore the portfolio of Harshit Rai: Computer Engineering student and developer specializing in C++, React, Node.js, and high-performance software systems.',
   canonicalUrl = 'https://harshitrai.com/',
   ogType = 'website',
   ogImage = 'https://harshitrai.com/images/og-preview.png',

@@ -85,8 +85,10 @@ export async function fetchLeetCodeStats(username = LEETCODE_USERNAME) {
     return { success: true, hasStats: true, data: cached, fromCache: true };
   }
 
-  // Attempt fetch from modern reliable LeetCode proxies
+  // Attempt fetch from modern reliable LeetCode proxies or custom endpoint
+  const customEndpoint = import.meta.env.VITE_LEETCODE_API_ENDPOINT;
   const apiEndpoints = [
+    ...(customEndpoint ? [customEndpoint.replace('{username}', username)] : []),
     `https://alfa-leetcode-api.onrender.com/userProfile/${username}`,
     `https://leetcode-api-faisalshohag.vercel.app/${username}`
   ];
@@ -94,7 +96,7 @@ export async function fetchLeetCodeStats(username = LEETCODE_USERNAME) {
   for (const url of apiEndpoints) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 4500);
+      const timeoutId = setTimeout(() => controller.abort(), 6500);
 
       const response = await fetch(url, { signal: controller.signal });
       clearTimeout(timeoutId);

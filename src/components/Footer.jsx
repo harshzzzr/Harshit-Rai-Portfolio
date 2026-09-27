@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowUp, Mail } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, LeetcodeIcon, SpotifyIcon } from './Icons';
 import { personalInfo } from '../data/portfolioData';
@@ -144,14 +145,27 @@ export default function Footer() {
 
         {/* Bottom row */}
         <div className="pt-8 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600 dark:text-slate-400">
-          <p>
-            © {new Date().getFullYear()} Harshit Rai. All rights reserved.
-          </p>
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2">
+            <p>
+              © {new Date().getFullYear()} Harshit Rai. All rights reserved.
+            </p>
+            <span className="text-slate-300 dark:text-slate-700 hidden sm:inline" aria-hidden="true">•</span>
+            <Link
+              to="/privacy"
+              className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
+            >
+              Privacy Policy
+            </Link>
+            <span className="text-slate-300 dark:text-slate-700 hidden sm:inline" aria-hidden="true">•</span>
+            <Link
+              to="/terms"
+              className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
+            >
+              Terms & Conditions
+            </Link>
+          </div>
 
           <div className="flex items-center gap-4">
-            <span className="font-mono text-[11px] text-slate-500 dark:text-slate-400">
-              Version 1.1 Foundation
-            </span>
             <button
               onClick={scrollToTop}
               className="inline-flex items-center gap-1 text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-1 cursor-pointer"

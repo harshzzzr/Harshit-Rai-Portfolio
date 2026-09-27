@@ -13,11 +13,11 @@ import {
 import { submitFeedback, getApprovedFeedback } from '../services/feedbackService';
 
 const RATING_LABELS = {
-  1: '1 — Needs Improvement',
-  2: '2 — Fair',
-  3: '3 — Good',
-  4: '4 — Very Good',
-  5: '5 — Exceptional'
+  1: '1: Needs Improvement',
+  2: '2: Fair',
+  3: '3: Good',
+  4: '4: Very Good',
+  5: '5: Exceptional'
 };
 
 export default function Feedback() {
@@ -166,9 +166,9 @@ export default function Feedback() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-medium bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800/60 mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-mono font-medium bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800/60 mb-3">
             <MessageSquareQuote size={13} />
-            <span>Community & Peer Reviews</span>
+            <span>Peer & Professional Reviews</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
             Feedback & Endorsements
@@ -184,12 +184,12 @@ export default function Feedback() {
           <div className="lg:col-span-7 space-y-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Sparkles size={18} className="text-primary-600 dark:text-primary-400" />
+                <MessageSquareQuote size={18} className="text-primary-600 dark:text-primary-400" />
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                   Approved Endorsements
                 </h3>
               </div>
-              <span className="text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full">
+              <span className="text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">
                 {approvedList.length} {approvedList.length === 1 ? 'Review' : 'Reviews'}
               </span>
             </div>
@@ -201,14 +201,14 @@ export default function Feedback() {
               </div>
             ) : approvedList.length === 0 ? (
               <div className="p-8 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 bg-white/60 dark:bg-slate-950/60 text-center space-y-3">
-                <div className="w-12 h-12 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+                <div className="w-12 h-12 mx-auto rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
                   <MessageSquareQuote size={24} />
                 </div>
                 <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
                   No Public Reviews Yet
                 </h4>
                 <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-                  Be the first to share an endorsement or feedback! Submitted entries are published here upon administrator approval.
+                  Be the first to share an endorsement or feedback. Submitted entries are published here upon administrator approval.
                 </p>
               </div>
             ) : (
@@ -216,10 +216,10 @@ export default function Feedback() {
                 {approvedList.map((item) => (
                   <div
                     key={item.id}
-                    className={`p-4 sm:p-6 rounded-2xl border transition-all duration-200 hover:-translate-y-0.5 ${
+                    className={`p-4 sm:p-6 rounded-xl border transition-colors ${
                       item.featured
-                        ? 'border-amber-300 dark:border-amber-500/60 bg-gradient-to-br from-amber-500/[0.04] via-white to-transparent dark:from-amber-500/[0.08] dark:via-slate-950 dark:to-transparent shadow-md shadow-amber-500/5 ring-1 ring-amber-400/20'
-                        : 'border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm hover:shadow-md'
+                        ? 'border-amber-400 dark:border-amber-500/60 bg-white dark:bg-slate-950 shadow-sm ring-1 ring-amber-400/20'
+                        : 'border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm'
                     }`}
                   >
                     {/* Top Row: Stars, Featured Pill, and Date */}
@@ -245,8 +245,7 @@ export default function Feedback() {
 
                       <div className="flex items-center gap-2">
                         {item.featured && (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-mono font-medium px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-700/60 shadow-xs">
-                            <Sparkles size={11} className="text-amber-500 fill-amber-500" />
+                          <span className="inline-flex items-center gap-1 text-[11px] font-mono font-medium px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-700/60 shadow-xs">
                             <span>Featured</span>
                           </span>
                         )}
@@ -279,7 +278,7 @@ export default function Feedback() {
                     {/* Author Signature */}
                     <div className="flex flex-wrap items-center justify-between gap-2 pt-3 mt-2 border-t border-slate-100 dark:border-slate-800/80 text-xs">
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary-600 to-sky-500 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
+                        <div className="w-7 h-7 rounded-md bg-slate-700 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
                           {(item.name || 'U').charAt(0).toUpperCase()}
                         </div>
                         <span className="font-semibold text-slate-900 dark:text-white break-words">
@@ -289,7 +288,7 @@ export default function Feedback() {
 
                       <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded shrink-0">
                         <ShieldCheck size={11} />
-                        <span>Verified Review</span>
+                        <span>Moderated Review</span>
                       </span>
                     </div>
                   </div>
@@ -300,7 +299,7 @@ export default function Feedback() {
 
           {/* Right Column: Feedback Submission Form (lg: 5 cols) */}
           <div className="lg:col-span-5">
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-4 sm:p-8 shadow-sm">
+            <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-4 sm:p-8 shadow-sm">
               <div className="mb-6">
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">
                   Leave a Review
@@ -313,7 +312,7 @@ export default function Feedback() {
               {/* Success Notification State */}
               {submitted ? (
                 <div role="status" aria-live="polite" className="py-6 text-center space-y-4 animate-fade-in">
-                  <div className="w-14 h-14 mx-auto rounded-full bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                  <div className="w-14 h-14 mx-auto rounded-lg bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
                     <CheckCircle2 size={30} aria-hidden="true" />
                   </div>
                   <div>
@@ -427,8 +426,8 @@ export default function Feedback() {
                           }}
                           onMouseEnter={() => setHoveredStar(star)}
                           onMouseLeave={() => setHoveredStar(0)}
-                          className="p-1 rounded hover:scale-110 transition-transform cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500"
-                          aria-label={`Rate ${star} star${star > 1 ? 's' : ''} — ${RATING_LABELS[star]}`}
+                          className="p-1 rounded transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500"
+                          aria-label={`Rate ${star} star${star > 1 ? 's' : ''}: ${RATING_LABELS[star]}`}
                         >
                           <Star
                             size={20}

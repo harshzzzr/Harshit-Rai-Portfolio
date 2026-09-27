@@ -29,7 +29,6 @@ export default function GitHubSection() {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isRateLimited, setIsRateLimited] = useState(false);
-  const [isFallback, setIsFallback] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('All');
 
@@ -55,18 +54,12 @@ export default function GitHubSection() {
         setRepos(repoRes.data);
       }
 
-      if (repoRes.rateLimited || profRes.rateLimited) {
+      if (repoRes.rateLimited || profRes.rateLimited || (!repoRes.success && !profRes.success)) {
         setIsRateLimited(true);
-      }
-
-      if (repoRes.isFallback) {
-        setIsFallback(true);
-      } else {
-        setIsFallback(false);
       }
     } catch (err) {
       console.warn('[GitHubSection] Error fetching GitHub data:', err);
-      setIsFallback(true);
+      setIsRateLimited(true);
     } finally {
       setLoading(false);
     }
@@ -122,7 +115,7 @@ export default function GitHubSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-medium bg-slate-900 dark:bg-white text-white dark:text-slate-900 mb-3 shadow-xs">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-mono font-medium bg-slate-900 dark:bg-white text-white dark:text-slate-900 mb-3 shadow-xs">
             <GithubIcon size={14} />
             <span>Public Open-Source Footprint</span>
           </div>
@@ -145,9 +138,9 @@ export default function GitHubSection() {
                 </div>
                 <span
                   className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white dark:border-slate-950 flex items-center justify-center ${
-                    !isFallback ? 'bg-emerald-500' : 'bg-amber-500'
+                    !isRateLimited && repos.length > 0 ? 'bg-emerald-500' : 'bg-amber-500'
                   }`}
-                  title={!isFallback ? 'Live GitHub API' : 'Cached / Catalog Mode'}
+                  title={!isRateLimited && repos.length > 0 ? 'Live GitHub API' : 'API Rate Limited / Offline'}
                 />
               </div>
 
@@ -213,15 +206,18 @@ export default function GitHubSection() {
             <div className="flex items-center gap-2">
               <AlertCircle size={15} className="shrink-0 text-amber-500" aria-hidden="true" />
               <span>
-                GitHub API rate limit reached (60 unauthenticated requests/hr). Displaying verified catalog repositories with direct links.
+                GitHub API rate limit reached (60 unauthenticated requests/hr). You can view all repositories directly on GitHub.
               </span>
             </div>
-            <button
-              onClick={() => loadGitHubData(true)}
-              className="font-semibold underline hover:no-underline shrink-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
+            <a
+              href={GITHUB_PROFILE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 font-semibold underline hover:no-underline shrink-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
             >
-              Retry Sync
-            </button>
+              <span>View GitHub Profile</span>
+              <ExternalLink size={12} />
+            </a>
           </div>
         )}
 
@@ -301,22 +297,38 @@ export default function GitHubSection() {
               <FolderGit2 size={24} />
             </div>
             <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-              No Repositories Found
+              {repos.length === 0 ? 'GitHub API Unavailable / Rate-Limited' : 'No Repositories Found'}
             </h4>
             <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-              {searchQuery
+              {repos.length === 0
+                ? 'GitHub API rate limit reached or service temporarily unavailable. You can explore all public repositories directly on my GitHub profile.'
+                : searchQuery
                 ? `No repositories matching "${searchQuery}" in ${selectedLanguage}.`
                 : `No public repositories found under ${selectedLanguage}.`}
             </p>
-            <button
-              onClick={() => {
-                setSearchQuery('');
-                setSelectedLanguage('All');
-              }}
-              className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline cursor-pointer"
-            >
-              Clear Filters
-            </button>
+            <div className="pt-2">
+              {repos.length === 0 ? (
+                <a
+                  href={GITHUB_PROFILE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-semibold text-xs transition-colors shadow-xs"
+                >
+                  <span>View GitHub Profile</span>
+                  <ExternalLink size={13} />
+                </a>
+              ) : (
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedLanguage('All');
+                  }}
+                  className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline cursor-pointer"
+                >
+                  Clear Filters
+                </button>
+              )}
+            </div>
           </div>
         ) : (
           /* Repositories Cards */

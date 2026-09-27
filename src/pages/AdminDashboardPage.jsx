@@ -170,7 +170,7 @@ export default function AdminDashboardPage() {
                   <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                     Page Views
                   </span>
-                  <div className="p-2 rounded-xl bg-violet-50 dark:bg-violet-950 text-violet-600 dark:text-violet-400 group-hover:scale-110 transition-transform">
+                  <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950 text-sky-600 dark:text-sky-400">
                     <BarChart3 size={20} />
                   </div>
                 </div>
@@ -179,7 +179,7 @@ export default function AdminDashboardPage() {
                     {loading ? '...' : counts.pageViews.toLocaleString()}
                   </div>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    <span className="font-semibold text-violet-600 dark:text-violet-400">{counts.uniqueSessions}</span> tab sessions
+                    <span className="font-semibold text-sky-600 dark:text-sky-400">{counts.uniqueSessions}</span> tab sessions
                   </p>
                 </div>
               </div>
@@ -307,7 +307,7 @@ export default function AdminDashboardPage() {
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         {proj.featured && (
-                          <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium">
+                          <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium">
                             Featured
                           </span>
                         )}
@@ -352,9 +352,9 @@ export default function AdminDashboardPage() {
             </div>
 
             {/* Quick Analytics Inbound Banner */}
-            <div className="p-5 rounded-2xl bg-gradient-to-r from-violet-500/10 via-primary-500/10 to-transparent border border-violet-200 dark:border-violet-900/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="p-5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-violet-100 dark:bg-violet-950 text-violet-600 dark:text-violet-400">
+                <div className="p-2.5 rounded-lg bg-sky-100 dark:bg-sky-950 text-sky-600 dark:text-sky-400">
                   <BarChart3 size={20} />
                 </div>
                 <div>

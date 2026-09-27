@@ -128,15 +128,17 @@ export default function AnalyticsManager({ onDataChanged }) {
             <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
           </button>
 
-          {/* Seed Demo Data */}
-          <button
-            onClick={handleSeedDemo}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-900/50 border border-primary-200 dark:border-primary-800 text-xs font-medium transition-colors cursor-pointer"
-            title="Seed anonymous demonstration traffic events"
-          >
-            <Sparkles size={13} />
-            <span className="hidden sm:inline">Simulate Data</span>
-          </button>
+          {/* Seed Demo Data (Development testing only) */}
+          {import.meta.env.VITE_ENABLE_DEMO_DATA === 'true' && (
+            <button
+              onClick={handleSeedDemo}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-900/50 border border-primary-200 dark:border-primary-800 text-xs font-medium transition-colors cursor-pointer"
+              title="Seed anonymous demonstration traffic events"
+            >
+              <Sparkles size={13} />
+              <span className="hidden sm:inline">Simulate Data</span>
+            </button>
+          )}
 
           {/* Reset Buffer */}
           <button
@@ -502,7 +504,7 @@ export default function AnalyticsManager({ onDataChanged }) {
                 { name: 'GitHub Profiles / Repos', count: summary?.referrerBreakdown?.github || 0, pct: summary?.referrerBreakdown?.githubPct || 0, color: 'bg-slate-700 dark:bg-slate-400' },
                 { name: 'LinkedIn', count: summary?.referrerBreakdown?.linkedin || 0, pct: summary?.referrerBreakdown?.linkedinPct || 0, color: 'bg-sky-600' },
                 { name: 'Search Engines', count: summary?.referrerBreakdown?.search || 0, pct: summary?.referrerBreakdown?.searchPct || 0, color: 'bg-amber-500' },
-                { name: 'External Referrals', count: summary?.referrerBreakdown?.external || 0, pct: summary?.referrerBreakdown?.externalPct || 0, color: 'bg-purple-500' },
+                { name: 'External Referrals', count: summary?.referrerBreakdown?.external || 0, pct: summary?.referrerBreakdown?.externalPct || 0, color: 'bg-teal-500' },
               ].map((src) => (
                 <div key={src.name}>
                   <div className="flex justify-between text-xs font-medium mb-1">

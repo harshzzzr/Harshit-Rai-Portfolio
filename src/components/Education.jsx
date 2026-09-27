@@ -32,14 +32,14 @@ export default function Education() {
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 mb-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-mono font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 mb-1">
             <span className={`w-2 h-2 rounded-full ${isLive ? 'bg-emerald-500 animate-pulse' : 'bg-primary-500'}`} />
             <span>{isLive ? 'Cloud Firestore Academic Record' : 'Verified Academic Record'}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
             Education
           </h2>
-          <div className="w-12 h-1 bg-primary-500 mx-auto rounded-full mt-2" />
+          <div className="w-12 h-1 bg-primary-500 mx-auto rounded-sm mt-2" />
         </div>
 
         {/* Loading State */}

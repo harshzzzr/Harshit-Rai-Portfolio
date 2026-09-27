@@ -105,7 +105,7 @@ export default function SocialProfiles() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-medium bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800/60 mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-mono font-medium bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800/60 mb-3">
             <Radio size={13} />
             <span>Connected Profiles & Activity</span>
           </div>
@@ -461,11 +461,11 @@ export default function SocialProfiles() {
                   <div className="flex items-center gap-2">
                     <Headphones size={15} className="text-emerald-500" aria-hidden="true" />
                     <span className="text-xs font-bold text-slate-900 dark:text-white">
-                      Current Listening Track
+                      {spotifyData?.isPlaying ? 'Currently Listening' : 'Curated Coding Soundtrack'}
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 font-semibold">
-                    {spotifyData?.isPlaying ? 'Streaming Now' : 'Focus Mode'}
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 font-semibold">
+                    {spotifyData?.isPlaying ? 'Streaming Now' : 'Coding Soundtrack'}
                   </span>
                 </div>
 

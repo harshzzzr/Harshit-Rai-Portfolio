@@ -39,17 +39,20 @@ export const defaultSampleMessages = [
  * Local storage cache helpers for messages (used for fallback/offline testing)
  */
 function getStoredLocalMessages() {
-  if (typeof window === 'undefined') return defaultSampleMessages;
+  if (typeof window === 'undefined') return [];
   try {
     const raw = localStorage.getItem(LOCAL_MESSAGES_KEY);
     if (!raw) {
-      saveStoredLocalMessages(defaultSampleMessages);
-      return defaultSampleMessages;
+      if (import.meta.env.VITE_ENABLE_DEMO_DATA === 'true') {
+        saveStoredLocalMessages(defaultSampleMessages);
+        return defaultSampleMessages;
+      }
+      return [];
     }
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultSampleMessages;
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
-    return defaultSampleMessages;
+    return [];
   }
 }
 
@@ -66,7 +69,8 @@ const RATE_LIMIT_COOLDOWN_SECONDS = 45;
 const LAST_SUBMISSION_KEY = 'harshit_portfolio_last_msg_ts';
 
 /**
- * Check client-side rate limiting / cooldown
+ * Check client-side UX submission cooldown (designed to prevent accidental double submissions).
+ * Note: Real security rules and data validation are enforced server-side via firestore.rules.
  */
 export function checkClientRateLimit() {
   if (typeof window === 'undefined') return { isLimited: false, remainingSeconds: 0 };
@@ -197,9 +201,7 @@ export async function submitContactMessage(input) {
     };
   }
 
-  // Record submission timestamp for client-side cooldown
-  recordClientSubmissionTime();
-
+  // Check client-side UX cooldown
   const newDocId = `msg-${Date.now()}`;
   const nowIso = new Date().toISOString();
   const { name, email, subject, message } = validation.sanitized;
@@ -213,7 +215,41 @@ export async function submitContactMessage(input) {
     createdAt: nowIso,
   };
 
-  // Cache locally for fallback and test inspection
+  // If Firebase is configured, submit directly to Firestore
+  if (isFirebaseConfigured && db) {
+    try {
+      const messagesCol = collection(db, COLLECTIONS.MESSAGES);
+      const docRef = await addDoc(messagesCol, {
+        ...messagePayload,
+        createdAt: serverTimestamp(),
+      });
+
+      // On successful Firestore write, record cooldown and mirror to local cache
+      recordClientSubmissionTime();
+      const localList = getStoredLocalMessages();
+      localList.unshift({
+        id: docRef.id,
+        ...messagePayload,
+      });
+      saveStoredLocalMessages(localList);
+
+      return {
+        success: true,
+        id: docRef.id,
+        isLive: true,
+        message: 'Thank you! Your message has been safely delivered to Cloud Firestore.',
+      };
+    } catch (err) {
+      console.error('[Firebase] submitContactMessage error:', err);
+      return {
+        success: false,
+        error: err.message || 'Failed to submit your message. Please try again later.',
+      };
+    }
+  }
+
+  // Local offline fallback mode (only when Firebase is unconfigured)
+  recordClientSubmissionTime();
   const localList = getStoredLocalMessages();
   localList.unshift({
     id: newDocId,
@@ -221,36 +257,12 @@ export async function submitContactMessage(input) {
   });
   saveStoredLocalMessages(localList);
 
-  if (!isFirebaseConfigured || !db) {
-    return {
-      success: true,
-      id: newDocId,
-      isLive: false,
-      message: 'Thank you! Your message has been received (local offline fallback mode).',
-    };
-  }
-
-  try {
-    const messagesCol = collection(db, COLLECTIONS.MESSAGES);
-    const docRef = await addDoc(messagesCol, {
-      ...messagePayload,
-      createdAt: serverTimestamp(),
-    });
-
-    return {
-      success: true,
-      id: docRef.id,
-      isLive: true,
-      message: 'Thank you! Your message has been safely delivered to Cloud Firestore.',
-    };
-  } catch (err) {
-    console.error('[Firebase] submitContactMessage error:', err);
-    // Return friendly error with error message
-    return {
-      success: false,
-      error: err.message || 'Failed to submit your message. Please try again later.',
-    };
-  }
+  return {
+    success: true,
+    id: newDocId,
+    isLive: false,
+    message: 'Thank you! Your message has been received (local offline fallback mode).',
+  };
 }
 
 /**
@@ -278,11 +290,10 @@ export async function getMessages() {
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
-      const local = getStoredLocalMessages();
       return {
-        data: local,
+        data: [],
         error: null,
-        isLive: false,
+        isLive: true,
       };
     }
 
@@ -314,10 +325,10 @@ export async function getMessages() {
       isLive: true,
     };
   } catch (err) {
-    console.warn('[Firebase] getMessages error, falling back:', err.message);
+    console.warn('[Firebase] getMessages error:', err.message);
     return {
-      data: getStoredLocalMessages(),
-      error: err.message,
+      data: [],
+      error: 'Unable to load messages from Cloud Firestore.',
       isLive: false,
     };
   }
@@ -337,23 +348,31 @@ export async function getMessageCount() {
 export async function updateMessageStatus(messageId, status) {
   if (!messageId) return { success: false, error: 'Message ID is required' };
 
-  // Update local cache
-  const localList = getStoredLocalMessages();
-  const index = localList.findIndex((m) => m.id === messageId);
-  if (index >= 0) {
-    localList[index].status = status;
-    saveStoredLocalMessages(localList);
-  }
-
   if (!isFirebaseConfigured || !db) {
+    const localList = getStoredLocalMessages();
+    const index = localList.findIndex((m) => m.id === messageId);
+    if (index >= 0) {
+      localList[index].status = status;
+      saveStoredLocalMessages(localList);
+    }
     return { success: true, isLive: false };
   }
 
   try {
     const docRef = doc(db, COLLECTIONS.MESSAGES, messageId);
     await updateDoc(docRef, { status });
+
+    // Update local cache on successful Firebase write
+    const localList = getStoredLocalMessages();
+    const index = localList.findIndex((m) => m.id === messageId);
+    if (index >= 0) {
+      localList[index].status = status;
+      saveStoredLocalMessages(localList);
+    }
+
     return { success: true, isLive: true };
   } catch (err) {
+    console.error('[Firebase] updateMessageStatus error:', err);
     return { success: false, error: err.message };
   }
 }
@@ -364,19 +383,25 @@ export async function updateMessageStatus(messageId, status) {
 export async function deleteMessage(messageId) {
   if (!messageId) return { success: false, error: 'Message ID is required' };
 
-  const localList = getStoredLocalMessages();
-  const filtered = localList.filter((m) => m.id !== messageId);
-  saveStoredLocalMessages(filtered);
-
   if (!isFirebaseConfigured || !db) {
+    const localList = getStoredLocalMessages();
+    const filtered = localList.filter((m) => m.id !== messageId);
+    saveStoredLocalMessages(filtered);
     return { success: true, isLive: false };
   }
 
   try {
     const docRef = doc(db, COLLECTIONS.MESSAGES, messageId);
     await deleteDoc(docRef);
+
+    // Update local cache on successful Firebase delete
+    const localList = getStoredLocalMessages();
+    const filtered = localList.filter((m) => m.id !== messageId);
+    saveStoredLocalMessages(filtered);
+
     return { success: true, isLive: true };
   } catch (err) {
+    console.error('[Firebase] deleteMessage error:', err);
     return { success: false, error: err.message };
   }
 }

@@ -18,7 +18,7 @@ export default function HomePage() {
     <div className="w-full">
       <SEO
         title="Harshit Rai | Developer Portfolio"
-        description="Explore the portfolio of Harshit Rai — Computer Engineering student and developer specializing in C++, React, Node.js, and high-performance software systems."
+        description="Explore the portfolio of Harshit Rai: Computer Engineering student and developer specializing in C++, React, Node.js, and high-performance software systems."
         canonicalUrl="https://harshitrai.com/"
         ogType="website"
       />

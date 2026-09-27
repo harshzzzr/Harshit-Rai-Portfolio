@@ -11,6 +11,8 @@ import ErrorBoundary from './components/ErrorBoundary';
 // Route-level code splitting
 const HomePage = lazy(() => import('./pages/HomePage'));
 const ProjectDetailPage = lazy(() => import('./pages/ProjectDetailPage'));
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
+const TermsPage = lazy(() => import('./pages/TermsPage'));
 const AdminLoginPage = lazy(() => import('./pages/AdminLoginPage'));
 const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
@@ -53,6 +55,22 @@ export default function App() {
                 element={
                   <MainLayout>
                     <ProjectDetailPage />
+                  </MainLayout>
+                }
+              />
+              <Route
+                path="/privacy"
+                element={
+                  <MainLayout>
+                    <PrivacyPolicyPage />
+                  </MainLayout>
+                }
+              />
+              <Route
+                path="/terms"
+                element={
+                  <MainLayout>
+                    <TermsPage />
                   </MainLayout>
                 }
               />

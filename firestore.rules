@@ -2,45 +2,52 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Helper to verify authenticated admin user
+    // Helpers to verify authenticated user and administrator
     function isAuthenticated() {
       return request.auth != null;
     }
 
-    // Public portfolio data: public read, admin-only write
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.email in ['harshittrrai@gmail.com', 'admin@harshitrai.com'] ||
+        request.auth.token.admin == true
+      );
+    }
+
+    // Public portfolio data: public read only if visible == true; admin full access
     match /projects/{projectId} {
-      allow read: if true;
-      allow write: if isAuthenticated();
+      allow read: if resource.data.visible == true || isAdmin();
+      allow write: if isAdmin();
     }
 
     match /skills/{skillId} {
-      allow read: if true;
-      allow write: if isAuthenticated();
+      allow read: if resource.data.visible == true || isAdmin();
+      allow write: if isAdmin();
     }
 
     match /education/{educationId} {
-      allow read: if true;
-      allow write: if isAuthenticated();
+      allow read: if resource.data.visible == true || isAdmin();
+      allow write: if isAdmin();
     }
 
     match /experience/{experienceId} {
-      allow read: if true;
-      allow write: if isAuthenticated();
+      allow read: if resource.data.visible == true || isAdmin();
+      allow write: if isAdmin();
     }
 
     match /timeline/{timelineId} {
-      allow read: if true;
-      allow write: if isAuthenticated();
+      allow read: if resource.data.visible == true || isAdmin();
+      allow write: if isAdmin();
     }
 
     match /achievements/{achievementId} {
-      allow read: if true;
-      allow write: if isAuthenticated();
+      allow read: if resource.data.visible == true || isAdmin();
+      allow write: if isAdmin();
     }
 
     match /certifications/{certificationId} {
-      allow read: if true;
-      allow write: if isAuthenticated();
+      allow read: if resource.data.visible == true || isAdmin();
+      allow write: if isAdmin();
     }
 
     // Contact messages: public create with strict validation, admin-only read/update/delete
@@ -60,7 +67,7 @@ service cloud.firestore {
                     && request.resource.data.message.size() >= 10
                     && request.resource.data.message.size() <= 3000
                     && request.resource.data.status == 'unread';
-      allow read, update, delete: if isAuthenticated();
+      allow read, update, delete: if isAdmin();
     }
 
     // Testimonials / Feedback: public submit (pending), approved read publicly, admin moderation
@@ -76,21 +83,21 @@ service cloud.firestore {
                     && request.resource.data.feedback.size() >= 5
                     && request.resource.data.feedback.size() <= 1000
                     && request.resource.data.status == 'pending';
-      allow read: if resource.data.status == 'approved' || isAuthenticated();
-      allow update, delete: if isAuthenticated();
+      allow read: if resource.data.status == 'approved' || isAdmin();
+      allow update, delete: if isAdmin();
     }
 
     // Analytics telemetry: anonymous event logging, admin-only read/delete
     match /analytics/{analyticsId} {
-      allow create: if request.resource.data.keys().hasOnly(['name', 'properties', 'path', 'referrer', 'sessionId', 'date', 'timestamp', 'source', 'createdAt'])
-                    && request.resource.data.name is string
-                    && request.resource.data.name.size() <= 100;
-      allow read, update, delete: if isAuthenticated();
+      allow create: if request.resource.data.keys().hasOnly(['path', 'title', 'isProjectView', 'projectId', 'device', 'referrer', 'sessionId', 'date', 'timestamp', 'source', 'createdAt'])
+                    && request.resource.data.path is string
+                    && request.resource.data.path.size() <= 200;
+      allow read, update, delete: if isAdmin();
     }
 
     // Default deny for unmapped documents
     match /{document=**} {
-      allow read, write: if isAuthenticated();
+      allow read, write: if isAdmin();
     }
   }
 }

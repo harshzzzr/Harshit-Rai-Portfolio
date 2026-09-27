@@ -1,4 +1,4 @@
-import { personalInfo, projectsData } from '../data/portfolioData';
+import { personalInfo } from '../data/portfolioData';
 
 const CACHE_TTL_MS = 1000 * 60 * 15; // 15 minutes session cache to prevent rate-limiting
 
@@ -7,6 +7,18 @@ export const GITHUB_USERNAME =
 
 export const GITHUB_PROFILE_URL =
   import.meta.env.VITE_GITHUB_URL || personalInfo.socials.github || `https://github.com/${GITHUB_USERNAME}`;
+
+export const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN || '';
+
+export function getGitHubHeaders() {
+  const headers = {
+    Accept: 'application/vnd.github.v3+json'
+  };
+  if (GITHUB_TOKEN && !GITHUB_TOKEN.includes('your_')) {
+    headers.Authorization = `Bearer ${GITHUB_TOKEN}`;
+  }
+  return headers;
+}
 
 /**
  * Recognized programming language color map for badges
@@ -81,9 +93,7 @@ export async function fetchGitHubProfile(username = GITHUB_USERNAME) {
 
   try {
     const response = await fetch(`https://api.github.com/users/${username}`, {
-      headers: {
-        Accept: 'application/vnd.github.v3+json'
-      }
+      headers: getGitHubHeaders()
     });
 
     if (!response.ok) {
@@ -122,7 +132,7 @@ export async function fetchGitHubProfile(username = GITHUB_USERNAME) {
 /**
  * Fetch public repositories only
  * Private repositories are never exposed or accessed
- * Falls back to verified catalog projects if rate-limited or offline
+ * When rate-limited or offline, returns empty data array without fabricated repos
  */
 export async function fetchGitHubRepos(username = GITHUB_USERNAME, limit = 12) {
   const cacheKey = `gh_repos_${username}_${limit}`;
@@ -136,9 +146,7 @@ export async function fetchGitHubRepos(username = GITHUB_USERNAME, limit = 12) {
     const response = await fetch(
       `https://api.github.com/users/${username}/repos?type=public&sort=updated&per_page=${limit}`,
       {
-        headers: {
-          Accept: 'application/vnd.github.v3+json'
-        }
+        headers: getGitHubHeaders()
       }
     );
 
@@ -147,14 +155,13 @@ export async function fetchGitHubRepos(username = GITHUB_USERNAME, limit = 12) {
         success: false,
         status: response.status,
         rateLimited: response.status === 403 || response.status === 429,
-        isFallback: true,
-        data: getFallbackRepos()
+        data: []
       };
     }
 
     const list = await response.json();
-    if (!Array.isArray(list) || list.length === 0) {
-      return { success: true, isFallback: true, data: getFallbackRepos() };
+    if (!Array.isArray(list)) {
+      return { success: false, data: [] };
     }
 
     const repos = list.map((r) => ({
@@ -171,31 +178,12 @@ export async function fetchGitHubRepos(username = GITHUB_USERNAME, limit = 12) {
     }));
 
     setCached(cacheKey, repos);
-    return { success: true, isFallback: false, data: repos };
-  } catch {
+    return { success: true, data: repos };
+  } catch (err) {
     return {
       success: false,
-      isFallback: true,
-      data: getFallbackRepos()
+      error: err.message,
+      data: []
     };
   }
-}
-
-/**
- * Verified fallback repository data derived from actual portfolio projects
- * Ensures public users always see verified repos even if GitHub API is rate-limited
- */
-function getFallbackRepos() {
-  return projectsData.map((p, idx) => ({
-    id: `local-repo-${p.id || idx}`,
-    name: p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-    description: p.shortDescription || p.tagline,
-    htmlUrl: p.githubUrl || GITHUB_PROFILE_URL,
-    stars: 0,
-    forks: 0,
-    language: (p.technologies && p.technologies[0]) || 'C++',
-    isFork: false,
-    topics: p.technologies || [],
-    updatedAt: new Date().toISOString()
-  }));
 }

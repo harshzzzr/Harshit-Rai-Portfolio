@@ -19,9 +19,11 @@ import {
 import { GithubIcon } from '../components/Icons';
 import SafeImage from '../components/SafeImage';
 import SEO from '../components/SEO';
+import { useAuth } from '../context/AuthContext';
 
 export default function ProjectDetailPage() {
   const { projectId } = useParams();
+  const { isAdmin } = useAuth();
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,7 +33,7 @@ export default function ProjectDetailPage() {
     setLoading(true);
     setError(null);
 
-    getProjectById(projectId)
+    getProjectById(projectId, { includeHidden: Boolean(isAdmin) })
       .then((res) => {
         if (!isMounted) return;
         setProject(res.data);
@@ -53,7 +55,7 @@ export default function ProjectDetailPage() {
   useEffect(() => {
     const cleanup = fetchProject();
     return cleanup;
-  }, [projectId]);
+  }, [projectId, isAdmin]);
 
   // Loading State
   if (loading) {
@@ -178,19 +180,19 @@ export default function ProjectDetailPage() {
       </div>
 
       {/* Hero Visual Header Banner */}
-      <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-gradient-to-br from-slate-100 via-slate-50 to-slate-200 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 shadow-md">
+      <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shadow-sm">
         {/* Subtle grid pattern */}
         <div className="absolute inset-0 opacity-25 dark:opacity-15 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:20px_20px]" aria-hidden="true" />
 
         <div className="relative p-5 sm:p-8 lg:p-12 space-y-6">
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800">
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-md text-xs font-mono font-semibold bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800">
               <FolderGit2 size={13} aria-hidden="true" />
               <span>{project.badge || 'Engineering Project'}</span>
             </span>
 
             {project.featured && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500 text-white shadow-sm">
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-md text-xs font-semibold bg-amber-500 text-white shadow-sm">
                 <Sparkles size={12} aria-hidden="true" />
                 <span>Featured Project</span>
               </span>

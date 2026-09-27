@@ -177,7 +177,7 @@ export default function AdminLoginPage() {
                 aria-invalid={Boolean(error)}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@harshitrai.dev"
+                placeholder="harshittrrai@gmail.com"
                 autoComplete="email"
                 disabled={loading}
                 className="w-full pl-10 pr-3.5 py-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-500 transition-all disabled:opacity-50"

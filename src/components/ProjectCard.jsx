@@ -8,9 +8,9 @@ function ProjectCard({ project }) {
   const { id, title, description, technologies, featured, githubUrl, liveUrl, badge, image } = project;
 
   const fallbackBanner = (
-    <div className="relative h-44 w-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-950 flex items-center justify-center border-b border-slate-200 dark:border-slate-800 overflow-hidden">
+    <div className="relative h-44 w-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center border-b border-slate-200 dark:border-slate-800 overflow-hidden">
       <div className="absolute inset-0 opacity-20 dark:opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]" />
-      <div className="flex flex-col items-center gap-2 z-10 transition-transform duration-300 group-hover:scale-105">
+      <div className="flex flex-col items-center gap-2 z-10">
         <div className="p-3 rounded-xl bg-white dark:bg-slate-900/90 shadow-sm border border-slate-200 dark:border-slate-700 text-primary-600 dark:text-primary-400">
           <FolderGit2 size={32} />
         </div>
@@ -23,10 +23,10 @@ function ProjectCard({ project }) {
 
   return (
     <article
-      className={`group relative rounded-xl bg-white dark:bg-slate-900 border transition-all duration-300 flex flex-col justify-between overflow-hidden ${
+      className={`group relative rounded-xl bg-white dark:bg-slate-900 border transition-colors flex flex-col justify-between overflow-hidden ${
         featured
-          ? 'border-primary-500/40 dark:border-primary-500/30 shadow-md hover:shadow-xl hover:border-primary-500'
-          : 'border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700'
+          ? 'border-primary-500/40 dark:border-primary-500/30 shadow-sm hover:border-primary-500'
+          : 'border-slate-200 dark:border-slate-800 shadow-sm hover:border-slate-300 dark:hover:border-slate-700'
       }`}
     >
       {/* Visual Header / Image Preview with Fallback */}
@@ -48,7 +48,7 @@ function ProjectCard({ project }) {
 
         {/* Featured Tag */}
         {featured && (
-          <div className="absolute top-3 right-3 z-20 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-primary-500 text-white shadow-sm">
+          <div className="absolute top-3 right-3 z-20 inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-primary-600 text-white shadow-sm">
             <Sparkles size={12} aria-hidden="true" />
             <span>Featured</span>
           </div>

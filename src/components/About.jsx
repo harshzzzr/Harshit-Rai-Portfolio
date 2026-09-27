@@ -32,7 +32,7 @@ export default function About() {
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
             About Me
           </h2>
-          <div className="w-12 h-1 bg-primary-500 mx-auto rounded-full mt-2" />
+          <div className="w-12 h-1 bg-primary-500 mx-auto rounded-sm mt-2" />
         </div>
 
         {/* Content Grid */}
