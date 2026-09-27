@@ -159,7 +159,7 @@ export default function AdminLoginPage() {
         )}
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} noValidate className="space-y-4">
+        <form onSubmit={handleSubmit} noValidate className="space-y-4" autoComplete="off">
           {/* Email Field */}
           <div className="space-y-1.5">
             <label htmlFor="admin-email" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
@@ -177,8 +177,10 @@ export default function AdminLoginPage() {
                 aria-invalid={Boolean(error)}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="harshittrrai@gmail.com"
-                autoComplete="email"
+                placeholder=""
+                autoComplete="off"
+                spellCheck="false"
+                autoCapitalize="none"
                 disabled={loading}
                 className="w-full pl-10 pr-3.5 py-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-500 transition-all disabled:opacity-50"
               />
@@ -202,8 +204,8 @@ export default function AdminLoginPage() {
                 aria-invalid={Boolean(error)}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                autoComplete="current-password"
+                placeholder=""
+                autoComplete="new-password"
                 disabled={loading}
                 className="w-full pl-10 pr-10 py-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-500 transition-all disabled:opacity-50"
               />

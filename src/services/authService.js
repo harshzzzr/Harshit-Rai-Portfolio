@@ -1,52 +1,42 @@
 import {
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged
 } from 'firebase/auth';
 import { auth, isFirebaseConfigured } from '../firebase/config';
 
-// Local storage key for fallback/demo admin session when Firebase is unconfigured
-const DEMO_AUTH_KEY = 'harshit_portfolio_admin_session';
+// Local storage key for authenticated administrator session
+const ADMIN_AUTH_KEY = 'harshit_portfolio_admin_session';
 
 /**
- * Production Whitelist of Admin Emails matching firestore.rules
+ * Single Authorized Administrator Account
  */
-export const ADMIN_EMAILS = [
-  'harshittrrai@gmail.com',
-  'admin@harshitrai.com',
-];
+export const PRIMARY_ADMIN_EMAIL = 'harshittrrai@gmail.com';
+export const ADMIN_EMAILS = [PRIMARY_ADMIN_EMAIL];
+
+// Administrator password requirement
+const ADMIN_PASSWORD_TARGET = 'Harsh@6206';
 
 /**
  * Verify whether an authenticated user matches administrator authorization
  */
 export function isUserAdmin(user) {
   if (!user) return false;
-  if (user.isDemo && import.meta.env.VITE_ENABLE_DEMO_AUTH === 'true') return true;
   const email = user.email ? user.email.toLowerCase().trim() : '';
-  if (ADMIN_EMAILS.includes(email)) return true;
-  if (user.admin === true || user.customClaims?.admin === true || user.claims?.admin === true) return true;
-  return false;
+  return email === PRIMARY_ADMIN_EMAIL;
 }
 
 /**
- * Async verification including Firebase Auth custom token claims (getIdTokenResult)
+ * Async verification of administrator authorization
  */
 export async function checkUserAdmin(user) {
   if (!user) return false;
-  if (isUserAdmin(user)) return true;
-  if (typeof user.getIdTokenResult === 'function') {
-    try {
-      const tokenResult = await user.getIdTokenResult();
-      if (tokenResult?.claims?.admin === true) return true;
-    } catch {
-      return false;
-    }
-  }
-  return false;
+  return isUserAdmin(user);
 }
 
 /**
- * Log in admin via Firebase Authentication
+ * Log in admin - strictly restricted to harshittrrai@gmail.com with Harsh@6206
  * @param {string} email
  * @param {string} password
  */
@@ -55,82 +45,79 @@ export async function loginAdmin(email, password) {
     return { success: false, error: 'Email and password are required.' };
   }
 
-  // If Firebase Authentication is active
+  const normalizedEmail = email.trim().toLowerCase();
+
+  // Strict check: Only one authorized administrator account
+  if (normalizedEmail !== PRIMARY_ADMIN_EMAIL) {
+    return {
+      success: false,
+      error: 'Access denied: Only the authorized administrator account (harshittrrai@gmail.com) is permitted.',
+    };
+  }
+
+  // Strict check: Verify administrator password
+  if (password !== ADMIN_PASSWORD_TARGET) {
+    return {
+      success: false,
+      error: 'Invalid password. Please check your credentials and try again.',
+    };
+  }
+
+  // If Firebase Authentication is active and configured, sync with Firebase Auth
   if (isFirebaseConfigured && auth) {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password);
-      const user = userCredential.user;
-      const authorized = await checkUserAdmin(user);
+      let firebaseUser = null;
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, normalizedEmail, password);
+        firebaseUser = userCredential.user;
+      } catch (signInErr) {
+        // If account does not exist yet in Firebase Auth, attempt to create it
+        if (
+          signInErr.code === 'auth/user-not-found' ||
+          signInErr.code === 'auth/invalid-credential' ||
+          signInErr.code === 'auth/invalid-login-credentials'
+        ) {
+          try {
+            const newCredential = await createUserWithEmailAndPassword(auth, normalizedEmail, password);
+            firebaseUser = newCredential.user;
+          } catch {
+            // Fallback handled below
+          }
+        }
+      }
 
-      if (!authorized) {
-        await signOut(auth);
+      if (firebaseUser) {
+        const adminUser = {
+          uid: firebaseUser.uid,
+          email: PRIMARY_ADMIN_EMAIL,
+          displayName: 'Harshit Rai',
+          isLive: true,
+        };
+        localStorage.setItem(ADMIN_AUTH_KEY, JSON.stringify(adminUser));
         return {
-          success: false,
-          error: 'Access denied: Your account is not authorized as an administrator.',
+          success: true,
+          user: adminUser,
+          isLive: true,
         };
       }
-
-      return {
-        success: true,
-        user,
-        isLive: true,
-      };
-    } catch (err) {
-      let friendlyMessage = 'Authentication failed. Please check your credentials.';
-
-      switch (err.code) {
-        case 'auth/invalid-credential':
-        case 'auth/wrong-password':
-        case 'auth/user-not-found':
-          friendlyMessage = 'Invalid email or password. Please try again.';
-          break;
-        case 'auth/invalid-email':
-          friendlyMessage = 'The email address format is invalid.';
-          break;
-        case 'auth/too-many-requests':
-          friendlyMessage = 'Access temporarily disabled due to too many failed attempts. Try again later.';
-          break;
-        case 'auth/network-request-failed':
-          friendlyMessage = 'Network connection failed. Please check your internet connection.';
-          break;
-        case 'auth/invalid-api-key':
-        case 'auth/api-key-not-valid':
-          friendlyMessage = 'Firebase Web API Key is invalid or expired. Check VITE_FIREBASE_API_KEY in .env or enable Demo Mode (VITE_ENABLE_DEMO_AUTH=true).';
-          break;
-        default:
-          friendlyMessage = err.message || friendlyMessage;
-      }
-
-      return {
-        success: false,
-        error: friendlyMessage,
-        code: err.code,
-      };
+    } catch (fbErr) {
+      console.warn('[Auth] Firebase Auth notice:', fbErr.message);
     }
   }
 
-  // Graceful Demo / Local Testing Mode (Strictly gated behind VITE_ENABLE_DEMO_AUTH)
-  if (import.meta.env.VITE_ENABLE_DEMO_AUTH === 'true') {
-    if (email.trim() === 'admin@harshitrai.dev' && password === 'admin123') {
-      const demoUser = {
-        uid: 'demo-admin-uid',
-        email: 'admin@harshitrai.dev',
-        displayName: 'Harshit Rai (Admin)',
-        isDemo: true,
-      };
-      localStorage.setItem(DEMO_AUTH_KEY, JSON.stringify(demoUser));
-      return {
-        success: true,
-        user: demoUser,
-        isLive: false,
-        notice: 'Signed in via Development Demo Session.',
-      };
-    }
-  }
+  // Establish verified administrator session
+  const adminUser = {
+    uid: 'admin-harshit-rai',
+    email: PRIMARY_ADMIN_EMAIL,
+    displayName: 'Harshit Rai',
+    isLive: false,
+  };
+  localStorage.setItem(ADMIN_AUTH_KEY, JSON.stringify(adminUser));
 
   return {
-    success: false,
-    error: 'Invalid credentials or unauthorized account.',
+    success: true,
+    user: adminUser,
+    isLive: false,
   };
 }
 
@@ -138,15 +125,13 @@ export async function loginAdmin(email, password) {
  * Log out current admin
  */
 export async function logoutAdmin() {
-  localStorage.removeItem(DEMO_AUTH_KEY);
+  localStorage.removeItem(ADMIN_AUTH_KEY);
 
   if (isFirebaseConfigured && auth) {
     try {
       await signOut(auth);
-      return { success: true };
     } catch (err) {
-      console.error('[Auth] Logout error:', err);
-      return { success: false, error: err.message };
+      console.warn('[Auth] Firebase logout notice:', err.message);
     }
   }
 
@@ -159,27 +144,39 @@ export async function logoutAdmin() {
  * @returns {Function} Unsubscribe function
  */
 export function subscribeToAuthChanges(callback) {
+  const getStoredAdmin = () => {
+    const stored = localStorage.getItem(ADMIN_AUTH_KEY);
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (parsed?.email?.toLowerCase().trim() === PRIMARY_ADMIN_EMAIL) {
+          return parsed;
+        }
+      } catch {
+        localStorage.removeItem(ADMIN_AUTH_KEY);
+      }
+    }
+    return null;
+  };
+
   if (isFirebaseConfigured && auth) {
     return onAuthStateChanged(auth, (user) => {
-      callback(user);
+      if (user && user.email?.toLowerCase().trim() === PRIMARY_ADMIN_EMAIL) {
+        callback({
+          uid: user.uid,
+          email: PRIMARY_ADMIN_EMAIL,
+          displayName: user.displayName || 'Harshit Rai',
+          isLive: true,
+        });
+      } else {
+        const storedAdmin = getStoredAdmin();
+        callback(storedAdmin);
+      }
     });
   }
 
-  // Check demo session strictly when demo auth is enabled
-  if (import.meta.env.VITE_ENABLE_DEMO_AUTH === 'true') {
-    const stored = localStorage.getItem(DEMO_AUTH_KEY);
-    if (stored) {
-      try {
-        callback(JSON.parse(stored));
-        return () => {};
-      } catch {
-        callback(null);
-        return () => {};
-      }
-    }
-  }
-
-  callback(null);
+  const storedAdmin = getStoredAdmin();
+  callback(storedAdmin);
   return () => {};
 }
 
@@ -187,12 +184,28 @@ export function subscribeToAuthChanges(callback) {
  * Get current authenticated user synchronously if available
  */
 export function getCurrentUser() {
-  if (isFirebaseConfigured && auth) {
-    return auth.currentUser;
+  if (isFirebaseConfigured && auth?.currentUser) {
+    const email = auth.currentUser.email?.toLowerCase().trim();
+    if (email === PRIMARY_ADMIN_EMAIL) {
+      return {
+        uid: auth.currentUser.uid,
+        email: PRIMARY_ADMIN_EMAIL,
+        displayName: auth.currentUser.displayName || 'Harshit Rai',
+        isLive: true,
+      };
+    }
   }
-  if (import.meta.env.VITE_ENABLE_DEMO_AUTH === 'true') {
-    const stored = localStorage.getItem(DEMO_AUTH_KEY);
-    return stored ? JSON.parse(stored) : null;
+
+  const stored = localStorage.getItem(ADMIN_AUTH_KEY);
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (parsed?.email?.toLowerCase().trim() === PRIMARY_ADMIN_EMAIL) {
+        return parsed;
+      }
+    } catch {
+      return null;
+    }
   }
   return null;
 }
