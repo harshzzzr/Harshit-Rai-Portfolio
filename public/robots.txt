@@ -1,5 +1,5 @@
 # Robots.txt for Harshit Rai Portfolio
-# https://harshitrai.com
+# https://harshit-rai-portfolio.vercel.app/
 
 User-agent: *
 Allow: /
@@ -7,4 +7,4 @@ Disallow: /admin
 Disallow: /admin/
 
 # Sitemap Location
-Sitemap: https://harshitrai.com/sitemap.xml
+Sitemap: https://harshit-rai-portfolio.vercel.app/sitemap.xml

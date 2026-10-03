@@ -21,8 +21,7 @@ import {
   Clock,
   Search,
   Check,
-  Ban,
-  ShieldCheck
+  Ban
 } from 'lucide-react';
 
 export default function FeedbackManager({ onFeedbackChanged }) {

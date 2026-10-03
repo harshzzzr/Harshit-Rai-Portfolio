@@ -2,8 +2,7 @@ import {
   ref,
   uploadBytes,
   getDownloadURL,
-  deleteObject,
-  listAll
+  deleteObject
 } from 'firebase/storage';
 import { storage, isFirebaseConfigured } from '../firebase/config';
 

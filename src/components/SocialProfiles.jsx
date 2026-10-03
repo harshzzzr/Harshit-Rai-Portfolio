@@ -7,16 +7,10 @@ import {
 } from './Icons';
 import {
   ExternalLink,
-  Star,
-  GitFork,
   CheckCircle2,
   Code2,
   Headphones,
-  ShieldCheck,
-  Sparkles,
-  Layers,
-  Radio,
-  BookOpen
+  Radio
 } from 'lucide-react';
 import {
   fetchGitHubProfile,
@@ -40,15 +34,12 @@ export default function SocialProfiles() {
   // GitHub State
   const [ghProfile, setGhProfile] = useState(null);
   const [ghRepos, setGhRepos] = useState([]);
-  const [loadingGh, setLoadingGh] = useState(true);
 
   // LeetCode State
   const [leetcodeData, setLeetcodeData] = useState(null);
-  const [loadingLeetcode, setLoadingLeetcode] = useState(true);
 
   // Spotify State
   const [spotifyData, setSpotifyData] = useState(null);
-  const [loadingSpotify, setLoadingSpotify] = useState(true);
 
   useEffect(() => {
     // Load GitHub
@@ -66,8 +57,6 @@ export default function SocialProfiles() {
         }
       } catch (err) {
         console.warn('[SocialProfiles] GitHub fetch caught:', err);
-      } finally {
-        setLoadingGh(false);
       }
     }
 
@@ -78,8 +67,6 @@ export default function SocialProfiles() {
         setLeetcodeData(res);
       } catch (err) {
         console.warn('[SocialProfiles] LeetCode fetch caught:', err);
-      } finally {
-        setLoadingLeetcode(false);
       }
     }
 
@@ -90,8 +77,6 @@ export default function SocialProfiles() {
         setSpotifyData(res);
       } catch (err) {
         console.warn('[SocialProfiles] Spotify fetch caught:', err);
-      } finally {
-        setLoadingSpotify(false);
       }
     }
 

@@ -5,7 +5,7 @@ import {
   updateEducation,
   deleteEducation,
   toggleEducationVisibility
-} from '../../services/timelineService';
+} from '../../services/educationService';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import {
   Plus,

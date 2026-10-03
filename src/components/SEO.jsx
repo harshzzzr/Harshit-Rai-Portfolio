@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { SITE_CONFIG } from '../config/site';
 
 /**
  * Set or create a <meta> tag in the document <head>
@@ -22,7 +23,7 @@ function setLinkTag(rel, href) {
   let element = document.querySelector(`link[rel="${rel}"]`);
   if (!element) {
     element = document.createElement('link');
-    element.setAttribute('rel', rel);
+    element.setAttribute(rel, rel);
     document.head.appendChild(element);
   }
   element.setAttribute('href', href || '');
@@ -36,11 +37,11 @@ function setLinkTag(rel, href) {
  * Tailored for WhatsApp, LinkedIn, X (Twitter), Facebook, and Discord preview crawlers.
  */
 export default function SEO({
-  title = 'Harshit Rai | Developer Portfolio',
-  description = 'Explore the portfolio of Harshit Rai: Computer Engineering student and developer specializing in C++, React, Node.js, and high-performance software systems.',
-  canonicalUrl = 'https://harshitrai.com/',
+  title = SITE_CONFIG.title,
+  description = SITE_CONFIG.description,
+  canonicalUrl = SITE_CONFIG.url,
   ogType = 'website',
-  ogImage = 'https://harshitrai.com/images/og-preview.png',
+  ogImage = SITE_CONFIG.ogImage,
   imageAlt = 'Harshit Rai - Developer Portfolio Preview',
   noindex = false,
   jsonLd = null
@@ -80,8 +81,6 @@ export default function SEO({
 
     // 5. Twitter / X Card Metadata
     setMetaTag('name', 'twitter:card', 'summary_large_image');
-    setMetaTag('name', 'twitter:site', '@harshitrai');
-    setMetaTag('name', 'twitter:creator', '@harshitrai');
     setMetaTag('name', 'twitter:title', title);
     setMetaTag('name', 'twitter:description', description);
     if (ogImage) {

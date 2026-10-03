@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, FileText, Scale, ShieldAlert, CheckCircle, Mail } from 'lucide-react';
 import SEO from '../components/SEO';
+import { SITE_CONFIG } from '../config/site';
 
 export default function TermsPage() {
   const lastUpdated = 'September 27, 2026';
@@ -11,7 +12,7 @@ export default function TermsPage() {
       <SEO
         title="Terms and Conditions | Harshit Rai Portfolio"
         description="Terms of service and acceptable use conditions for Harshit Rai's developer portfolio."
-        canonicalUrl="https://harshitrai.com/terms"
+        canonicalUrl={`${SITE_CONFIG.url}terms`}
         ogType="website"
       />
 
@@ -46,7 +47,7 @@ export default function TermsPage() {
             <span>1. Acceptance of Terms</span>
           </h2>
           <p>
-            By accessing or browsing this website (harshitrai.com), you acknowledge that you have read, understood, and agree to be bound by these Terms & Conditions and the accompanying Privacy Policy. If you do not agree with any portion of these terms, please discontinue use of this website.
+            By accessing or browsing this website (harshit-rai-portfolio.vercel.app), you acknowledge that you have read, understood, and agree to be bound by these Terms & Conditions and the accompanying Privacy Policy. If you do not agree with any portion of these terms, please discontinue use of this website.
           </p>
         </section>
 

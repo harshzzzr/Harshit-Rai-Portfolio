@@ -7,10 +7,8 @@ import {
   Wrench,
   Smartphone,
   Cpu,
-  Layers,
   AlertCircle,
-  RefreshCw,
-  Sparkles
+  RefreshCw
 } from 'lucide-react';
 
 const categoryIcons = {

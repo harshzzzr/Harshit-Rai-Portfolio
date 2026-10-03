@@ -25,7 +25,6 @@ import {
   RefreshCw,
   Sparkles,
   Calendar,
-  Building2,
   Layers
 } from 'lucide-react';
 

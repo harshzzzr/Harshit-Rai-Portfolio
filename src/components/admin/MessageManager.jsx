@@ -3,10 +3,7 @@ import {
   getMessages,
   updateMessageStatus,
   deleteMessage,
-  markMessageRead,
-  markMessageUnread,
-  archiveMessage,
-  unarchiveMessage
+  markMessageRead
 } from '../../services/messageService';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import {
@@ -22,11 +19,8 @@ import {
   X,
   RefreshCw,
   ExternalLink,
-  Clock,
-  User,
   Inbox,
-  Send,
-  Sparkles
+  Send
 } from 'lucide-react';
 
 export default function MessageManager({ onMessageChanged }) {

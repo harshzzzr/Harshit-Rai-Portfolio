@@ -18,10 +18,7 @@ import {
   CheckCircle2,
   AlertCircle,
   X,
-  RefreshCw,
-  Sparkles,
-  Layers,
-  ArrowUpDown
+  RefreshCw
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -172,7 +169,7 @@ export default function SkillManager({ onSkillChanged }) {
         type: 'success',
         message: `Skill "${skill.name}" is now ${skill.visible ? 'hidden' : 'visible'}.`,
       });
-    } catch (err) {
+    } catch (_err) {
       setFeedback({ type: 'error', message: 'Failed to update visibility.' });
     }
   };

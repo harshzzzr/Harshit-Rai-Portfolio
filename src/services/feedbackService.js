@@ -67,18 +67,16 @@ function sanitizeString(str) {
 }
 
 /**
- * Submit public feedback
- * Strictly stores submission with status: 'pending'
- * Rating must be an integer between 1 and 5
+ * Validate feedback payload with rating (1-5), bounds, and bot detection
  */
-export async function submitFeedback({ name, rating, feedback, honeypot = '' }) {
+export function validateFeedbackPayload({ name, rating, feedback, honeypot = '' }) {
   // Anti-bot honeypot check
   if (honeypot && honeypot.trim().length > 0) {
-    console.warn('[FeedbackService] Bot submission rejected via honeypot.');
     return {
-      success: true,
-      message: 'Feedback submitted successfully.',
-      id: 'bot-filtered'
+      isValid: false,
+      isBot: true,
+      error: 'Automated spam submission detected.',
+      errors: { general: 'Spam submission detected.' },
     };
   }
 
@@ -105,10 +103,39 @@ export async function submitFeedback({ name, rating, feedback, honeypot = '' }) 
     errors.feedback = 'Feedback cannot exceed 1000 characters.';
   }
 
-  if (Object.keys(errors).length > 0) {
-    return { success: false, errors };
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors,
+    sanitized: {
+      name: cleanName,
+      rating: cleanRating,
+      feedback: cleanFeedback,
+    },
+  };
+}
+
+/**
+ * Submit public feedback
+ * Strictly stores submission with status: 'pending'
+ * Rating must be an integer between 1 and 5
+ */
+export async function submitFeedback(payload) {
+  const validation = validateFeedbackPayload(payload || {});
+
+  if (validation.isBot) {
+    console.warn('[FeedbackService] Bot submission rejected via honeypot.');
+    return {
+      success: true,
+      message: 'Feedback submitted successfully.',
+      id: 'bot-filtered',
+    };
   }
 
+  if (!validation.isValid) {
+    return { success: false, errors: validation.errors };
+  }
+
+  const { name: cleanName, rating: cleanRating, feedback: cleanFeedback } = validation.sanitized;
   const nowIso = new Date().toISOString();
 
   // Firestore submission

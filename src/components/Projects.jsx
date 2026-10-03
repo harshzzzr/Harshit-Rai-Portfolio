@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getProjects } from '../services/projectService';
 import ProjectCard from './ProjectCard';
-import { RefreshCw, AlertCircle, Sparkles, FolderX } from 'lucide-react';
+import { RefreshCw, AlertCircle, FolderX } from 'lucide-react';
 
 export default function Projects() {
   const [projects, setProjects] = useState([]);

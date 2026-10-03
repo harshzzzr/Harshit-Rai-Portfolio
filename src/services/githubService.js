@@ -8,16 +8,10 @@ export const GITHUB_USERNAME =
 export const GITHUB_PROFILE_URL =
   import.meta.env.VITE_GITHUB_URL || personalInfo.socials.github || `https://github.com/${GITHUB_USERNAME}`;
 
-export const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN || '';
-
 export function getGitHubHeaders() {
-  const headers = {
+  return {
     Accept: 'application/vnd.github.v3+json'
   };
-  if (GITHUB_TOKEN && !GITHUB_TOKEN.includes('your_')) {
-    headers.Authorization = `Bearer ${GITHUB_TOKEN}`;
-  }
-  return headers;
 }
 
 /**

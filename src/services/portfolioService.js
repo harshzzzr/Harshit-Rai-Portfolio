@@ -2,12 +2,38 @@
  * Centralized Portfolio Service Layer
  * Re-exports domain services for projects, skills, education, and timeline
  */
-export { getProjects, getProjectById, seedFirestoreProjects } from './projectService';
-export { getSkills, seedFirestoreSkills } from './skillService';
+export {
+  getProjects,
+  getProjectById,
+  createProject,
+  updateProject,
+  deleteProject,
+  toggleProjectFeatured,
+  toggleProjectVisibility,
+  seedFirestoreProjects
+} from './projectService';
+export {
+  getSkills,
+  seedFirestoreSkills,
+  createSkill,
+  updateSkill,
+  deleteSkill,
+  toggleSkillVisibility
+} from './skillService';
 export {
   getEducation,
+  createEducation,
+  updateEducation,
+  deleteEducation,
+  toggleEducationVisibility,
+  seedFirestoreEducation
+} from './educationService';
+export {
   getTimelineData,
-  seedFirestoreEducation,
+  createTimelineItem,
+  updateTimelineItem,
+  deleteTimelineItem,
+  toggleTimelineItemVisibility,
   seedFirestoreTimeline
 } from './timelineService';
 export {
@@ -56,5 +82,3 @@ export {
   seedDemoAnalytics,
   clearAnalytics
 } from './analyticsService';
-
-

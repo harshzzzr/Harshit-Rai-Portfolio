@@ -12,14 +12,15 @@ import SpotifySection from '../components/SpotifySection';
 import Feedback from '../components/Feedback';
 import Contact from '../components/Contact';
 import SEO from '../components/SEO';
+import { SITE_CONFIG } from '../config/site';
 
 export default function HomePage() {
   return (
     <div className="w-full">
       <SEO
-        title="Harshit Rai | Developer Portfolio"
-        description="Explore the portfolio of Harshit Rai: Computer Engineering student and developer specializing in C++, React, Node.js, and high-performance software systems."
-        canonicalUrl="https://harshitrai.com/"
+        title={SITE_CONFIG.title}
+        description={SITE_CONFIG.description}
+        canonicalUrl={SITE_CONFIG.url}
         ogType="website"
       />
       <Hero />

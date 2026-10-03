@@ -14,14 +14,9 @@ import {
   GitFork,
   Search,
   RefreshCw,
-  AlertCircle,
-  Clock,
   FolderGit2,
-  Code2,
-  Users,
-  CheckCircle2,
-  Sparkles,
-  X
+  X,
+  AlertCircle
 } from 'lucide-react';
 
 export default function GitHubSection() {

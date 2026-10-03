@@ -7,8 +7,7 @@ import {
   Loader2,
   ShieldCheck,
   MessageSquareQuote,
-  Clock,
-  Sparkles
+  Clock
 } from 'lucide-react';
 import { submitFeedback, getApprovedFeedback } from '../services/feedbackService';
 

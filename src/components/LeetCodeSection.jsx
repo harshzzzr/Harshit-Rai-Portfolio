@@ -11,12 +11,10 @@ import {
   ExternalLink,
   RefreshCw,
   Code2,
-  CheckCircle2,
   Cpu,
   Boxes,
   GitBranch,
   ShieldCheck,
-  TrendingUp,
   Award,
   Zap
 } from 'lucide-react';

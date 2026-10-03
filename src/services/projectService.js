@@ -5,7 +5,6 @@ import {
   getDoc,
   query,
   where,
-  orderBy,
   setDoc,
   updateDoc,
   deleteDoc,
@@ -29,16 +28,23 @@ export function invalidateProjectsCache() {
 }
 
 /**
- * Standardize project object ensuring all Version 3.2 required fields are present
+ * Standardize project object ensuring all required fields are present
  */
 export function normalizeProject(data, id) {
   const finalId = id || data.id || data.slug || `proj-${Date.now()}`;
+  const title = data.title || 'Untitled Project';
+  const desc = data.description || data.shortDescription || '';
+  const overv = data.overview || data.fullDescription || '';
+
   return {
     id: finalId,
     slug: data.slug || data.id || finalId,
-    title: data.title || 'Untitled Project',
-    shortDescription: data.shortDescription || data.description || '',
-    fullDescription: data.fullDescription || data.overview || '',
+    title,
+    tagline: data.tagline || '',
+    description: desc,
+    shortDescription: data.shortDescription || desc,
+    overview: overv,
+    fullDescription: data.fullDescription || overv,
     problem: data.problem || '',
     solution: data.solution || '',
     features: Array.isArray(data.features)
@@ -52,9 +58,9 @@ export function normalizeProject(data, id) {
     githubUrl: data.githubUrl || null,
     liveUrl: data.liveUrl || null,
     featured: Boolean(data.featured),
+    category: data.category || 'Engineering',
     visible: data.visible !== false,
     badge: data.badge || (data.featured ? 'Featured Project' : 'Project Architecture'),
-    tagline: data.tagline || '',
     order: typeof data.order === 'number' ? data.order : 99,
     createdAt: data.createdAt || new Date().toISOString(),
     updatedAt: data.updatedAt || new Date().toISOString(),
@@ -187,6 +193,14 @@ export async function getProjects(options = {}) {
   }
 }
 
+export const SLUG_ALIASES = {
+  'fullstack-web-platform': 'campus-connect',
+  'iot-embedded-system': 'drone-detection',
+  'interactive-3d-simulation': 'vip-framework',
+  'interactive-android-utility': 'android-jetpack-compose',
+  'database-management-system': 'transport-logistics',
+};
+
 /**
  * Fetch a single project by ID or slug
  * Returns not-found error if project is marked visible: false and includeHidden is false
@@ -198,11 +212,15 @@ export async function getProjectById(projectIdOrSlug, options = {}) {
     return { data: null, error: 'Project identifier is required', isLive: false };
   }
 
+  const lookupKey = projectIdOrSlug;
+  const aliasKey = SLUG_ALIASES[projectIdOrSlug];
+
+  const matchesKey = (p) =>
+    p.id === lookupKey || p.slug === lookupKey || (aliasKey && (p.id === aliasKey || p.slug === aliasKey));
+
   // Fast memory lookup
   if (memoryProjectsCache) {
-    const found = memoryProjectsCache.find(
-      (p) => p.id === projectIdOrSlug || p.slug === projectIdOrSlug
-    );
+    const found = memoryProjectsCache.find(matchesKey);
     if (found) {
       if (!includeHidden && found.visible === false) {
         return { data: null, error: 'Project not found', isLive: Boolean(isFirebaseConfigured && db) };
@@ -213,9 +231,7 @@ export async function getProjectById(projectIdOrSlug, options = {}) {
 
   if (!isFirebaseConfigured || !db) {
     const localList = getStoredLocalProjects();
-    const local = localList.find(
-      (p) => p.id === projectIdOrSlug || p.slug === projectIdOrSlug
-    );
+    const local = localList.find(matchesKey);
     if (local && !includeHidden && local.visible === false) {
       return { data: null, error: 'Project not found', isLive: false };
     }
@@ -264,9 +280,7 @@ export async function getProjectById(projectIdOrSlug, options = {}) {
   } catch (err) {
     console.warn(`[Firebase] Firestore getProjectById(${projectIdOrSlug}) error, using fallback:`, err.message);
     const localList = getStoredLocalProjects();
-    const local = localList.find(
-      (p) => p.id === projectIdOrSlug || p.slug === projectIdOrSlug
-    );
+    const local = localList.find(matchesKey);
     if (local && !includeHidden && local.visible === false) {
       return { data: null, error: 'Project not found', isLive: false };
     }

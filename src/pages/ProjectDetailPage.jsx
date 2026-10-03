@@ -12,14 +12,13 @@ import {
   Target,
   Lightbulb,
   Image as ImageIcon,
-  Calendar,
-  Clock,
   RefreshCw
 } from 'lucide-react';
 import { GithubIcon } from '../components/Icons';
 import SafeImage from '../components/SafeImage';
 import SEO from '../components/SEO';
 import { useAuth } from '../context/AuthContext';
+import { SITE_CONFIG } from '../config/site';
 
 export default function ProjectDetailPage() {
   const { projectId } = useParams();
@@ -141,7 +140,7 @@ export default function ProjectDetailPage() {
 
   const projectSeoTitle = `${project.title} | Harshit Rai Developer Portfolio`;
   const projectSeoDesc = project.shortDescription || project.description || `${project.title} software engineering project by Harshit Rai, built with ${(project.technologies || []).join(', ')}.`;
-  const projectCanonical = `https://harshitrai.com/projects/${projectId}`;
+  const projectCanonical = `${SITE_CONFIG.url}projects/${projectId}`;
   const projectJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareSourceCode',
@@ -153,7 +152,7 @@ export default function ProjectDetailPage() {
     'author': {
       '@type': 'Person',
       'name': 'Harshit Rai',
-      'url': 'https://harshitrai.com'
+      'url': SITE_CONFIG.url
     }
   };
 
@@ -164,7 +163,7 @@ export default function ProjectDetailPage() {
         description={projectSeoDesc}
         canonicalUrl={projectCanonical}
         ogType="article"
-        ogImage={project.image || 'https://harshitrai.com/images/og-preview.png'}
+        ogImage={project.image || SITE_CONFIG.ogImage}
         jsonLd={projectJsonLd}
       />
       {/* Top Back Navigation */}

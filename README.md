@@ -2,8 +2,7 @@
 
 A modern, responsive personal portfolio built with **React**, **Vite**, and **Tailwind CSS**, powered by **Firebase** and deployed on **Vercel**.
 
-🌐 **Live Demo:** [harshit-rai-portfolio.vercel.app](https://harshit-rai-portfolio.vercel.app)  
-🔗 **Custom Domain:** [harshitrai.com](https://harshitrai.com)
+🌐 **Live Demo:** [harshit-rai-portfolio.vercel.app](https://harshit-rai-portfolio.vercel.app)
 
 ---
 

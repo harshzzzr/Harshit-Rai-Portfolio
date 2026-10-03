@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Send, CheckCircle2, AlertCircle, RefreshCw, X, ShieldCheck, Lock } from 'lucide-react';
+import { Mail, MapPin, Send, CheckCircle2, AlertCircle, RefreshCw, X, ShieldCheck } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { submitContactMessage, checkClientRateLimit } from '../services/messageService';
 

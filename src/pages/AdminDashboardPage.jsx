@@ -5,25 +5,17 @@ import { getSkills } from '../services/skillService';
 import { getEducation, getTimelineData } from '../services/timelineService';
 import { getMessageCount } from '../services/messageService';
 import { getAllFeedback } from '../services/feedbackService';
-import { db, isFirebaseConfigured } from '../firebase/config';
-import { collection, getDocs } from 'firebase/firestore';
-import { COLLECTIONS } from '../firebase/collections';
 import {
   FolderGit2,
   Code,
   Mail,
   MessageSquareQuote,
-  GraduationCap,
-  Briefcase,
-  Sparkles,
   RefreshCw,
   ExternalLink,
-  ShieldCheck,
   CheckCircle2,
   ArrowRight,
   Sliders,
-  BarChart3,
-  Eye
+  BarChart3
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProjectManager from '../components/admin/ProjectManager';

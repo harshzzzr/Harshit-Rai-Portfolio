@@ -11,9 +11,7 @@ import {
   Globe,
   ShieldCheck,
   RefreshCw,
-  Calendar,
   Flame,
-  ArrowUpRight,
   Sparkles,
   RotateCcw,
   ExternalLink,
@@ -285,9 +283,8 @@ export default function AnalyticsManager({ onDataChanged }) {
             {/* Chart Area */}
             <div className="overflow-x-auto touch-scroll pb-1">
               <div className="h-56 min-w-[320px] sm:min-w-full flex items-end gap-1.5 sm:gap-3 pt-6 pb-2 border-b border-slate-100 dark:border-slate-800">
-                {summary.dailyTrends.map((day, idx) => {
+                {summary.dailyTrends.map((day) => {
                   const totalPct = Math.max(Math.round((day.views / summary.maxDailyViews) * 100), 4);
-                  const projectPct = Math.round((day.projectViews / summary.maxDailyViews) * 100);
                   const isHovered = hoveredDay?.date === day.date;
                   const isPeak = day.views === summary.maxDailyViews && day.views > 0;
 

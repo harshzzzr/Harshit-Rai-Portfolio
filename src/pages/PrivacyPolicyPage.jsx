@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ShieldCheck, Mail, Lock, Eye, Database } from 'lucide-react';
 import SEO from '../components/SEO';
+import { SITE_CONFIG } from '../config/site';
 
 export default function PrivacyPolicyPage() {
   const lastUpdated = 'September 27, 2026';
@@ -11,7 +12,7 @@ export default function PrivacyPolicyPage() {
       <SEO
         title="Privacy Policy | Harshit Rai Portfolio"
         description="Privacy policy and data protection transparency for Harshit Rai's developer portfolio."
-        canonicalUrl="https://harshitrai.com/privacy"
+        canonicalUrl={`${SITE_CONFIG.url}privacy`}
         ogType="website"
       />
 
@@ -46,7 +47,7 @@ export default function PrivacyPolicyPage() {
             <span>1. Commitment to Privacy</span>
           </h2>
           <p>
-            This portfolio website (accessible at harshitrai.com) is operated by Harshit Rai as a personal software engineering portfolio. Respecting user privacy and maintaining data transparency are foundational principles. This website does not sell, rent, or monetize personal information.
+            This portfolio website (accessible at harshit-rai-portfolio.vercel.app) is operated by Harshit Rai as a personal software engineering portfolio. Respecting user privacy and maintaining data transparency are foundational principles. This website does not sell, rent, or monetize personal information.
           </p>
         </section>
 
