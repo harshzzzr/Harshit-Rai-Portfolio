@@ -27,7 +27,7 @@ export default function ProjectDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchProject = () => {
+  const fetchProject = React.useCallback(() => {
     let isMounted = true;
     setLoading(true);
     setError(null);
@@ -49,22 +49,91 @@ export default function ProjectDetailPage() {
     return () => {
       isMounted = false;
     };
-  };
+  }, [projectId, isAdmin]);
 
   useEffect(() => {
     const cleanup = fetchProject();
     return cleanup;
-  }, [projectId, isAdmin]);
+  }, [fetchProject]);
 
-  // Loading State
+  // Loading State Skeleton
   if (loading) {
     return (
-      <div className="min-h-[70vh] flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3 text-slate-500">
-          <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
-          <span className="text-sm font-mono">Loading project from data architecture...</span>
+      <article className="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-12 motion-safe:animate-pulse">
+        {/* Back Link Skeleton */}
+        <div className="h-5 w-36 bg-slate-200 dark:bg-slate-800 rounded-md" />
+
+        {/* Hero Header Banner Skeleton */}
+        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-10 space-y-6">
+          <div className="flex gap-2">
+            <div className="h-6 w-28 bg-slate-200 dark:bg-slate-800 rounded-md" />
+            <div className="h-6 w-24 bg-slate-200 dark:bg-slate-800 rounded-md" />
+          </div>
+          <div className="space-y-3">
+            <div className="h-10 w-3/4 sm:w-1/2 bg-slate-200 dark:bg-slate-800 rounded-lg" />
+            <div className="h-5 w-full sm:w-2/3 bg-slate-200 dark:bg-slate-800 rounded-md" />
+          </div>
+          <div className="flex flex-wrap gap-3 pt-2">
+            <div className="h-10 w-36 bg-slate-200 dark:bg-slate-800 rounded-lg" />
+            <div className="h-10 w-36 bg-slate-200 dark:bg-slate-800 rounded-lg" />
+          </div>
         </div>
-      </div>
+
+        {/* Main Details Grid Skeleton */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Column Narrative */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* Overview Card */}
+            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
+              <div className="h-6 w-40 bg-slate-200 dark:bg-slate-800 rounded" />
+              <div className="space-y-2">
+                <div className="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-4 w-5/6 bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-4 w-4/6 bg-slate-200 dark:bg-slate-800 rounded" />
+              </div>
+            </div>
+
+            {/* Problem & Solution Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+                <div className="h-5 w-28 bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-4 w-3/4 bg-slate-200 dark:bg-slate-800 rounded" />
+              </div>
+              <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+                <div className="h-5 w-28 bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-4 w-3/4 bg-slate-200 dark:bg-slate-800 rounded" />
+              </div>
+            </div>
+
+            {/* Features Checklist */}
+            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
+              <div className="h-6 w-36 bg-slate-200 dark:bg-slate-800 rounded" />
+              <div className="space-y-3">
+                {[1, 2, 3, 4].map((f) => (
+                  <div key={f} className="flex items-center gap-3">
+                    <div className="w-4 h-4 bg-slate-200 dark:bg-slate-800 rounded shrink-0" />
+                    <div className="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column Sidebar */}
+          <div className="lg:col-span-4 space-y-6">
+            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
+              <div className="h-5 w-32 bg-slate-200 dark:bg-slate-800 rounded" />
+              <div className="flex flex-wrap gap-2">
+                {[1, 2, 3, 4, 5].map((t) => (
+                  <div key={t} className="h-6 w-16 bg-slate-200 dark:bg-slate-800 rounded-md" />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
     );
   }
 

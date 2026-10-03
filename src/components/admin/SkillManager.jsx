@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   getSkills,
   createSkill,
@@ -61,7 +61,7 @@ export default function SkillManager({ onSkillChanged }) {
   const [initialSnapshot, setInitialSnapshot] = useState(JSON.stringify(initialForm));
   const [formErrors, setFormErrors] = useState({});
 
-  const fetchSkillsList = async () => {
+  const fetchSkillsList = useCallback(async () => {
     setLoading(true);
     try {
       const res = await getSkills({ includeHidden: true });
@@ -74,11 +74,11 @@ export default function SkillManager({ onSkillChanged }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [onSkillChanged]);
 
   useEffect(() => {
     fetchSkillsList();
-  }, []);
+  }, [fetchSkillsList]);
 
   const handleOpenCreate = () => {
     const fresh = {

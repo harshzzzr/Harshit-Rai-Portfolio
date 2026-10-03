@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   getTimelineData,
   createTimelineItem,
@@ -75,7 +75,7 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
   const [initialSnapshot, setInitialSnapshot] = useState(JSON.stringify(initialForm));
   const [formErrors, setFormErrors] = useState({});
 
-  const fetchTimeline = async () => {
+  const fetchTimeline = useCallback(async () => {
     setLoading(true);
     try {
       const res = await getTimelineData({ includeHidden: true });
@@ -88,11 +88,11 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
     } finally {
       setLoading(false);
     }
-  };
+  }, [onTimelineChanged]);
 
   useEffect(() => {
     fetchTimeline();
-  }, []);
+  }, [fetchTimeline]);
 
   const handleOpenCreate = () => {
     setEditingItem(null);

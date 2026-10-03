@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   getMessages,
   updateMessageStatus,
@@ -38,7 +38,7 @@ export default function MessageManager({ onMessageChanged }) {
   const [deleteConfirmMessage, setDeleteConfirmMessage] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
 
-  const fetchInbox = async () => {
+  const fetchInbox = useCallback(async () => {
     setLoading(true);
     try {
       const res = await getMessages();
@@ -51,11 +51,11 @@ export default function MessageManager({ onMessageChanged }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [onMessageChanged, showToast]);
 
   useEffect(() => {
     fetchInbox();
-  }, []);
+  }, [fetchInbox]);
 
   // Format date helper
   const formatDate = (dateString) => {

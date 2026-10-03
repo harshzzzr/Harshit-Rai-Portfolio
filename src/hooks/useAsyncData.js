@@ -34,6 +34,7 @@ export function useAsyncData(asyncFn, dependencies = []) {
     return () => {
       isMounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies);
 
   const isEmpty = !loading && (!data || (Array.isArray(data) && data.length === 0));

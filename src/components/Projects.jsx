@@ -1,16 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { getProjects } from '../services/projectService';
 import ProjectCard from './ProjectCard';
-import { RefreshCw, AlertCircle, FolderX } from 'lucide-react';
+import { RefreshCw, AlertCircle, FolderX, Search, X, Sparkles, RotateCcw } from 'lucide-react';
 
 export default function Projects() {
   const [projects, setProjects] = useState([]);
-  const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isLive, setIsLive] = useState(false);
 
-  const fetchProjects = async () => {
+  // Search & Filter State
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedTechnology, setSelectedTechnology] = useState('all');
+  const [featuredOnly, setFeaturedOnly] = useState(false);
+
+  const fetchProjects = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -23,19 +28,123 @@ export default function Projects() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [fetchProjects]);
 
-  const filteredProjects = filter === 'featured'
-    ? projects.filter((p) => p.featured)
-    : projects;
+  // Dynamically extract categories that ACTUALLY exist in the project data
+  const availableCategories = useMemo(() => {
+    const categorySet = new Set();
+    projects.forEach((p) => {
+      if (p.category && typeof p.category === 'string') {
+        categorySet.add(p.category.trim());
+      }
+    });
+    return ['all', ...Array.from(categorySet)];
+  }, [projects]);
+
+  // Dynamically extract technologies that ACTUALLY exist in the project data
+  const availableTechnologies = useMemo(() => {
+    const techSet = new Set();
+    projects.forEach((p) => {
+      if (Array.isArray(p.technologies)) {
+        p.technologies.forEach((t) => {
+          if (t && typeof t === 'string') {
+            techSet.add(t.trim());
+          }
+        });
+      }
+    });
+    return ['all', ...Array.from(techSet).sort((a, b) => a.localeCompare(b))];
+  }, [projects]);
+
+  // Combined Search & Multi-Filter Logic
+  const filteredProjects = useMemo(() => {
+    return projects.filter((project) => {
+      // 1. Featured Filter
+      if (featuredOnly && !project.featured) {
+        return false;
+      }
+
+      // 2. Category Filter
+      if (
+        selectedCategory !== 'all' &&
+        (project.category || '').toLowerCase() !== selectedCategory.toLowerCase()
+      ) {
+        return false;
+      }
+
+      // 3. Technology Filter
+      if (selectedTechnology !== 'all') {
+        const projectTechs = (project.technologies || []).map((t) => (t || '').toLowerCase());
+        if (!projectTechs.includes(selectedTechnology.toLowerCase())) {
+          return false;
+        }
+      }
+
+      // 4. Search Filter (searches title, description, technologies, category)
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matchTitle = (project.title || '').toLowerCase().includes(q);
+        const matchDesc = (project.description || project.shortDescription || project.overview || '').toLowerCase().includes(q);
+        const matchCategory = (project.category || '').toLowerCase().includes(q);
+        const matchTech = (project.technologies || []).some((t) =>
+          (t || '').toLowerCase().includes(q)
+        );
+
+        if (!matchTitle && !matchDesc && !matchCategory && !matchTech) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [projects, featuredOnly, selectedCategory, selectedTechnology, searchQuery]);
+
+  const hasActiveFilters =
+    searchQuery.trim() !== '' ||
+    selectedCategory !== 'all' ||
+    selectedTechnology !== 'all' ||
+    featuredOnly;
+
+  const handleClearFilters = () => {
+    setSearchQuery('');
+    setSelectedCategory('all');
+    setSelectedTechnology('all');
+    setFeaturedOnly(false);
+  };
+
+  // Determine empty state message based on active controls
+  const getEmptyStateMessage = () => {
+    if (projects.length === 0) {
+      return {
+        title: 'No Projects Available',
+        description: 'No portfolio projects have been loaded yet.',
+      };
+    }
+    if (searchQuery.trim() && !featuredOnly && selectedCategory === 'all' && selectedTechnology === 'all') {
+      return {
+        title: 'No Projects Found',
+        description: 'No projects found. Try another search.',
+      };
+    }
+    if (!searchQuery.trim() && (featuredOnly || selectedCategory !== 'all' || selectedTechnology !== 'all')) {
+      return {
+        title: 'No Projects Found',
+        description: 'No projects found. Try another filter.',
+      };
+    }
+    return {
+      title: 'No Projects Found',
+      description: 'No projects match your search and filter criteria. Try clearing filters.',
+    };
+  };
 
   return (
     <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-200 dark:border-slate-800/60">
-      <div className="max-w-6xl mx-auto space-y-12">
+      <div className="max-w-6xl mx-auto space-y-10">
         {/* Section Header */}
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-mono font-medium bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 mb-1">
@@ -51,47 +160,153 @@ export default function Projects() {
           <div className="w-12 h-1 bg-primary-500 mx-auto rounded-sm mt-2" />
         </div>
 
-        {/* Filter Controls & Actions */}
+        {/* Search & Multi-Filter Controls */}
         {!loading && !error && projects.length > 0 && (
-          <div role="tablist" aria-label="Project category filters" className="flex flex-wrap items-center justify-center gap-2">
-            <button
-              id="tab-filter-all"
-              role="tab"
-              aria-selected={filter === 'all'}
-              aria-controls="projects-grid"
-              onClick={() => setFilter('all')}
-              className={`px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 ${
-                filter === 'all'
-                  ? 'bg-primary-600 text-white shadow-sm'
-                  : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
-              }`}
+          <div className="space-y-4">
+            {/* Top Row: Search Input & Controls */}
+            <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+              {/* Search Bar */}
+              <div className="relative flex-1" role="search">
+                <Search
+                  size={16}
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 pointer-events-none"
+                  aria-hidden="true"
+                />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search projects..."
+                  aria-label="Search projects by title, description, category, or technology"
+                  className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-xs sm:text-sm focus-visible:ring-2 focus-visible:ring-primary-500 shadow-xs transition-colors"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    aria-label="Clear search query"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-md transition-colors cursor-pointer"
+                  >
+                    <X size={15} />
+                  </button>
+                )}
+              </div>
+
+              {/* Secondary Selectors (Tech Dropdown & Featured Toggle) */}
+              <div className="flex flex-wrap items-center gap-2.5">
+                {/* Technology Selector */}
+                {availableTechnologies.length > 1 && (
+                  <div className="relative flex items-center">
+                    <label htmlFor="tech-filter" className="sr-only">
+                      Filter by Technology
+                    </label>
+                    <select
+                      id="tech-filter"
+                      value={selectedTechnology}
+                      onChange={(e) => setSelectedTechnology(e.target.value)}
+                      className="px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium focus-visible:ring-2 focus-visible:ring-primary-500 shadow-xs cursor-pointer"
+                    >
+                      <option value="all">All Technologies</option>
+                      {availableTechnologies
+                        .filter((t) => t !== 'all')
+                        .map((tech) => (
+                          <option key={tech} value={tech}>
+                            {tech}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                )}
+
+                {/* Featured Status Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setFeaturedOnly((prev) => !prev)}
+                  aria-pressed={featuredOnly}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer shadow-xs focus-visible:ring-2 focus-visible:ring-primary-500 ${
+                    featuredOnly
+                      ? 'bg-amber-500 text-white shadow-amber-500/20'
+                      : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  <Sparkles size={13} className={featuredOnly ? 'text-white' : 'text-amber-500'} />
+                  <span>Featured Only</span>
+                </button>
+
+                {/* Clear Filters Button (Visible when filters are active) */}
+                {hasActiveFilters && (
+                  <button
+                    type="button"
+                    onClick={handleClearFilters}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50 border border-rose-200 dark:border-rose-900 transition-colors cursor-pointer"
+                  >
+                    <RotateCcw size={12} />
+                    <span>Clear Filters</span>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Bottom Row: Category Pills Bar */}
+            <div
+              role="group"
+              aria-label="Filter projects by category"
+              className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar"
             >
-              All Projects ({projects.length})
-            </button>
-            <button
-              id="tab-filter-featured"
-              role="tab"
-              aria-selected={filter === 'featured'}
-              aria-controls="projects-grid"
-              onClick={() => setFilter('featured')}
-              className={`px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 ${
-                filter === 'featured'
-                  ? 'bg-primary-600 text-white shadow-sm'
-                  : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
-              }`}
-            >
-              Featured Only ({projects.filter((p) => p.featured).length})
-            </button>
+              {availableCategories.map((category) => {
+                const isSelected = selectedCategory.toLowerCase() === category.toLowerCase();
+                const count =
+                  category === 'all'
+                    ? projects.length
+                    : projects.filter(
+                        (p) => (p.category || '').toLowerCase() === category.toLowerCase()
+                      ).length;
+
+                return (
+                  <button
+                    key={category}
+                    type="button"
+                    onClick={() => setSelectedCategory(category)}
+                    aria-pressed={isSelected}
+                    className={`px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 ${
+                      isSelected
+                        ? 'bg-primary-600 text-white shadow-xs'
+                        : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <span className="capitalize">{category === 'all' ? 'All Categories' : category}</span>
+                    <span className="ml-1.5 opacity-70 font-mono text-[11px]">({count})</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Result summary count when filters are active */}
+            {hasActiveFilters && (
+              <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 px-1">
+                <span>
+                  Showing <strong className="text-slate-800 dark:text-slate-200">{filteredProjects.length}</strong> of{' '}
+                  {projects.length} projects
+                </span>
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  className="text-xs text-primary-600 dark:text-primary-400 hover:underline cursor-pointer"
+                >
+                  Reset all
+                </button>
+              </div>
+            )}
           </div>
         )}
 
-        {/* Loading State Skeleton */}
+        {/* Loading State Skeleton (respects prefers-reduced-motion) */}
         {loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3].map((skeletonId) => (
               <div
                 key={skeletonId}
-                className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 space-y-4 animate-pulse"
+                className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 space-y-4 motion-safe:animate-pulse"
               >
                 <div className="h-44 w-full bg-slate-200 dark:bg-slate-800 rounded-lg" />
                 <div className="space-y-2">
@@ -124,7 +339,7 @@ export default function Projects() {
             </div>
             <button
               onClick={fetchProjects}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition-colors cursor-pointer"
             >
               <RefreshCw size={14} />
               <span>Retry</span>
@@ -132,27 +347,29 @@ export default function Projects() {
           </div>
         )}
 
-        {/* Empty State */}
+        {/* Meaningful Empty States for Search & Filters */}
         {!loading && !error && filteredProjects.length === 0 && (
-          <div className="text-center py-16 px-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 max-w-lg mx-auto space-y-3">
+          <div className="text-center py-16 px-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 max-w-lg mx-auto space-y-3 animate-fade-in">
             <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 mx-auto flex items-center justify-center">
               <FolderX size={24} />
             </div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              No Projects Found
+              {getEmptyStateMessage().title}
             </h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              {filter === 'featured'
-                ? 'No projects are currently marked as featured.'
-                : 'No projects have been added yet.'}
+            <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+              {getEmptyStateMessage().description}
             </p>
-            {filter === 'featured' && (
-              <button
-                onClick={() => setFilter('all')}
-                className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline"
-              >
-                View all projects instead
-              </button>
+            {hasActiveFilters && (
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold transition-colors cursor-pointer shadow-xs focus-visible:ring-2 focus-visible:ring-primary-500"
+                >
+                  <RotateCcw size={13} />
+                  <span>Clear Filters</span>
+                </button>
+              </div>
             )}
           </div>
         )}
@@ -161,8 +378,6 @@ export default function Projects() {
         {!loading && !error && filteredProjects.length > 0 && (
           <div
             id="projects-grid"
-            role="tabpanel"
-            aria-labelledby={`tab-filter-${filter}`}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {filteredProjects.map((project) => (

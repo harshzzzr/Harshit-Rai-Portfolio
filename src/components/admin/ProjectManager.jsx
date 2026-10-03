@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   getProjects,
   deleteProject,
@@ -40,7 +40,7 @@ export default function ProjectManager({ onProjectChanged }) {
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   // Load Projects (Admin retrieves all including drafts)
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     setLoading(true);
     try {
       const res = await getProjects({ includeHidden: true });
@@ -53,11 +53,11 @@ export default function ProjectManager({ onProjectChanged }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [onProjectChanged]);
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [fetchProjects]);
 
   const handleOpenCreate = () => {
     setEditingProject(null);

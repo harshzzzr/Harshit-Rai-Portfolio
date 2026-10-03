@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   getEducation,
   createEducation,
@@ -55,7 +55,7 @@ export default function EducationManager({ onEducationChanged }) {
   const [courseInput, setCourseInput] = useState('');
   const [formErrors, setFormErrors] = useState({});
 
-  const fetchEducationList = async () => {
+  const fetchEducationList = useCallback(async () => {
     setLoading(true);
     try {
       const res = await getEducation({ includeHidden: true });
@@ -68,11 +68,11 @@ export default function EducationManager({ onEducationChanged }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [onEducationChanged]);
 
   useEffect(() => {
     fetchEducationList();
-  }, []);
+  }, [fetchEducationList]);
 
   const handleOpenCreate = () => {
     const fresh = {

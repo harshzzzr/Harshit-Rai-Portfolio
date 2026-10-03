@@ -68,10 +68,11 @@ describe('AdminModal Component', () => {
     expect(handleClose).not.toHaveBeenCalled();
 
     // Confirm prompt should appear
-    expect(screen.getByText('Discard unsaved changes?')).toBeInTheDocument();
+    expect(screen.getByText('Discard changes?')).toBeInTheDocument();
+    expect(screen.getByText('Your changes have not been saved.')).toBeInTheDocument();
 
-    // Clicking "Discard Changes" confirms
-    const discardBtn = screen.getByRole('button', { name: /discard changes/i });
+    // Clicking "Discard" confirms
+    const discardBtn = screen.getByRole('button', { name: /^discard$/i });
     fireEvent.click(discardBtn);
     expect(handleClose).toHaveBeenCalledTimes(1);
   });

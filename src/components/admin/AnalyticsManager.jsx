@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   BarChart3,
   TrendingUp,
@@ -36,7 +36,7 @@ export default function AnalyticsManager({ onDataChanged }) {
   const [confirmResetOpen, setConfirmResetOpen] = useState(false);
   const [resetting, setResetting] = useState(false);
 
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = useCallback(async () => {
     setLoading(true);
     try {
       const data = await getAnalyticsSummary(timeframe);
@@ -46,11 +46,11 @@ export default function AnalyticsManager({ onDataChanged }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [timeframe]);
 
   useEffect(() => {
     fetchAnalytics();
-  }, [timeframe]);
+  }, [fetchAnalytics]);
 
   const handleSeedDemo = () => {
     const count = seedDemoAnalytics();

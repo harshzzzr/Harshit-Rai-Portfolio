@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Send, CheckCircle2, AlertCircle, RefreshCw, X, ShieldCheck } from 'lucide-react';
+import { Mail, MapPin, Send, CheckCircle2, AlertCircle, RefreshCw, X, ShieldCheck, Copy, Check } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { submitContactMessage, checkClientRateLimit } from '../services/messageService';
+import { useToast } from '../context/ToastContext';
 
 export default function Contact() {
+  const { showToast } = useToast();
+  const [copiedEmail, setCopiedEmail] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -83,6 +86,34 @@ export default function Contact() {
     }
   };
 
+  const handleCopyEmail = async () => {
+    const emailToCopy = personalInfo.contact.email;
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(emailToCopy);
+      } else if (typeof document !== 'undefined') {
+        const textArea = document.createElement('textarea');
+        textArea.value = emailToCopy;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        if (!successful) throw new Error('execCommand failed');
+      } else {
+        throw new Error('Clipboard unavailable');
+      }
+      setCopiedEmail(true);
+      showToast('Email copied to clipboard!', 'success');
+      setTimeout(() => setCopiedEmail(false), 2500);
+    } catch {
+      showToast('Unable to copy email. Please copy it manually.', 'error');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
@@ -145,18 +176,37 @@ export default function Contact() {
             </div>
 
             <div className="space-y-4 pt-2">
-              <div className="flex items-start gap-3 sm:gap-4">
-                <div className="p-3 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 shrink-0">
-                  <Mail size={20} />
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+                <div className="flex items-start gap-3 min-w-0">
+                  <div className="p-2.5 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 shrink-0">
+                    <Mail size={18} />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-xs font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 font-semibold block">
+                      Direct Email
+                    </span>
+                    <a
+                      href={`mailto:${personalInfo.contact.email}`}
+                      className="text-sm font-medium text-slate-800 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 break-all transition-colors"
+                    >
+                      {personalInfo.contact.email}
+                    </a>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <span className="text-xs font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 font-semibold block">
-                    Direct Email
-                  </span>
-                  <span className="text-sm font-medium text-slate-800 dark:text-slate-200 break-all">
-                    {personalInfo.contact.email}
-                  </span>
-                </div>
+                <button
+                  type="button"
+                  onClick={handleCopyEmail}
+                  aria-label={copiedEmail ? 'Email copied' : 'Copy email address'}
+                  title={copiedEmail ? 'Email copied!' : 'Copy Email'}
+                  className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all shrink-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 self-start sm:self-center ${
+                    copiedEmail
+                      ? 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 shadow-xs'
+                      : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  {copiedEmail ? <Check size={14} className="text-emerald-600 dark:text-emerald-400" /> : <Copy size={14} />}
+                  <span>{copiedEmail ? 'Email copied!' : 'Copy Email'}</span>
+                </button>
               </div>
 
               <div className="flex items-start gap-3 sm:gap-4">

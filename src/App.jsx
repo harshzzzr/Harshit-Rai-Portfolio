@@ -7,7 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
 import AnalyticsTracker from './components/AnalyticsTracker';
 import ErrorBoundary from './components/ErrorBoundary';
-import { AdminToastProvider } from './components/admin/ui/AdminToast';
+import { ToastProvider } from './context/ToastContext';
 
 // Route-level code splitting
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -36,76 +36,76 @@ export default function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <Router>
-          <AnalyticsTracker />
-          <ScrollToTop />
-          <ErrorBoundary>
-            <Suspense fallback={<RouteLoadingFallback />}>
-              <Routes>
-              {/* Public Portfolio Routes */}
-              <Route
-                path="/"
-                element={
-                  <MainLayout>
-                    <HomePage />
-                  </MainLayout>
-                }
-              />
-              <Route
-                path="/projects/:projectId"
-                element={
-                  <MainLayout>
-                    <ProjectDetailPage />
-                  </MainLayout>
-                }
-              />
-              <Route
-                path="/privacy"
-                element={
-                  <MainLayout>
-                    <PrivacyPolicyPage />
-                  </MainLayout>
-                }
-              />
-              <Route
-                path="/terms"
-                element={
-                  <MainLayout>
-                    <TermsPage />
-                  </MainLayout>
-                }
-              />
+        <ToastProvider>
+          <Router>
+            <AnalyticsTracker />
+            <ScrollToTop />
+            <ErrorBoundary>
+              <Suspense fallback={<RouteLoadingFallback />}>
+                <Routes>
+                  {/* Public Portfolio Routes */}
+                  <Route
+                    path="/"
+                    element={
+                      <MainLayout>
+                        <HomePage />
+                      </MainLayout>
+                    }
+                  />
+                  <Route
+                    path="/projects/:projectId"
+                    element={
+                      <MainLayout>
+                        <ProjectDetailPage />
+                      </MainLayout>
+                    }
+                  />
+                  <Route
+                    path="/privacy"
+                    element={
+                      <MainLayout>
+                        <PrivacyPolicyPage />
+                      </MainLayout>
+                    }
+                  />
+                  <Route
+                    path="/terms"
+                    element={
+                      <MainLayout>
+                        <TermsPage />
+                      </MainLayout>
+                    }
+                  />
 
-              {/* Admin Authentication & Console */}
-              <Route path="/admin/login" element={<AdminLoginPage />} />
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute>
-                    <AdminToastProvider>
-                      <AdminDashboardPage />
-                    </AdminToastProvider>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/*"
-                element={<Navigate to="/admin" replace />}
-              />
+                  {/* Admin Authentication & Console */}
+                  <Route path="/admin/login" element={<AdminLoginPage />} />
+                  <Route
+                    path="/admin"
+                    element={
+                      <ProtectedRoute>
+                        <AdminDashboardPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/*"
+                    element={<Navigate to="/admin" replace />}
+                  />
 
-              {/* 404 Fallback */}
-              <Route
-                path="*"
-                element={
-                  <MainLayout>
-                    <NotFoundPage />
-                  </MainLayout>
-                }
-              />
-            </Routes>
-          </Suspense>
-        </ErrorBoundary>
-      </Router>
+                  {/* 404 Fallback */}
+                  <Route
+                    path="*"
+                    element={
+                      <MainLayout>
+                        <NotFoundPage />
+                      </MainLayout>
+                    }
+                  />
+                </Routes>
+              </Suspense>
+            </ErrorBoundary>
+          </Router>
+        </ToastProvider>
       </AuthProvider>
     </ThemeProvider>
   );

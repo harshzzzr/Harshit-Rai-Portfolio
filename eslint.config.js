@@ -76,7 +76,10 @@ export default [
       'no-empty': ['error', { allowEmptyCatch: true }],
       'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true }
+        {
+          allowConstantExport: true,
+          allowExportNames: ['useTheme', 'useAuth', 'useToast', 'useAdminToast']
+        }
       ],
       'no-unused-vars': [
         'warn',

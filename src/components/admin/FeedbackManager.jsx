@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   getAllFeedback,
   approveFeedback,
@@ -38,7 +38,7 @@ export default function FeedbackManager({ onFeedbackChanged }) {
   const [deleteConfirmItem, setDeleteConfirmItem] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
 
-  const fetchFeedback = async () => {
+  const fetchFeedback = useCallback(async () => {
     setLoading(true);
     try {
       const res = await getAllFeedback();
@@ -51,11 +51,11 @@ export default function FeedbackManager({ onFeedbackChanged }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [onFeedbackChanged, showToast]);
 
   useEffect(() => {
     fetchFeedback();
-  }, []);
+  }, [fetchFeedback]);
 
   // Compute stats
   const counts = {

@@ -208,10 +208,10 @@ export default function AdminModal({
                 </div>
                 <div>
                   <h3 id="unsaved-prompt-title" className="text-sm font-bold text-slate-900 dark:text-white">
-                    Discard unsaved changes?
+                    Discard changes?
                   </h3>
                   <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
-                    You have modified information that hasn't been saved. Closing now will lose these edits.
+                    Your changes have not been saved.
                   </p>
                 </div>
               </div>
@@ -219,9 +219,9 @@ export default function AdminModal({
                 <button
                   type="button"
                   onClick={() => setShowUnsavedPrompt(false)}
-                  className="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
                 >
-                  Keep Editing
+                  Cancel
                 </button>
                 <button
                   type="button"
@@ -231,7 +231,7 @@ export default function AdminModal({
                   }}
                   className="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 transition-colors shadow-xs cursor-pointer"
                 >
-                  Discard Changes
+                  Discard
                 </button>
               </div>
             </div>
