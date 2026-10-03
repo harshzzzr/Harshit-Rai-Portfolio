@@ -7,6 +7,8 @@ import {
   toggleEducationVisibility
 } from '../../services/educationService';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import AdminModal from './ui/AdminModal';
+import { useAdminToast } from './ui/AdminToast';
 import {
   Plus,
   Search,
@@ -29,11 +31,13 @@ export default function EducationManager({ onEducationChanged }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [feedback, setFeedback] = useState(null);
 
+  const { showToast } = useAdminToast();
   // Modal States
   const [modalOpen, setModalOpen] = useState(false);
   const [editingEdu, setEditingEdu] = useState(null);
   const [deleteConfirmEdu, setDeleteConfirmEdu] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   // Form State
   const initialForm = {
@@ -46,6 +50,7 @@ export default function EducationManager({ onEducationChanged }) {
     courses: [],
   };
   const [formData, setFormData] = useState(initialForm);
+  const [initialSnapshot, setInitialSnapshot] = useState(JSON.stringify(initialForm));
   const [highlightInput, setHighlightInput] = useState('');
   const [courseInput, setCourseInput] = useState('');
   const [formErrors, setFormErrors] = useState({});
@@ -70,13 +75,15 @@ export default function EducationManager({ onEducationChanged }) {
   }, []);
 
   const handleOpenCreate = () => {
-    setEditingEdu(null);
-    setFormData({
+    const fresh = {
       ...initialForm,
       order: educationList.length + 1,
       highlights: [],
       courses: [],
-    });
+    };
+    setEditingEdu(null);
+    setFormData(fresh);
+    setInitialSnapshot(JSON.stringify(fresh));
     setHighlightInput('');
     setCourseInput('');
     setFormErrors({});
@@ -84,8 +91,7 @@ export default function EducationManager({ onEducationChanged }) {
   };
 
   const handleOpenEdit = (edu) => {
-    setEditingEdu(edu);
-    setFormData({
+    const editData = {
       degree: edu.degree || '',
       institution: edu.institution || '',
       status: edu.status || 'Graduated',
@@ -93,12 +99,17 @@ export default function EducationManager({ onEducationChanged }) {
       visible: edu.visible !== false,
       highlights: Array.isArray(edu.highlights) ? [...edu.highlights] : [],
       courses: Array.isArray(edu.courses) ? [...edu.courses] : [],
-    });
+    };
+    setEditingEdu(edu);
+    setFormData(editData);
+    setInitialSnapshot(JSON.stringify(editData));
     setHighlightInput('');
     setCourseInput('');
     setFormErrors({});
     setModalOpen(true);
   };
+
+  const isDirty = JSON.stringify(formData) !== initialSnapshot;
 
   const handleAddHighlight = () => {
     if (!highlightInput.trim()) return;
@@ -153,24 +164,29 @@ export default function EducationManager({ onEducationChanged }) {
         const res = await updateEducation(editingEdu.id, formData);
         if (res.success) {
           setFeedback({ type: 'success', message: `Education record "${formData.degree}" updated.` });
+          showToast({ type: 'success', message: `Education record "${formData.degree}" updated.` });
           setModalOpen(false);
           await fetchEducationList();
         } else {
           setFeedback({ type: 'error', message: res.error || 'Failed to update record.' });
+          showToast({ type: 'error', message: res.error || 'Failed to update record.' });
         }
       } else {
         // Create
         const res = await createEducation(formData);
         if (res.success) {
           setFeedback({ type: 'success', message: `Education record "${formData.degree}" added.` });
+          showToast({ type: 'success', message: `Education record "${formData.degree}" added.` });
           setModalOpen(false);
           await fetchEducationList();
         } else {
           setFeedback({ type: 'error', message: res.error || 'Failed to create record.' });
+          showToast({ type: 'error', message: res.error || 'Failed to create record.' });
         }
       }
     } catch (err) {
       setFeedback({ type: 'error', message: err.message || 'Operation failed.' });
+      showToast({ type: 'error', message: err.message || 'Operation failed.' });
     } finally {
       setSaving(false);
     }
@@ -178,20 +194,23 @@ export default function EducationManager({ onEducationChanged }) {
 
   const handleDelete = async () => {
     if (!deleteConfirmEdu) return;
-    setSaving(true);
+    setDeleteLoading(true);
     try {
       const res = await deleteEducation(deleteConfirmEdu.id);
       if (res.success) {
         setFeedback({ type: 'success', message: `Education record deleted.` });
+        showToast({ type: 'success', message: `Education record deleted.` });
         setDeleteConfirmEdu(null);
         await fetchEducationList();
       } else {
         setFeedback({ type: 'error', message: res.error || 'Failed to delete record.' });
+        showToast({ type: 'error', message: res.error || 'Failed to delete record.' });
       }
     } catch (err) {
       setFeedback({ type: 'error', message: err.message });
+      showToast({ type: 'error', message: err.message });
     } finally {
-      setSaving(false);
+      setDeleteLoading(false);
     }
   };
 
@@ -411,36 +430,43 @@ export default function EducationManager({ onEducationChanged }) {
       </div>
 
       {/* Create / Edit Education Modal */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div
-            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-6 animate-scale-up max-h-[90vh] overflow-y-auto"
-            role="dialog"
-            aria-modal="true"
-          >
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 flex items-center justify-center">
-                  <GraduationCap size={18} />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                    {editingEdu ? 'Edit Education Record' : 'Add Education Record'}
-                  </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Degree title, academic institution, core curriculum and focus areas
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => setModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg cursor-pointer"
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            <form onSubmit={handleSave} className="space-y-4">
+      <AdminModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={editingEdu ? 'Edit Education Record' : 'Add Education Record'}
+        description="Degree title, academic institution, core curriculum and focus areas"
+        icon={GraduationCap}
+        size="large"
+        hasUnsavedChanges={isDirty}
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => setModalOpen(false)}
+              disabled={saving}
+              className="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              form="education-editor-form"
+              disabled={saving}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 transition-colors shadow-sm cursor-pointer disabled:opacity-50"
+            >
+              {saving ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <span>{editingEdu ? 'Save Changes' : 'Create Record'}</span>
+              )}
+            </button>
+          </>
+        }
+      >
+        <form id="education-editor-form" onSubmit={handleSave} className="space-y-4">
               {/* Degree */}
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
@@ -628,35 +654,8 @@ export default function EducationManager({ onEducationChanged }) {
                 </label>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
-                  disabled={saving}
-                  className="px-4 py-2 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 transition-colors shadow-sm cursor-pointer disabled:opacity-50"
-                >
-                  {saving ? (
-                    <>
-                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Saving...</span>
-                    </>
-                  ) : (
-                    <span>{editingEdu ? 'Save Changes' : 'Create Record'}</span>
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+        </form>
+      </AdminModal>
 
       {/* Delete Confirmation Modal */}
       <DeleteConfirmModal
@@ -667,7 +666,7 @@ export default function EducationManager({ onEducationChanged }) {
         message="Are you sure you want to delete this education record? This action cannot be undone."
         onConfirm={handleDelete}
         onCancel={() => setDeleteConfirmEdu(null)}
-        loading={saving}
+        loading={deleteLoading}
       />
     </div>
   );

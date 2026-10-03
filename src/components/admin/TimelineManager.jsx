@@ -7,6 +7,8 @@ import {
   toggleTimelineItemVisibility
 } from '../../services/timelineService';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import AdminModal from './ui/AdminModal';
+import { useAdminToast } from './ui/AdminToast';
 import {
   Plus,
   Search,
@@ -50,11 +52,13 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
     }
   }, [initialType]);
 
+  const { showToast } = useAdminToast();
   // Modal States
   const [modalOpen, setModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [deleteConfirmItem, setDeleteConfirmItem] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   // Form State
   const initialForm = {
@@ -68,6 +72,7 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
     visible: true,
   };
   const [formData, setFormData] = useState(initialForm);
+  const [initialSnapshot, setInitialSnapshot] = useState(JSON.stringify(initialForm));
   const [formErrors, setFormErrors] = useState({});
 
   const fetchTimeline = async () => {
@@ -93,18 +98,20 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
     setEditingItem(null);
     const targetType = activeTypeFilter !== 'all' ? activeTypeFilter : 'experience';
     const typeItems = items.filter((i) => i.type === targetType);
-    setFormData({
+    const fresh = {
       ...initialForm,
       type: targetType,
       order: typeItems.length + 1,
-    });
+    };
+    setFormData(fresh);
+    setInitialSnapshot(JSON.stringify(fresh));
     setFormErrors({});
     setModalOpen(true);
   };
 
   const handleOpenEdit = (item) => {
     setEditingItem(item);
-    setFormData({
+    const editData = {
       type: item.type || 'experience',
       title: item.title || '',
       role: item.role || '',
@@ -113,10 +120,14 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
       description: item.description || '',
       order: item.order || 99,
       visible: item.visible !== false,
-    });
+    };
+    setFormData(editData);
+    setInitialSnapshot(JSON.stringify(editData));
     setFormErrors({});
     setModalOpen(true);
   };
+
+  const isDirty = JSON.stringify(formData) !== initialSnapshot;
 
   const validateForm = () => {
     const errors = {};
@@ -139,25 +150,25 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
         // Update
         const res = await updateTimelineItem(editingItem.id, formData);
         if (res.success) {
-          setFeedback({ type: 'success', message: `Milestone "${formData.title}" updated.` });
+          showToast(`Milestone "${formData.title}" updated.`, 'success');
           setModalOpen(false);
           await fetchTimeline();
         } else {
-          setFeedback({ type: 'error', message: res.error || 'Failed to update milestone.' });
+          showToast(res.error || 'Failed to update milestone.', 'error');
         }
       } else {
         // Create
         const res = await createTimelineItem(formData);
         if (res.success) {
-          setFeedback({ type: 'success', message: `Milestone "${formData.title}" added to catalog.` });
+          showToast(`Milestone "${formData.title}" added to catalog.`, 'success');
           setModalOpen(false);
           await fetchTimeline();
         } else {
-          setFeedback({ type: 'error', message: res.error || 'Failed to create milestone.' });
+          showToast(res.error || 'Failed to create milestone.', 'error');
         }
       }
     } catch (err) {
-      setFeedback({ type: 'error', message: err.message || 'Operation failed.' });
+      showToast(err.message || 'Operation failed.', 'error');
     } finally {
       setSaving(false);
     }
@@ -165,20 +176,20 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
 
   const handleDelete = async () => {
     if (!deleteConfirmItem) return;
-    setSaving(true);
+    setDeleteLoading(true);
     try {
       const res = await deleteTimelineItem(deleteConfirmItem.id);
       if (res.success) {
-        setFeedback({ type: 'success', message: `Milestone "${deleteConfirmItem.title}" deleted.` });
+        showToast(`Milestone "${deleteConfirmItem.title}" deleted.`, 'success');
         setDeleteConfirmItem(null);
         await fetchTimeline();
       } else {
-        setFeedback({ type: 'error', message: res.error || 'Failed to delete milestone.' });
+        showToast(res.error || 'Failed to delete milestone.', 'error');
       }
     } catch (err) {
-      setFeedback({ type: 'error', message: err.message });
+      showToast(err.message || 'Failed to delete milestone.', 'error');
     } finally {
-      setSaving(false);
+      setDeleteLoading(false);
     }
   };
 
@@ -186,12 +197,12 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
     try {
       await toggleTimelineItemVisibility(item.id, item.visible);
       await fetchTimeline();
-      setFeedback({
-        type: 'success',
-        message: `Milestone "${item.title}" is now ${item.visible ? 'hidden' : 'visible'}.`,
-      });
+      showToast(
+        `Milestone "${item.title}" is now ${item.visible ? 'hidden' : 'visible'}.`,
+        'success'
+      );
     } catch {
-      setFeedback({ type: 'error', message: 'Failed to update visibility.' });
+      showToast('Failed to update visibility.', 'error');
     }
   };
 
@@ -458,202 +469,181 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
       </div>
 
       {/* Create / Edit Milestone Modal */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div
-            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-6 animate-scale-up"
-            role="dialog"
-            aria-modal="true"
-          >
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 flex items-center justify-center">
-                  <CurrentIcon size={18} />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                    {editingItem ? 'Edit Milestone Entry' : 'Add Milestone Entry'}
-                  </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Provide title, role, organization, timeline duration and overview
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => setModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg cursor-pointer"
-              >
-                <X size={18} />
-              </button>
+      <AdminModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={editingItem ? 'Edit Milestone Entry' : 'Add Milestone Entry'}
+        description="Provide title, role, organization, timeline duration and overview"
+        icon={CurrentIcon}
+        size="large"
+        hasUnsavedChanges={isDirty}
+        footer={
+          <div className="flex items-center justify-end gap-3 w-full">
+            <button
+              type="button"
+              onClick={() => setModalOpen(false)}
+              disabled={saving}
+              className="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              form="timeline-form"
+              disabled={saving}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 transition-colors shadow-sm cursor-pointer disabled:opacity-50"
+            >
+              {saving ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <span>{editingItem ? 'Save Changes' : 'Create Entry'}</span>
+              )}
+            </button>
+          </div>
+        }
+      >
+        <form id="timeline-form" onSubmit={handleSave} className="space-y-4">
+          {/* Category Type */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              Milestone Category Type *
+            </label>
+            <select
+              value={formData.type}
+              onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+              className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
+            >
+              {TIMELINE_TYPES.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Title */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              Title / Milestone Headline *
+            </label>
+            <input
+              type="text"
+              value={formData.title}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              placeholder="e.g. Engineering Hackathon Participant, Systems Research Paper"
+              className={`w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border ${
+                formErrors.title
+                  ? 'border-red-500 focus:ring-red-500'
+                  : 'border-slate-200 dark:border-slate-800 focus:ring-primary-500'
+              } text-slate-900 dark:text-white focus:outline-none focus:ring-2`}
+            />
+            {formErrors.title && (
+              <p className="text-xs text-red-500 mt-1 font-medium">{formErrors.title}</p>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Role */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                Role / Subtitle *
+              </label>
+              <input
+                type="text"
+                value={formData.role}
+                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                placeholder="e.g. Student Developer, Researcher"
+                className={`w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border ${
+                  formErrors.role
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-slate-200 dark:border-slate-800 focus:ring-primary-500'
+                } text-slate-900 dark:text-white focus:outline-none focus:ring-2`}
+              />
+              {formErrors.role && (
+                <p className="text-xs text-red-500 mt-1 font-medium">{formErrors.role}</p>
+              )}
             </div>
 
-            <form onSubmit={handleSave} className="space-y-4">
-              {/* Category Type */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Milestone Category Type *
-                </label>
-                <select
-                  value={formData.type}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
-                >
-                  {TIMELINE_TYPES.map((t) => (
-                    <option key={t.id} value={t.id}>
-                      {t.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Title */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Title / Milestone Headline *
-                </label>
-                <input
-                  type="text"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="e.g. Engineering Hackathon Participant, Systems Research Paper"
-                  className={`w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border ${
-                    formErrors.title
-                      ? 'border-red-500 focus:ring-red-500'
-                      : 'border-slate-200 dark:border-slate-800 focus:ring-primary-500'
-                  } text-slate-900 dark:text-white focus:outline-none focus:ring-2`}
-                />
-                {formErrors.title && (
-                  <p className="text-xs text-red-500 mt-1 font-medium">{formErrors.title}</p>
-                )}
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                {/* Role */}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    Role / Subtitle *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    placeholder="e.g. Student Developer, Researcher"
-                    className={`w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border ${
-                      formErrors.role
-                        ? 'border-red-500 focus:ring-red-500'
-                        : 'border-slate-200 dark:border-slate-800 focus:ring-primary-500'
-                    } text-slate-900 dark:text-white focus:outline-none focus:ring-2`}
-                  />
-                  {formErrors.role && (
-                    <p className="text-xs text-red-500 mt-1 font-medium">{formErrors.role}</p>
-                  )}
-                </div>
-
-                {/* Organization */}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    Organization / Platform
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.organization}
-                    onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
-                    placeholder="e.g. University Lab, Independent"
-                    className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                {/* Period */}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    Period / Timeframe
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.period}
-                    onChange={(e) => setFormData({ ...formData, period: e.target.value })}
-                    placeholder="e.g. Academic Trajectory, 2025"
-                    className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  />
-                </div>
-
-                {/* Order */}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    Display Order
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={formData.order}
-                    onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value, 10) || 1 })}
-                    className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  />
-                </div>
-              </div>
-
-              {/* Description */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Description / Details
-                </label>
-                <textarea
-                  rows={3}
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Summarize key tasks, findings, outcomes, or awards..."
-                  className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
-                />
-              </div>
-
-              {/* Visibility Checkbox */}
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-                <input
-                  type="checkbox"
-                  id="timeline-visible-toggle"
-                  checked={formData.visible}
-                  onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
-                  className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300 dark:border-slate-700 cursor-pointer"
-                />
-                <label
-                  htmlFor="timeline-visible-toggle"
-                  className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer select-none"
-                >
-                  Visible on public portfolio website
-                </label>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
-                  disabled={saving}
-                  className="px-4 py-2 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 transition-colors shadow-sm cursor-pointer disabled:opacity-50"
-                >
-                  {saving ? (
-                    <>
-                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Saving...</span>
-                    </>
-                  ) : (
-                    <span>{editingItem ? 'Save Changes' : 'Create Entry'}</span>
-                  )}
-                </button>
-              </div>
-            </form>
+            {/* Organization */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                Organization / Platform
+              </label>
+              <input
+                type="text"
+                value={formData.organization}
+                onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+                placeholder="e.g. University Lab, Independent"
+                className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
           </div>
-        </div>
-      )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Period */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                Period / Timeframe
+              </label>
+              <input
+                type="text"
+                value={formData.period}
+                onChange={(e) => setFormData({ ...formData, period: e.target.value })}
+                placeholder="e.g. Academic Trajectory, 2025"
+                className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+
+            {/* Order */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                Display Order
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={formData.order}
+                onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value, 10) || 1 })}
+                className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              Description / Details
+            </label>
+            <textarea
+              rows={3}
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              placeholder="Summarize key tasks, findings, outcomes, or awards..."
+              className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+            />
+          </div>
+
+          {/* Visibility Checkbox */}
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+            <input
+              type="checkbox"
+              id="timeline-visible-toggle"
+              checked={formData.visible}
+              onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
+              className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300 dark:border-slate-700 cursor-pointer"
+            />
+            <label
+              htmlFor="timeline-visible-toggle"
+              className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer select-none"
+            >
+              Visible on public portfolio website
+            </label>
+          </div>
+        </form>
+      </AdminModal>
 
       {/* Delete Confirmation Modal */}
       <DeleteConfirmModal
@@ -664,7 +654,7 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
         message="Are you sure you want to permanently delete this milestone entry? It will be removed from your timeline."
         onConfirm={handleDelete}
         onCancel={() => setDeleteConfirmItem(null)}
-        loading={saving}
+        loading={deleteLoading}
       />
     </div>
   );

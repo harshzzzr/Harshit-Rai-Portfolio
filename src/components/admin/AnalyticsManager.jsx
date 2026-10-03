@@ -22,15 +22,19 @@ import { Link } from 'react-router-dom';
 import {
   getAnalyticsSummary,
   seedDemoAnalytics,
-  clearAnalytics
+  resetAnalyticsData
 } from '../../services/analyticsService';
+import ConfirmDialog from './ui/ConfirmDialog';
+import { useAdminToast } from './ui/AdminToast';
 
 export default function AnalyticsManager({ onDataChanged }) {
+  const { showToast } = useAdminToast();
   const [timeframe, setTimeframe] = useState(14); // 7, 14, 30 days
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [hoveredDay, setHoveredDay] = useState(null);
-  const [actionFeedback, setActionFeedback] = useState(null);
+  const [confirmResetOpen, setConfirmResetOpen] = useState(false);
+  const [resetting, setResetting] = useState(false);
 
   const fetchAnalytics = async () => {
     setLoading(true);
@@ -50,19 +54,23 @@ export default function AnalyticsManager({ onDataChanged }) {
 
   const handleSeedDemo = () => {
     const count = seedDemoAnalytics();
-    setActionFeedback(`Generated ${count} anonymous demo traffic data points.`);
+    showToast(`Generated ${count} anonymous demo traffic data points.`, 'success');
     fetchAnalytics();
     if (onDataChanged) onDataChanged();
-    setTimeout(() => setActionFeedback(null), 4000);
   };
 
-  const handleReset = () => {
-    if (window.confirm('Reset local analytics buffer? This will clear local anonymous visitor history.')) {
-      clearAnalytics();
-      setActionFeedback('Analytics buffer cleared.');
-      fetchAnalytics();
+  const handleConfirmReset = async () => {
+    setResetting(true);
+    try {
+      await resetAnalyticsData();
+      showToast('Analytics buffer and telemetry logs cleared successfully.', 'success');
+      await fetchAnalytics();
       if (onDataChanged) onDataChanged();
-      setTimeout(() => setActionFeedback(null), 4000);
+      setConfirmResetOpen(false);
+    } catch (err) {
+      showToast(err.message || 'Failed to reset analytics.', 'error');
+    } finally {
+      setResetting(false);
     }
   };
 
@@ -140,22 +148,15 @@ export default function AnalyticsManager({ onDataChanged }) {
 
           {/* Reset Buffer */}
           <button
-            onClick={handleReset}
-            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
-            title="Reset local analytics data"
+            onClick={() => setConfirmResetOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 hover:text-rose-600 dark:text-slate-300 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors text-xs font-semibold cursor-pointer border border-transparent hover:border-rose-200 dark:hover:border-rose-900"
+            title="Reset recorded analytics telemetry"
           >
-            <RotateCcw size={15} />
+            <RotateCcw size={14} />
+            <span className="hidden sm:inline">Reset Analytics</span>
           </button>
         </div>
       </div>
-
-      {/* Action Notification */}
-      {actionFeedback && (
-        <div className="p-3.5 rounded-xl bg-primary-50 dark:bg-primary-950/60 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 text-xs flex items-center gap-2 animate-fade-in">
-          <CheckCircle2 size={16} className="shrink-0" />
-          <span>{actionFeedback}</span>
-        </div>
-      )}
 
       {/* KPI Highlights Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -539,6 +540,19 @@ export default function AnalyticsManager({ onDataChanged }) {
           <span>GDPR Compliant By Design</span>
         </div>
       </div>
+
+      {/* Reset Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={confirmResetOpen}
+        onClose={() => setConfirmResetOpen(false)}
+        onConfirm={handleConfirmReset}
+        title="Reset All Analytics Data"
+        description="Are you sure you want to reset all analytics telemetry? This will permanently delete all recorded anonymous pageviews and traffic metrics. Your portfolio projects, skills, education, timeline, feedback, and messages will remain completely untouched."
+        confirmText="Reset Analytics"
+        cancelText="Cancel"
+        variant="danger"
+        loading={resetting}
+      />
     </div>
   );
 }

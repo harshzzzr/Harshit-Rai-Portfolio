@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { createProject, updateProject, uploadProjectImage } from '../../services/projectService';
-import { FolderGit2, X, Upload } from 'lucide-react';
+import { FolderGit2, Upload, AlertCircle } from 'lucide-react';
+import AdminModal from './ui/AdminModal';
 
 const initialForm = {
   title: '',
@@ -27,16 +28,20 @@ export default function ProjectForm({
   onClose,
   editingProject,
   projectsCount = 0,
-  onSaved
+  onSaved,
 }) {
   const [formData, setFormData] = useState(initialForm);
+  const [initialSnapshot, setInitialSnapshot] = useState(JSON.stringify(initialForm));
   const [formErrors, setFormErrors] = useState({});
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
 
   useEffect(() => {
+    if (!isOpen) return;
+
+    let baseline;
     if (editingProject) {
-      setFormData({
+      baseline = {
         title: editingProject.title || '',
         slug: editingProject.slug || editingProject.id || '',
         tagline: editingProject.tagline || '',
@@ -54,18 +59,22 @@ export default function ProjectForm({
         liveUrl: editingProject.liveUrl || '',
         image: editingProject.image || '',
         screenshots: editingProject.screenshots || [],
-      });
+      };
     } else {
-      setFormData({
+      baseline = {
         ...initialForm,
         order: projectsCount + 1,
         visible: true,
-      });
+      };
     }
+    setFormData(baseline);
+    setInitialSnapshot(JSON.stringify(baseline));
     setFormErrors({});
   }, [editingProject, isOpen, projectsCount]);
 
-  if (!isOpen) return null;
+  const isDirty = useMemo(() => {
+    return JSON.stringify(formData) !== initialSnapshot;
+  }, [formData, initialSnapshot]);
 
   const handleTitleChange = (e) => {
     const val = e.target.value;
@@ -159,308 +168,309 @@ export default function ProjectForm({
     }
   };
 
+  const modalFooter = (
+    <>
+      <button
+        type="button"
+        onClick={onClose}
+        disabled={saving}
+        className="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer disabled:opacity-50"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        form="project-editor-form"
+        disabled={saving}
+        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 transition-colors shadow-sm cursor-pointer disabled:opacity-50"
+      >
+        {saving ? (
+          <>
+            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <span>Saving...</span>
+          </>
+        ) : (
+          <span>{editingProject ? 'Save Changes' : 'Create Project'}</span>
+        )}
+      </button>
+    </>
+  );
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs overflow-y-auto">
-      <div className="max-w-2xl w-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden my-8 animate-fade-in">
-        {/* Modal Header */}
-        <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400">
-              <FolderGit2 size={20} />
-            </div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              {editingProject ? `Edit: ${editingProject.title}` : 'Add New Project'}
-            </h3>
+    <AdminModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={editingProject ? `Edit: ${editingProject.title}` : 'Add New Project'}
+      description="Configure architecture, technologies, problem-solution statements, and repository URLs"
+      icon={FolderGit2}
+      size="large"
+      hasUnsavedChanges={isDirty}
+      footer={modalFooter}
+    >
+      <form id="project-editor-form" onSubmit={handleSave} className="space-y-5">
+        {formErrors.submit && (
+          <div className="p-3.5 rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-900/60 text-xs sm:text-sm text-red-700 dark:text-red-300 flex items-center gap-2">
+            <AlertCircle size={16} className="shrink-0" />
+            <span>{formErrors.submit}</span>
           </div>
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
-            aria-label="Close dialog"
-          >
-            <X size={20} />
-          </button>
-        </div>
+        )}
 
-        {/* Modal Body / Form */}
-        <form onSubmit={handleSave} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
-          {formErrors.submit && (
-            <div className="p-3 rounded-lg bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-xs text-rose-700 dark:text-rose-300">
-              {formErrors.submit}
-            </div>
-          )}
-
-          {/* Title & Slug */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Project Title <span className="text-rose-500">*</span>
-              </label>
-              <input
-                type="text"
-                value={formData.title}
-                onChange={handleTitleChange}
-                placeholder="e.g. Campus Connect"
-                className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-              {formErrors.title && <p className="text-[11px] text-rose-500">{formErrors.title}</p>}
-            </div>
-
-            <div className="space-y-1">
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Slug / Identifier
-              </label>
-              <input
-                type="text"
-                value={formData.slug}
-                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                placeholder="campus-connect"
-                className="w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-            </div>
-          </div>
-
-          {/* Tagline / Subtitle */}
+        {/* 1. Core Metadata Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1">
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-              Tagline / Subtitle
+              Project Title *
             </label>
             <input
               type="text"
-              value={formData.tagline}
-              onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
-              placeholder="Full-stack campus networking and academic collaboration platform"
-              className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              value={formData.title}
+              onChange={handleTitleChange}
+              placeholder="e.g. Drone Detection System"
+              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border ${
+                formErrors.title ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'
+              } text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500`}
+            />
+            {formErrors.title && <p className="text-[11px] text-red-500">{formErrors.title}</p>}
+          </div>
+
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              URL Slug *
+            </label>
+            <input
+              type="text"
+              value={formData.slug}
+              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+              placeholder="drone-detection-system"
+              className="w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            />
+          </div>
+        </div>
+
+        {/* 2. Tagline */}
+        <div className="space-y-1">
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            Tagline / Focus Headline
+          </label>
+          <input
+            type="text"
+            value={formData.tagline}
+            onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
+            placeholder="Real-Time Aerial Surveillance & Acoustic Signal Classifier"
+            className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+        </div>
+
+        {/* 3. Short Description */}
+        <div className="space-y-1">
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            Short Description (Grid card preview) *
+          </label>
+          <textarea
+            rows={2}
+            value={formData.shortDescription}
+            onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
+            placeholder="Brief overview explaining what the project achieves..."
+            className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border ${
+              formErrors.shortDescription ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'
+            } text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500`}
+          />
+          {formErrors.shortDescription && (
+            <p className="text-[11px] text-red-500">{formErrors.shortDescription}</p>
+          )}
+        </div>
+
+        {/* 4. Full Overview */}
+        <div className="space-y-1">
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            Full Description (Detail page architecture overview)
+          </label>
+          <textarea
+            rows={3}
+            value={formData.fullDescription}
+            onChange={(e) => setFormData({ ...formData, fullDescription: e.target.value })}
+            placeholder="Detailed architectural summary and engineering methodology..."
+            className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+        </div>
+
+        {/* 5. Technologies */}
+        <div className="space-y-1">
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            Technologies (comma-separated) *
+          </label>
+          <input
+            type="text"
+            value={formData.technologies}
+            onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
+            placeholder="C++, OpenCV, PyTorch, React, WebSockets"
+            className={`w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800 border ${
+              formErrors.technologies ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'
+            } text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500`}
+          />
+          {formErrors.technologies && (
+            <p className="text-[11px] text-red-500">{formErrors.technologies}</p>
+          )}
+        </div>
+
+        {/* 6. URLs */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              GitHub Repository URL
+            </label>
+            <input
+              type="url"
+              value={formData.githubUrl}
+              onChange={(e) => setFormData({ ...formData, githubUrl: e.target.value })}
+              placeholder="https://github.com/harshzzzr/repository"
+              className="w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
 
-          {/* Short Description */}
           <div className="space-y-1">
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-              Short Description (Listing Card) <span className="text-rose-500">*</span>
+              Live Demo / Product URL
+            </label>
+            <input
+              type="url"
+              value={formData.liveUrl}
+              onChange={(e) => setFormData({ ...formData, liveUrl: e.target.value })}
+              placeholder="https://my-app.example.com (optional)"
+              className="w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            />
+          </div>
+        </div>
+
+        {/* 7. Image Upload */}
+        <div className="space-y-1">
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            Project Banner Image (URL or Firebase Storage upload)
+          </label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={formData.image}
+              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+              placeholder="/images/projects/banner.png or https://..."
+              className="flex-1 px-3 py-2 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            />
+            <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold cursor-pointer transition-colors border border-slate-300 dark:border-slate-700 shrink-0">
+              <Upload size={14} />
+              <span>{uploadingImage ? 'Uploading...' : 'Upload'}</span>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                disabled={uploadingImage}
+                onChange={handleImageUpload}
+              />
+            </label>
+          </div>
+        </div>
+
+        {/* 8. Badge, Order, Featured, Visible */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+          <div className="space-y-1">
+            <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+              Category Badge
+            </label>
+            <input
+              type="text"
+              value={formData.badge}
+              onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
+              className="w-full px-2.5 py-1.5 text-xs rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-primary-500"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+              Display Order
+            </label>
+            <input
+              type="number"
+              value={formData.order}
+              onChange={(e) => setFormData({ ...formData, order: e.target.value })}
+              className="w-full px-2.5 py-1.5 text-xs rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-primary-500"
+            />
+          </div>
+
+          <div className="flex items-center gap-2 pt-4">
+            <input
+              type="checkbox"
+              id="proj-featured-toggle"
+              checked={formData.featured}
+              onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+              className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300 dark:border-slate-700 cursor-pointer"
+            />
+            <label
+              htmlFor="proj-featured-toggle"
+              className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer select-none"
+            >
+              Featured
+            </label>
+          </div>
+
+          <div className="flex items-center gap-2 pt-4">
+            <input
+              type="checkbox"
+              id="proj-visible-toggle"
+              checked={formData.visible}
+              onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
+              className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300 dark:border-slate-700 cursor-pointer"
+            />
+            <label
+              htmlFor="proj-visible-toggle"
+              className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer select-none"
+            >
+              Published
+            </label>
+          </div>
+        </div>
+
+        {/* 9. Problem & Solution */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              Problem Statement
             </label>
             <textarea
               rows={2}
-              value={formData.shortDescription}
-              onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
-              placeholder="Brief synopsis displayed on the home page card..."
-              className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
-            {formErrors.shortDescription && <p className="text-[11px] text-rose-500">{formErrors.shortDescription}</p>}
-          </div>
-
-          {/* Technologies & Category Badge */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Technologies (Comma separated) <span className="text-rose-500">*</span>
-              </label>
-              <input
-                type="text"
-                value={formData.technologies}
-                onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
-                placeholder="JavaScript, Node.js, Express, React"
-                className="w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-              {formErrors.technologies && <p className="text-[11px] text-rose-500">{formErrors.technologies}</p>}
-            </div>
-
-            <div className="space-y-1">
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Category Badge
-              </label>
-              <input
-                type="text"
-                value={formData.badge}
-                onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-                placeholder="Web, Mobile, Systems, Hardware, Database"
-                className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-            </div>
-          </div>
-
-          {/* Order & Featured Status */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center pt-1">
-            <div className="space-y-1">
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Display Order (Catalog Index)
-              </label>
-              <input
-                type="number"
-                value={formData.order}
-                onChange={(e) => setFormData({ ...formData, order: e.target.value })}
-                className="w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-            </div>
-
-            <div className="flex flex-wrap items-center gap-6 pt-4">
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="visible-toggle"
-                  checked={formData.visible}
-                  onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
-                  className="w-4 h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
-                />
-                <label htmlFor="visible-toggle" className="text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer">
-                  Visible on Portfolio
-                </label>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="featured-toggle"
-                  checked={formData.featured}
-                  onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-                  className="w-4 h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
-                />
-                <label htmlFor="featured-toggle" className="text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer">
-                  Featured on Homepage
-                </label>
-              </div>
-            </div>
-          </div>
-
-          {/* GitHub and Live Demo URLs */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                GitHub Repository URL
-              </label>
-              <input
-                type="url"
-                value={formData.githubUrl}
-                onChange={(e) => setFormData({ ...formData, githubUrl: e.target.value })}
-                placeholder="https://github.com/..."
-                className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Live Demo URL
-              </label>
-              <input
-                type="url"
-                value={formData.liveUrl}
-                onChange={(e) => setFormData({ ...formData, liveUrl: e.target.value })}
-                placeholder="https://..."
-                className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-            </div>
-          </div>
-
-          {/* Image Upload / Asset URL */}
-          <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-              Project Image Asset (Firebase Storage or URL)
-            </label>
-            <div className="flex flex-col sm:flex-row gap-3 items-center">
-              <input
-                type="text"
-                value={formData.image}
-                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                placeholder="Image URL or upload via button..."
-                className="flex-1 w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-              <label className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-semibold cursor-pointer border border-slate-200 dark:border-slate-700 shrink-0">
-                <Upload size={14} className={uploadingImage ? 'animate-bounce' : ''} />
-                <span>{uploadingImage ? 'Optimizing & Uploading...' : 'Upload Asset'}</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  disabled={uploadingImage}
-                  className="hidden"
-                />
-              </label>
-            </div>
-            {formErrors.image && <p className="text-[11px] text-rose-500">{formErrors.image}</p>}
-          </div>
-
-          {/* Deep Dive Fields: Full Overview, Problem, Solution */}
-          <div className="space-y-1 pt-2">
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-              Project Overview (Detail Page)
-            </label>
-            <textarea
-              rows={3}
-              value={formData.fullDescription}
-              onChange={(e) => setFormData({ ...formData, fullDescription: e.target.value })}
-              placeholder="In-depth explanation of the architecture and workflow..."
+              value={formData.problem}
+              onChange={(e) => setFormData({ ...formData, problem: e.target.value })}
+              placeholder="The challenge or bottleneck addressed..."
               className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Problem Statement
-              </label>
-              <textarea
-                rows={2}
-                value={formData.problem}
-                onChange={(e) => setFormData({ ...formData, problem: e.target.value })}
-                placeholder="The challenge or bottleneck addressed..."
-                className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Solution & Engineering
-              </label>
-              <textarea
-                rows={2}
-                value={formData.solution}
-                onChange={(e) => setFormData({ ...formData, solution: e.target.value })}
-                placeholder="How the technical stack resolved the problem..."
-                className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-            </div>
-          </div>
-
-          {/* Key Features (One per line) */}
           <div className="space-y-1">
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-              Key Features (One item per line)
+              Solution & Engineering
             </label>
             <textarea
-              rows={3}
-              value={formData.features}
-              onChange={(e) => setFormData({ ...formData, features: e.target.value })}
-              placeholder="Feature point 1&#10;Feature point 2&#10;Feature point 3"
+              rows={2}
+              value={formData.solution}
+              onChange={(e) => setFormData({ ...formData, solution: e.target.value })}
+              placeholder="How the technical stack resolved the problem..."
               className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
+        </div>
 
-          {/* Modal Footer */}
-          <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-end gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={saving}
-              className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={saving}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-xs sm:text-sm font-semibold transition-colors shadow-sm cursor-pointer disabled:opacity-50"
-            >
-              {saving ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>Saving...</span>
-                </>
-              ) : (
-                <span>{editingProject ? 'Save Changes' : 'Create Project'}</span>
-              )}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        {/* 10. Key Features */}
+        <div className="space-y-1">
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            Key Features (One item per line)
+          </label>
+          <textarea
+            rows={3}
+            value={formData.features}
+            onChange={(e) => setFormData({ ...formData, features: e.target.value })}
+            placeholder="Feature point 1&#10;Feature point 2&#10;Feature point 3"
+            className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+        </div>
+      </form>
+    </AdminModal>
   );
 }

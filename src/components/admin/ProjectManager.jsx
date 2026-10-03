@@ -7,6 +7,8 @@ import {
 } from '../../services/projectService';
 import SafeImage from '../SafeImage';
 import ProjectForm from './ProjectForm';
+import ConfirmDialog from './ui/ConfirmDialog';
+import { useAdminToast } from './ui/AdminToast';
 import {
   Plus,
   Search,
@@ -31,10 +33,11 @@ export default function ProjectManager({ onProjectChanged }) {
   const [filterType, setFilterType] = useState('all'); // all, featured, standard
   const [feedback, setFeedback] = useState(null); // { type: 'success'|'error', message: '' }
 
-  // Modal States
+  const { showToast } = useAdminToast();
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null); // null = create mode
   const [deleteConfirmProject, setDeleteConfirmProject] = useState(null); // project object to delete
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   // Load Projects (Admin retrieves all including drafts)
   const fetchProjects = async () => {
@@ -114,17 +117,23 @@ export default function ProjectManager({ onProjectChanged }) {
   const handleConfirmDelete = async () => {
     if (!deleteConfirmProject) return;
 
+    setDeleteLoading(true);
     try {
       const res = await deleteProject(deleteConfirmProject.id);
       if (res.success) {
         setFeedback({ type: 'success', message: `Deleted "${deleteConfirmProject.title}".` });
+        showToast({ type: 'success', message: `Deleted "${deleteConfirmProject.title}".` });
         setDeleteConfirmProject(null);
         await fetchProjects();
       } else {
         setFeedback({ type: 'error', message: res.error || 'Failed to delete project.' });
+        showToast({ type: 'error', message: res.error || 'Failed to delete project.' });
       }
     } catch (err) {
       setFeedback({ type: 'error', message: err.message || 'Delete operation failed.' });
+      showToast({ type: 'error', message: err.message || 'Delete operation failed.' });
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -416,41 +425,19 @@ export default function ProjectManager({ onProjectChanged }) {
         onSaved={handleFormSaved}
       />
 
-      {/* DELETE CONFIRMATION MODAL */}
-      {deleteConfirmProject && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in">
-          <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-5">
-            <div className="w-12 h-12 rounded-xl bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center">
-              <Trash2 size={24} />
-            </div>
-
-            <div className="space-y-2">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                Delete Project?
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Are you sure you want to permanently delete <strong className="text-slate-900 dark:text-white">"{deleteConfirmProject.title}"</strong>? This will remove the project from both the database and public portfolio immediately.
-              </p>
-            </div>
-
-            <div className="flex items-center justify-end gap-3 pt-2">
-              <button
-                onClick={() => setDeleteConfirmProject(null)}
-                className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleConfirmDelete}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition-colors shadow-sm cursor-pointer"
-              >
-                <Trash2 size={14} />
-                <span>Confirm Delete</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* DELETE CONFIRMATION DIALOG */}
+      <ConfirmDialog
+        isOpen={Boolean(deleteConfirmProject)}
+        title="Delete Project?"
+        message="Are you sure you want to permanently delete this project? This will remove it from both the database and the public website immediately."
+        itemName={deleteConfirmProject?.title}
+        confirmText="Delete Project"
+        cancelText="Cancel"
+        variant="danger"
+        loading={deleteLoading}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setDeleteConfirmProject(null)}
+      />
     </div>
   );
 }

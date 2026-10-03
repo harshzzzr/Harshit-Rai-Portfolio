@@ -59,8 +59,8 @@ export default function AdminLayout({ activeTab, onSelectTab, children }) {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col">
-      {/* Top Admin Bar */}
-      <header className="sticky top-0 z-40 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 flex items-center justify-between shadow-sm">
+        {/* Top Admin Bar - z-30 keeps it beneath modal z-50 */}
+        <header className="sticky top-0 z-30 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
           {/* Mobile Menu Button */}
           <button
@@ -134,13 +134,13 @@ export default function AdminLayout({ activeTab, onSelectTab, children }) {
         {sidebarOpen && (
           <div
             onClick={() => setSidebarOpen(false)}
-            className="fixed inset-0 z-40 bg-slate-950/50 backdrop-blur-xs lg:hidden"
+            className="fixed inset-0 z-30 bg-slate-950/50 backdrop-blur-xs lg:hidden"
           />
         )}
 
-        {/* Sidebar (Desktop Persistent / Mobile Drawer) */}
+        {/* Sidebar (Desktop Persistent / Mobile Drawer) - z-30 stays beneath modal z-50 */}
         <aside
-          className={`fixed lg:static top-16 bottom-0 left-0 z-50 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between transition-transform duration-200 ease-in-out ${
+          className={`fixed lg:static top-16 bottom-0 left-0 z-30 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between transition-transform duration-200 ease-in-out ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
           }`}
         >

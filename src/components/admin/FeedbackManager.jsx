@@ -7,6 +7,8 @@ import {
   deleteFeedback
 } from '../../services/feedbackService';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import AdminModal from './ui/AdminModal';
+import { useAdminToast } from './ui/AdminToast';
 import {
   Star,
   CheckCircle2,
@@ -18,13 +20,13 @@ import {
   X,
   MessageSquareQuote,
   Sparkles,
-  Clock,
   Search,
   Check,
   Ban
 } from 'lucide-react';
 
 export default function FeedbackManager({ onFeedbackChanged }) {
+  const { showToast } = useAdminToast();
   const [feedbackList, setFeedbackList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('pending'); // default to pending for moderation
@@ -45,7 +47,7 @@ export default function FeedbackManager({ onFeedbackChanged }) {
         onFeedbackChanged();
       }
     } catch {
-      setBanner({ type: 'error', message: 'Failed to load feedback records.' });
+      showToast('Failed to load feedback records.', 'error');
     } finally {
       setLoading(false);
     }
@@ -91,15 +93,12 @@ export default function FeedbackManager({ onFeedbackChanged }) {
       if (viewingItem && viewingItem.id === item.id) {
         setViewingItem((prev) => ({ ...prev, status: 'approved' }));
       }
-      setBanner({
-        type: 'success',
-        message: `Feedback from "${item.name}" approved for public display.`
-      });
+      showToast(`Feedback from "${item.name}" approved for public display.`, 'success');
       if (typeof onFeedbackChanged === 'function') {
         onFeedbackChanged();
       }
     } catch (err) {
-      setBanner({ type: 'error', message: err.message || 'Failed to approve feedback.' });
+      showToast(err.message || 'Failed to approve feedback.', 'error');
     } finally {
       setActionLoading(false);
     }
@@ -115,15 +114,12 @@ export default function FeedbackManager({ onFeedbackChanged }) {
       if (viewingItem && viewingItem.id === item.id) {
         setViewingItem((prev) => ({ ...prev, status: 'rejected' }));
       }
-      setBanner({
-        type: 'success',
-        message: `Feedback from "${item.name}" marked as rejected.`
-      });
+      showToast(`Feedback from "${item.name}" marked as rejected.`, 'warning');
       if (typeof onFeedbackChanged === 'function') {
         onFeedbackChanged();
       }
     } catch (err) {
-      setBanner({ type: 'error', message: err.message || 'Failed to reject feedback.' });
+      showToast(err.message || 'Failed to reject feedback.', 'error');
     } finally {
       setActionLoading(false);
     }
@@ -139,14 +135,14 @@ export default function FeedbackManager({ onFeedbackChanged }) {
       if (viewingItem && viewingItem.id === item.id) {
         setViewingItem((prev) => ({ ...prev, featured: newFeatured }));
       }
-      setBanner({
-        type: 'success',
-        message: `Review from "${item.name}" ${
+      showToast(
+        `Review from "${item.name}" ${
           newFeatured ? 'marked as featured' : 'removed from featured'
-        }.`
-      });
+        }.`,
+        'success'
+      );
     } catch (err) {
-      setBanner({ type: 'error', message: err.message || 'Failed to update featured status.' });
+      showToast(err.message || 'Failed to update featured status.', 'error');
     }
   };
 
@@ -160,12 +156,12 @@ export default function FeedbackManager({ onFeedbackChanged }) {
         setViewingItem(null);
       }
       setDeleteConfirmItem(null);
-      setBanner({ type: 'success', message: 'Feedback record permanently deleted.' });
+      showToast('Feedback record permanently deleted.', 'success');
       if (typeof onFeedbackChanged === 'function') {
         onFeedbackChanged();
       }
     } catch (err) {
-      setBanner({ type: 'error', message: err.message || 'Failed to delete record.' });
+      showToast(err.message || 'Failed to delete record.', 'error');
     } finally {
       setActionLoading(false);
     }
@@ -560,34 +556,68 @@ export default function FeedbackManager({ onFeedbackChanged }) {
       </div>
 
       {/* Feedback Detail Modal */}
-      {viewingItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-lg rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-2xl space-y-5 animate-slide-down">
-            {/* Header */}
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-bold text-sm flex items-center justify-center border border-primary-200 dark:border-primary-800">
-                  {getInitials(viewingItem.name)}
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                    {viewingItem.name}
-                  </h3>
-                  <div className="flex items-center gap-2 mt-0.5 text-xs text-slate-400 font-mono">
-                    <Clock size={12} />
-                    <span>{formatDate(viewingItem.createdAt)}</span>
-                  </div>
-                </div>
-              </div>
-
+      <AdminModal
+        isOpen={Boolean(viewingItem)}
+        onClose={() => setViewingItem(null)}
+        title={viewingItem ? viewingItem.name : 'Feedback Details'}
+        description={viewingItem ? `Submitted on ${formatDate(viewingItem.createdAt)}` : ''}
+        icon={MessageSquareQuote}
+        size="medium"
+        footer={
+          viewingItem && (
+            <div className="flex flex-wrap items-center justify-between gap-3 w-full">
               <button
-                onClick={() => setViewingItem(null)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white cursor-pointer"
+                type="button"
+                onClick={() => handleToggleFeatured(viewingItem)}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
               >
-                <X size={18} />
+                <Star
+                  size={14}
+                  className={viewingItem.featured ? 'text-amber-400 fill-amber-400' : ''}
+                />
+                <span>{viewingItem.featured ? 'Unmark Featured' : 'Mark Featured'}</span>
               </button>
-            </div>
 
+              <div className="flex items-center gap-2">
+                {viewingItem.status !== 'approved' && (
+                  <button
+                    type="button"
+                    onClick={() => handleApprove(viewingItem)}
+                    disabled={actionLoading}
+                    className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                  >
+                    <CheckCircle2 size={14} />
+                    <span>Approve</span>
+                  </button>
+                )}
+
+                {viewingItem.status !== 'rejected' && (
+                  <button
+                    type="button"
+                    onClick={() => handleReject(viewingItem)}
+                    disabled={actionLoading}
+                    className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                  >
+                    <Ban size={14} />
+                    <span>Reject</span>
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => setDeleteConfirmItem(viewingItem)}
+                  className="p-2 rounded-xl text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
+                  title="Delete feedback"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            </div>
+          )
+        }
+      >
+        {viewingItem && (
+          <div className="space-y-4">
             {/* Rating & Status Bar */}
             <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800">
               <div className="flex items-center gap-1.5">
@@ -639,57 +669,9 @@ export default function FeedbackManager({ onFeedbackChanged }) {
                 "{viewingItem.feedback}"
               </p>
             </div>
-
-            {/* Moderation Controls in Modal */}
-            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
-              <button
-                onClick={() => handleToggleFeatured(viewingItem)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
-              >
-                <Star
-                  size={14}
-                  className={viewingItem.featured ? 'text-amber-400 fill-amber-400' : ''}
-                />
-                <span>{viewingItem.featured ? 'Unmark Featured' : 'Mark Featured'}</span>
-              </button>
-
-              <div className="flex items-center gap-2">
-                {viewingItem.status !== 'approved' && (
-                  <button
-                    onClick={() => handleApprove(viewingItem)}
-                    disabled={actionLoading}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors cursor-pointer"
-                  >
-                    <CheckCircle2 size={14} />
-                    <span>Approve</span>
-                  </button>
-                )}
-
-                {viewingItem.status !== 'rejected' && (
-                  <button
-                    onClick={() => handleReject(viewingItem)}
-                    disabled={actionLoading}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold transition-colors cursor-pointer"
-                  >
-                    <Ban size={14} />
-                    <span>Reject</span>
-                  </button>
-                )}
-
-                <button
-                  onClick={() => {
-                    setDeleteConfirmItem(viewingItem);
-                  }}
-                  className="p-1.5 rounded-lg text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950 transition-colors cursor-pointer"
-                  title="Delete"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            </div>
           </div>
-        </div>
-      )}
+        )}
+      </AdminModal>
 
       {/* Delete Confirmation Modal */}
       <DeleteConfirmModal

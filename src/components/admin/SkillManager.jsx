@@ -7,6 +7,8 @@ import {
   toggleSkillVisibility
 } from '../../services/skillService';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import AdminModal from './ui/AdminModal';
+import { useAdminToast } from './ui/AdminToast';
 import {
   Plus,
   Search,
@@ -39,11 +41,13 @@ export default function SkillManager({ onSkillChanged }) {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [feedback, setFeedback] = useState(null);
 
+  const { showToast } = useAdminToast();
   // Modal States
   const [modalOpen, setModalOpen] = useState(false);
   const [editingSkill, setEditingSkill] = useState(null);
   const [deleteConfirmSkill, setDeleteConfirmSkill] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   // Form State
   const initialForm = {
@@ -54,6 +58,7 @@ export default function SkillManager({ onSkillChanged }) {
     visible: true,
   };
   const [formData, setFormData] = useState(initialForm);
+  const [initialSnapshot, setInitialSnapshot] = useState(JSON.stringify(initialForm));
   const [formErrors, setFormErrors] = useState({});
 
   const fetchSkillsList = async () => {
@@ -76,27 +81,33 @@ export default function SkillManager({ onSkillChanged }) {
   }, []);
 
   const handleOpenCreate = () => {
-    setEditingSkill(null);
-    setFormData({
+    const fresh = {
       ...initialForm,
       order: skills.length + 1,
-    });
+    };
+    setEditingSkill(null);
+    setFormData(fresh);
+    setInitialSnapshot(JSON.stringify(fresh));
     setFormErrors({});
     setModalOpen(true);
   };
 
   const handleOpenEdit = (skill) => {
-    setEditingSkill(skill);
-    setFormData({
+    const editData = {
       name: skill.name || '',
       category: skill.category || 'Other',
       icon: skill.icon || 'Code',
       order: skill.order || 99,
       visible: skill.visible !== false,
-    });
+    };
+    setEditingSkill(skill);
+    setFormData(editData);
+    setInitialSnapshot(JSON.stringify(editData));
     setFormErrors({});
     setModalOpen(true);
   };
+
+  const isDirty = JSON.stringify(formData) !== initialSnapshot;
 
   const validateForm = () => {
     const errors = {};
@@ -119,24 +130,29 @@ export default function SkillManager({ onSkillChanged }) {
         const res = await updateSkill(editingSkill.id, formData);
         if (res.success) {
           setFeedback({ type: 'success', message: `Skill "${formData.name}" updated successfully.` });
+          showToast({ type: 'success', message: `Skill "${formData.name}" updated successfully.` });
           setModalOpen(false);
           await fetchSkillsList();
         } else {
           setFeedback({ type: 'error', message: res.error || 'Failed to update skill.' });
+          showToast({ type: 'error', message: res.error || 'Failed to update skill.' });
         }
       } else {
         // Create
         const res = await createSkill(formData);
         if (res.success) {
           setFeedback({ type: 'success', message: `Skill "${formData.name}" added to catalog.` });
+          showToast({ type: 'success', message: `Skill "${formData.name}" added to catalog.` });
           setModalOpen(false);
           await fetchSkillsList();
         } else {
           setFeedback({ type: 'error', message: res.error || 'Failed to create skill.' });
+          showToast({ type: 'error', message: res.error || 'Failed to create skill.' });
         }
       }
     } catch (err) {
       setFeedback({ type: 'error', message: err.message || 'Operation failed.' });
+      showToast({ type: 'error', message: err.message || 'Operation failed.' });
     } finally {
       setSaving(false);
     }
@@ -144,20 +160,23 @@ export default function SkillManager({ onSkillChanged }) {
 
   const handleDelete = async () => {
     if (!deleteConfirmSkill) return;
-    setSaving(true);
+    setDeleteLoading(true);
     try {
       const res = await deleteSkill(deleteConfirmSkill.id);
       if (res.success) {
         setFeedback({ type: 'success', message: `Skill "${deleteConfirmSkill.name}" deleted.` });
+        showToast({ type: 'success', message: `Skill "${deleteConfirmSkill.name}" deleted.` });
         setDeleteConfirmSkill(null);
         await fetchSkillsList();
       } else {
         setFeedback({ type: 'error', message: res.error || 'Failed to delete skill.' });
+        showToast({ type: 'error', message: res.error || 'Failed to delete skill.' });
       }
     } catch (err) {
       setFeedback({ type: 'error', message: err.message });
+      showToast({ type: 'error', message: err.message });
     } finally {
-      setSaving(false);
+      setDeleteLoading(false);
     }
   };
 
@@ -397,155 +416,134 @@ export default function SkillManager({ onSkillChanged }) {
       </div>
 
       {/* Create / Edit Skill Modal */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div
-            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-6 animate-scale-up"
-            role="dialog"
-            aria-modal="true"
-          >
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 flex items-center justify-center">
-                  <Code size={18} />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                    {editingSkill ? 'Edit Skill' : 'Add New Skill'}
-                  </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Configure skill name, category group, icon, and display order
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => setModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg cursor-pointer"
+      <AdminModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={editingSkill ? 'Edit Skill' : 'Add New Skill'}
+        description="Configure skill name, category group, icon, and display order"
+        icon={Code}
+        size="medium"
+        hasUnsavedChanges={isDirty}
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => setModalOpen(false)}
+              disabled={saving}
+              className="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              form="skill-editor-form"
+              disabled={saving}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 transition-colors shadow-sm cursor-pointer disabled:opacity-50"
+            >
+              {saving ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <span>{editingSkill ? 'Save Changes' : 'Create Skill'}</span>
+              )}
+            </button>
+          </>
+        }
+      >
+        <form id="skill-editor-form" onSubmit={handleSave} className="space-y-4">
+          {/* Skill Name */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              Skill / Technology Name *
+            </label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="e.g. TypeScript, Docker, PostgreSQL"
+              className={`w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border ${
+                formErrors.name
+                  ? 'border-red-500 focus:ring-red-500'
+                  : 'border-slate-200 dark:border-slate-800 focus:ring-primary-500'
+              } text-slate-900 dark:text-white focus:outline-none focus:ring-2`}
+            />
+            {formErrors.name && (
+              <p className="text-xs text-red-500 mt-1 font-medium">{formErrors.name}</p>
+            )}
+          </div>
+
+          {/* Category */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              Category *
+            </label>
+            <select
+              value={formData.category}
+              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
+            >
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Icon identifier */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                Icon Identifier
+              </label>
+              <select
+                value={formData.icon}
+                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
               >
-                <X size={18} />
-              </button>
+                {COMMON_ICONS.map((ico) => (
+                  <option key={ico} value={ico}>
+                    {ico}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            <form onSubmit={handleSave} className="space-y-4">
-              {/* Skill Name */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Skill / Technology Name *
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="e.g. TypeScript, Docker, PostgreSQL"
-                  className={`w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border ${
-                    formErrors.name
-                      ? 'border-red-500 focus:ring-red-500'
-                      : 'border-slate-200 dark:border-slate-800 focus:ring-primary-500'
-                  } text-slate-900 dark:text-white focus:outline-none focus:ring-2`}
-                />
-                {formErrors.name && (
-                  <p className="text-xs text-red-500 mt-1 font-medium">{formErrors.name}</p>
-                )}
-              </div>
-
-              {/* Category */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Category *
-                </label>
-                <select
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
-                >
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                {/* Icon identifier */}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    Icon Identifier
-                  </label>
-                  <select
-                    value={formData.icon}
-                    onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
-                  >
-                    {COMMON_ICONS.map((ico) => (
-                      <option key={ico} value={ico}>
-                        {ico}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Display Order */}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    Display Order
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={formData.order}
-                    onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value, 10) || 1 })}
-                    className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  />
-                </div>
-              </div>
-
-              {/* Visibility Checkbox */}
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-                <input
-                  type="checkbox"
-                  id="skill-visible-toggle"
-                  checked={formData.visible}
-                  onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
-                  className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300 dark:border-slate-700 cursor-pointer"
-                />
-                <label
-                  htmlFor="skill-visible-toggle"
-                  className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer select-none"
-                >
-                  Visible on public portfolio website
-                </label>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
-                  disabled={saving}
-                  className="px-4 py-2 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 transition-colors shadow-sm cursor-pointer disabled:opacity-50"
-                >
-                  {saving ? (
-                    <>
-                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Saving...</span>
-                    </>
-                  ) : (
-                    <span>{editingSkill ? 'Save Changes' : 'Create Skill'}</span>
-                  )}
-                </button>
-              </div>
-            </form>
+            {/* Display Order */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                Display Order
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={formData.order}
+                onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value, 10) || 1 })}
+                className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
           </div>
-        </div>
-      )}
+
+          {/* Visibility Checkbox */}
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+            <input
+              type="checkbox"
+              id="skill-visible-toggle"
+              checked={formData.visible}
+              onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
+              className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300 dark:border-slate-700 cursor-pointer"
+            />
+            <label
+              htmlFor="skill-visible-toggle"
+              className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer select-none"
+            >
+              Visible on public portfolio website
+            </label>
+          </div>
+        </form>
+      </AdminModal>
 
       {/* Delete Confirmation Modal */}
       <DeleteConfirmModal
@@ -556,7 +554,7 @@ export default function SkillManager({ onSkillChanged }) {
         message="Are you sure you want to delete this skill from the portfolio catalog? It will no longer appear on your public website."
         onConfirm={handleDelete}
         onCancel={() => setDeleteConfirmSkill(null)}
-        loading={saving}
+        loading={deleteLoading}
       />
     </div>
   );

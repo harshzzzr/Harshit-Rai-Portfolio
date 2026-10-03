@@ -7,6 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
 import AnalyticsTracker from './components/AnalyticsTracker';
 import ErrorBoundary from './components/ErrorBoundary';
+import { AdminToastProvider } from './components/admin/ui/AdminToast';
 
 // Route-level code splitting
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -81,7 +82,9 @@ export default function App() {
                 path="/admin"
                 element={
                   <ProtectedRoute>
-                    <AdminDashboardPage />
+                    <AdminToastProvider>
+                      <AdminDashboardPage />
+                    </AdminToastProvider>
                   </ProtectedRoute>
                 }
               />

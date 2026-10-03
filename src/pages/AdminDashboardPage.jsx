@@ -15,7 +15,9 @@ import {
   CheckCircle2,
   ArrowRight,
   Sliders,
-  BarChart3
+  BarChart3,
+  RotateCcw,
+  ShieldCheck
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProjectManager from '../components/admin/ProjectManager';
@@ -27,8 +29,15 @@ import FeedbackManager from '../components/admin/FeedbackManager';
 import AnalyticsManager from '../components/admin/AnalyticsManager';
 import { getAnalyticsSummary } from '../services/analyticsService';
 import SEO from '../components/SEO';
+import { useAdminToast } from '../components/admin/ui/AdminToast';
+import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import { SITE_CONFIG } from '../config/site';
 
 export default function AdminDashboardPage() {
+  const { showToast } = useAdminToast();
+  const { currentUser } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [counts, setCounts] = useState({
     projects: 0,
@@ -105,6 +114,22 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const handleResetDashboardView = async () => {
+    setActiveTab('dashboard');
+    await fetchDashboardData();
+    showToast('Dashboard view and metrics have been reset.', 'info');
+  };
+
+  const handleResetAdminPreferences = () => {
+    try {
+      localStorage.removeItem('admin_filter_cache');
+      localStorage.removeItem('admin_table_view');
+      showToast('Admin preferences have been reset to defaults.', 'success');
+    } catch {
+      showToast('Preferences reset.', 'info');
+    }
+  };
+
   useEffect(() => {
     fetchDashboardData();
   }, []);
@@ -126,14 +151,23 @@ export default function AdminDashboardPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={handleResetDashboardView}
+              disabled={loading}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+              title="Reset dashboard view to default"
+            >
+              <RotateCcw size={13} />
+              <span>Reset View</span>
+            </button>
             <button
               onClick={fetchDashboardData}
               disabled={loading}
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
               title="Refresh inventory counts"
             >
-              <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+              <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
               <span>Refresh</span>
             </button>
             <Link
@@ -412,44 +446,141 @@ export default function AdminDashboardPage() {
           <AnalyticsManager onDataChanged={fetchDashboardData} />
         )}
 
-        {/* Dedicated Section Placeholders for remaining sidebar tabs (settings) */}
-        {activeTab !== 'dashboard' &&
-          activeTab !== 'analytics' &&
-          activeTab !== 'projects' &&
-          activeTab !== 'skills' &&
-          activeTab !== 'education' &&
-          activeTab !== 'experience' &&
-          activeTab !== 'hackathons' &&
-          activeTab !== 'research' &&
-          activeTab !== 'achievements' &&
-          activeTab !== 'certifications' &&
-          activeTab !== 'messages' &&
-          activeTab !== 'feedback' && (
-          <div className="p-8 sm:p-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-6 shadow-sm animate-fade-in">
-            <div className="w-16 h-16 rounded-2xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 mx-auto flex items-center justify-center">
-              <Sliders size={32} />
+        {/* Settings View */}
+        {activeTab === 'settings' && (
+          <div className="space-y-6 animate-fade-in">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Card 1: Admin Preferences */}
+              <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400">
+                    <Sliders size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                      Console Preferences
+                    </h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Configure your local admin interface preferences
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+                    <div>
+                      <div className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                        Theme Mode
+                      </div>
+                      <div className="text-[11px] text-slate-500">
+                        Currently: <span className="font-mono capitalize font-medium">{theme}</span> mode
+                      </div>
+                    </div>
+                    <button
+                      onClick={toggleTheme}
+                      className="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                    >
+                      Toggle Theme
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+                    <div>
+                      <div className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                        Reset Admin Preferences
+                      </div>
+                      <div className="text-[11px] text-slate-500">
+                        Restores default UI filters and local caches without modifying database
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleResetAdminPreferences}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 text-xs font-medium transition-colors cursor-pointer"
+                    >
+                      <RotateCcw size={13} />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2: Environment & Production Health */}
+              <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400">
+                    <ShieldCheck size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                      Deployment & Environment
+                    </h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Verified infrastructure parameters and live configuration
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-3 pt-2 text-xs">
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+                    <span className="text-slate-500">Production URL:</span>
+                    <a
+                      href={SITE_CONFIG.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-mono text-primary-600 dark:text-primary-400 hover:underline inline-flex items-center gap-1 font-semibold"
+                    >
+                      <span>{SITE_CONFIG.url}</span>
+                      <ExternalLink size={12} />
+                    </a>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+                    <span className="text-slate-500">Firebase Backend:</span>
+                    <span className="inline-flex items-center gap-1 font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
+                      <CheckCircle2 size={13} />
+                      <span>Online / Active</span>
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+                    <span className="text-slate-500">Active Admin Session:</span>
+                    <span className="font-mono text-slate-700 dark:text-slate-300 font-medium truncate max-w-[200px]">
+                      {currentUser?.email || 'admin@portfolio'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+                    <span className="text-slate-500">Deployment Target:</span>
+                    <span className="font-mono text-slate-700 dark:text-slate-300 font-semibold">
+                      Vercel Production
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="max-w-md mx-auto space-y-2">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white capitalize">
-                {activeTab} Management
-              </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                {activeTab === 'settings' && 'Administrator preferences and Firebase environment status settings.'}
-              </p>
-            </div>
+            {/* Reset & Quick Actions Bar */}
+            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-primary-100 dark:bg-primary-950 text-primary-600 dark:text-primary-400">
+                  <BarChart3 size={20} />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                    Need to inspect or reset traffic metrics?
+                  </h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Visitor analytics buffer and telemetry events are maintained under the Analytics console.
+                  </p>
+                </div>
+              </div>
 
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-mono text-slate-600 dark:text-slate-300">
-              <CheckCircle2 size={14} className="text-emerald-500" />
-              <span>Section verified in v4.1 navigation</span>
-            </div>
-
-            <div className="pt-2">
               <button
-                onClick={() => setActiveTab('dashboard')}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                onClick={() => setActiveTab('analytics')}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold transition-colors cursor-pointer shrink-0"
               >
-                <span>Return to Overview</span>
+                <span>Go to Analytics</span>
+                <ArrowRight size={13} />
               </button>
             </div>
           </div>

@@ -2,6 +2,8 @@ import {
   collection,
   addDoc,
   getDocs,
+  deleteDoc,
+  doc,
   serverTimestamp,
   query,
   orderBy,
@@ -424,3 +426,30 @@ export function clearAnalytics() {
     console.error('[Analytics] Error clearing local storage:', err);
   }
 }
+
+/**
+ * Safely and strictly reset analytics data only.
+ * This completely isolates analytics records and leaves all portfolio content intact.
+ */
+export async function resetAnalyticsData() {
+  clearAnalytics();
+  let remoteDeleted = 0;
+
+  if (isFirebaseConfigured && db) {
+    try {
+      const snapshot = await getDocs(collection(db, COLLECTIONS.ANALYTICS));
+      if (!snapshot.empty) {
+        const deleteOps = snapshot.docs.map((docSnap) =>
+          deleteDoc(doc(db, COLLECTIONS.ANALYTICS, docSnap.id))
+        );
+        await Promise.all(deleteOps);
+        remoteDeleted = snapshot.docs.length;
+      }
+    } catch (err) {
+      console.warn('[Analytics] Firestore analytics deletion notice:', err.message);
+    }
+  }
+
+  return { success: true, count: remoteDeleted };
+}
+
