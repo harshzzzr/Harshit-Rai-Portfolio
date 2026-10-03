@@ -8,13 +8,13 @@ function ProjectCard({ project }) {
   const { id, title, description, technologies, featured, githubUrl, liveUrl, badge, image } = project;
 
   const fallbackBanner = (
-    <div className="relative h-44 w-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center border-b border-slate-200 dark:border-slate-800 overflow-hidden">
-      <div className="absolute inset-0 opacity-20 dark:opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]" />
+    <div className="relative h-44 w-full bg-slate-100 dark:bg-[#141516] flex items-center justify-center border-b border-slate-200 dark:border-white/10 overflow-hidden">
+      <div className="absolute inset-0 opacity-15 dark:opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]" />
       <div className="flex flex-col items-center gap-2 z-10">
-        <div className="p-3 rounded-xl bg-white dark:bg-slate-900/90 shadow-sm border border-slate-200 dark:border-slate-700 text-primary-600 dark:text-primary-400">
-          <FolderGit2 size={32} />
+        <div className="p-3 rounded-xl bg-white dark:bg-[#101112] shadow-xs border border-slate-200 dark:border-white/10 text-primary-600 dark:text-primary-400">
+          <FolderGit2 size={30} />
         </div>
-        <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400 tracking-wide">
+        <span className="text-xs font-mono font-medium text-slate-500 dark:text-[#D7E2EA]/60 tracking-wide">
           {badge || 'Project Architecture'}
         </span>
       </div>
@@ -23,23 +23,23 @@ function ProjectCard({ project }) {
 
   return (
     <article
-      className={`group relative rounded-xl bg-white dark:bg-slate-900 border transition-colors flex flex-col justify-between overflow-hidden ${
+      className={`group relative rounded-xl flex flex-col justify-between overflow-hidden transition-all duration-300 ${
         featured
-          ? 'border-primary-500/40 dark:border-primary-500/30 shadow-sm hover:border-primary-500'
-          : 'border-slate-200 dark:border-slate-800 shadow-sm hover:border-slate-300 dark:hover:border-slate-700'
+          ? 'glass-panel hover:border-black/20 dark:hover:border-white/30'
+          : 'bg-white dark:bg-[#101112] border border-slate-200 dark:border-white/10 shadow-xs hover:border-slate-300 dark:hover:border-white/20'
       }`}
     >
       {/* Visual Header / Image Preview with Fallback */}
       <Link
         to={`/projects/${id}`}
-        className="block relative h-44 w-full border-b border-slate-200 dark:border-slate-800 overflow-hidden cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500"
+        className="block relative h-44 w-full border-b border-slate-200 dark:border-white/10 overflow-hidden cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500"
         aria-label={`View details and architecture for ${title}`}
       >
         {image ? (
           <SafeImage
             src={image}
             alt={`Screenshot preview of ${title} application`}
-            className="w-full h-44"
+            className="w-full h-44 object-cover group-hover:scale-[1.015] transition-transform duration-300"
             fallbackComponent={fallbackBanner}
           />
         ) : (
@@ -48,7 +48,7 @@ function ProjectCard({ project }) {
 
         {/* Featured Tag */}
         {featured && (
-          <div className="absolute top-3 right-3 z-20 inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-primary-600 text-white shadow-sm">
+          <div className="absolute top-3 right-3 z-20 inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-500 text-white shadow-xs">
             <Sparkles size={12} aria-hidden="true" />
             <span>Featured</span>
           </div>
@@ -58,15 +58,15 @@ function ProjectCard({ project }) {
       {/* Content Area */}
       <div className="p-4 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
         <div className="space-y-2">
-          <h3 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white break-words">
+          <h3 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-[#D7E2EA] break-words">
             <Link
               to={`/projects/${id}`}
-              className="block hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
+              className="block hover:text-primary-600 dark:hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
             >
               {title}
             </Link>
           </h3>
-          <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+          <p className="text-sm text-slate-600 dark:text-[#D7E2EA]/75 leading-relaxed">
             {description}
           </p>
         </div>
@@ -77,7 +77,7 @@ function ProjectCard({ project }) {
             {technologies.map((tech) => (
               <span
                 key={tech}
-                className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700/80 break-words"
+                className="px-2.5 py-1 rounded-md text-xs font-mono font-medium bg-slate-100 dark:bg-[#141516] text-slate-700 dark:text-[#D7E2EA] border border-slate-200/80 dark:border-white/8 break-words"
               >
                 {tech}
               </span>
@@ -86,7 +86,7 @@ function ProjectCard({ project }) {
         </div>
 
         {/* Action Links */}
-        <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-3">
+        <div className="pt-4 border-t border-slate-100 dark:border-white/8 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-3">
               {githubUrl && (
@@ -94,7 +94,7 @@ function ProjectCard({ project }) {
                   href={githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-0.5"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-[#D7E2EA] hover:text-primary-600 dark:hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-0.5"
                   aria-label={`View source code for ${title} on GitHub (opens in new tab)`}
                 >
                   <GithubIcon size={15} />
@@ -107,20 +107,20 @@ function ProjectCard({ project }) {
                   href={liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-0.5"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-0.5"
                   aria-label={`View live demo of ${title} (opens in new tab)`}
                 >
                   <ExternalLink size={15} />
                   <span>Demo</span>
                 </a>
               ) : (
-                <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+                <span className="text-xs font-mono text-slate-500 dark:text-[#D7E2EA]/50">
                   Offline Build
                 </span>
               )}
             </div>
 
-            <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+            <span className="text-[11px] font-mono text-slate-500 dark:text-[#D7E2EA]/50">
               {featured ? 'Priority' : 'Standard'}
             </span>
           </div>
@@ -129,7 +129,7 @@ function ProjectCard({ project }) {
           <Link
             to={`/projects/${id}`}
             aria-label={`View architecture and full details for ${title}`}
-            className="w-full inline-flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold bg-slate-50 dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-950 text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 border border-slate-200 dark:border-slate-700 transition-colors group/btn focus-visible:ring-2 focus-visible:ring-primary-500 text-center"
+            className="w-full inline-flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold bg-slate-50 dark:bg-[#141516] hover:bg-slate-100 dark:hover:bg-white/10 text-slate-700 dark:text-[#D7E2EA] hover:text-primary-600 dark:hover:text-white border border-slate-200 dark:border-white/10 transition-colors group/btn focus-visible:ring-2 focus-visible:ring-primary-500 text-center"
           >
             <span>Project Details & Architecture</span>
             <ArrowRight size={13} className="group-hover/btn:translate-x-1 transition-transform" aria-hidden="true" />

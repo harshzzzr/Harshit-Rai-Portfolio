@@ -47,21 +47,21 @@ export default function Skills() {
   }, []);
 
   return (
-    <section id="skills" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-100/50 dark:bg-slate-900/40 border-t border-slate-200 dark:border-slate-800/60">
+    <section id="skills" className="py-20 px-4 sm:px-6 lg:px-8 border-t border-black/5 dark:border-white/10">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-mono font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 mb-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-medium bg-white dark:bg-[#141516] border border-slate-200 dark:border-white/10 text-slate-600 dark:text-[#D7E2EA] mb-1 shadow-xs">
             <span className={`w-2 h-2 rounded-full ${isLive ? 'bg-emerald-500 animate-pulse' : 'bg-primary-500'}`} />
             <span>{isLive ? 'Cloud Firestore Live Skills' : 'Categorized Technical Stack'}</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-[#D7E2EA] font-sans">
             Skills & Technologies
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-[#D7E2EA]/75 max-w-xl mx-auto">
             Practical experience across core languages, modern frameworks, data systems, and developer tooling.
           </p>
-          <div className="w-12 h-1 bg-primary-500 mx-auto rounded-sm mt-2" />
+          <div className="w-12 h-0.5 bg-primary-500 mx-auto rounded-xs mt-2" />
         </div>
 
         {/* Loading State Skeleton */}
@@ -70,16 +70,16 @@ export default function Skills() {
             {[1, 2, 3, 4, 5, 6].map((idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4 animate-pulse"
+                className="p-6 rounded-xl bg-white dark:bg-[#101112] border border-slate-200 dark:border-white/10 space-y-4 animate-pulse shadow-xs"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-slate-200 dark:bg-slate-800" />
-                  <div className="h-5 w-32 bg-slate-200 dark:bg-slate-800 rounded" />
+                  <div className="w-9 h-9 rounded-lg bg-slate-200 dark:bg-[#141516]" />
+                  <div className="h-5 w-32 bg-slate-200 dark:bg-[#141516] rounded" />
                 </div>
                 <div className="flex flex-wrap gap-2 pt-2">
-                  <div className="h-7 w-16 bg-slate-200 dark:bg-slate-800 rounded" />
-                  <div className="h-7 w-20 bg-slate-200 dark:bg-slate-800 rounded" />
-                  <div className="h-7 w-14 bg-slate-200 dark:bg-slate-800 rounded" />
+                  <div className="h-7 w-16 bg-slate-200 dark:bg-[#141516] rounded" />
+                  <div className="h-7 w-20 bg-slate-200 dark:bg-[#141516] rounded" />
+                  <div className="h-7 w-14 bg-slate-200 dark:bg-[#141516] rounded" />
                 </div>
               </div>
             ))}
@@ -112,20 +112,20 @@ export default function Skills() {
 
         {/* Empty State */}
         {!loading && !error && categories.length === 0 && (
-          <div className="text-center py-16 px-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 max-w-lg mx-auto space-y-3">
-            <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 mx-auto flex items-center justify-center">
+          <div className="text-center py-16 px-4 rounded-xl border border-dashed border-slate-300 dark:border-white/10 max-w-lg mx-auto space-y-3">
+            <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-[#141516] text-slate-500 mx-auto flex items-center justify-center">
               <Code size={24} />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-[#D7E2EA]">
               No Skills Available
             </h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
+            <p className="text-sm text-slate-500 dark:text-[#D7E2EA]/60">
               Technical skills catalog is currently being updated in the database.
             </p>
           </div>
         )}
 
-        {/* Categories Grid */}
+        {/* Categories Grid (Solid Architectural Surfaces - Section 18) */}
         {!loading && !error && categories.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categories.map((catGroup) => {
@@ -133,14 +133,14 @@ export default function Skills() {
               return (
                 <div
                   key={catGroup.category}
-                  className="p-4 sm:p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200 flex flex-col justify-between"
+                  className="p-4 sm:p-6 rounded-xl bg-white dark:bg-[#101112] border border-slate-200 dark:border-white/10 shadow-xs hover:border-slate-300 dark:hover:border-white/20 transition-all duration-200 flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-center gap-2.5 sm:gap-3 mb-4 sm:mb-5">
-                      <div className="p-2 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 shrink-0">
+                      <div className="p-2 rounded-lg bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 shrink-0 border border-primary-200/50 dark:border-primary-800/40">
                         <IconComponent size={20} />
                       </div>
-                      <h3 className="text-base font-semibold text-slate-900 dark:text-white break-words">
+                      <h3 className="text-base font-bold text-slate-900 dark:text-[#D7E2EA] break-words">
                         {catGroup.category}
                       </h3>
                     </div>
@@ -149,7 +149,7 @@ export default function Skills() {
                       {catGroup.skills.map((skill) => (
                         <span
                           key={skill.id || skill.name}
-                          className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-200 hover:border-primary-500/60 dark:hover:border-primary-500/60 hover:text-primary-600 dark:hover:text-primary-400 transition-colors break-words"
+                          className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-50 dark:bg-[#141516] border border-slate-200 dark:border-white/8 text-slate-700 dark:text-[#D7E2EA] hover:border-primary-500/60 dark:hover:border-primary-500/60 hover:text-primary-600 dark:hover:text-primary-400 transition-colors break-words"
                         >
                           <span className="w-1.5 h-1.5 rounded-full bg-primary-500 shrink-0" />
                           <span>{skill.name}</span>
@@ -158,7 +158,7 @@ export default function Skills() {
                     </div>
                   </div>
 
-                  <div className="mt-5 sm:mt-6 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-[11px] font-mono text-slate-400 dark:text-slate-500">
+                  <div className="mt-5 sm:mt-6 pt-3 border-t border-slate-100 dark:border-white/5 text-[11px] font-mono text-slate-400 dark:text-[#D7E2EA]/50">
                     {catGroup.skills.length} verified technologies
                   </div>
                 </div>

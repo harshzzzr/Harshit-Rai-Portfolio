@@ -12,6 +12,17 @@ export default {
         mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
       },
       colors: {
+        architectural: {
+          dark: '#0C0C0C',
+          secondaryDark: '#101112',
+          elevatedDark: '#141516',
+          light: '#F2F1ED',
+          secondaryLight: '#E9E8E3',
+          elevatedLight: '#FFFFFF',
+          textDark: '#D7E2EA',
+          mutedDark: 'rgba(215, 226, 234, 0.50)',
+          secondaryTextDark: 'rgba(215, 226, 234, 0.70)',
+        },
         primary: {
           50: '#f0f9ff',
           100: '#e0f2fe',
@@ -27,16 +38,33 @@ export default {
         },
         surface: {
           light: '#ffffff',
-          dark: '#0f172a',
-          cardLight: '#f8fafc',
-          cardDark: '#1e293b',
+          dark: '#101112',
+          cardLight: '#ffffff',
+          cardDark: '#101112',
         }
       },
+      borderRadius: {
+        'sm': '8px',
+        'md': '14px',
+        'lg': '20px',
+        'xl': '28px',
+        '2xl': '32px',
+      },
       boxShadow: {
-        'card-light': '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)',
-        'card-hover-light': '0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04)',
-        'card-dark': '0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px -1px rgba(0, 0, 0, 0.3)',
-        'card-hover-dark': '0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.4)',
+        'card-light': '0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 8px 24px rgba(0, 0, 0, 0.04), 0 24px 60px rgba(0, 0, 0, 0.03)',
+        'card-dark': '0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 8px 24px rgba(0, 0, 0, 0.12), 0 24px 60px rgba(0, 0, 0, 0.10)',
+        'glass-dark': '0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 8px 24px rgba(0, 0, 0, 0.12), 0 24px 60px rgba(0, 0, 0, 0.10)',
+        'glass-modal': '0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 12px 32px rgba(0, 0, 0, 0.35)',
+      },
+      backdropBlur: {
+        'glass': '32px',
+        'glass-subtle': '24px',
+        'glass-strong': '40px',
+        'glass-mobile': '20px',
+      },
+      letterSpacing: {
+        'editorial': '-0.035em',
+        'editorial-tight': '-0.04em',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out forwards',
@@ -44,11 +72,11 @@ export default {
       },
       keyframes: {
         fadeIn: {
-          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '0%': { opacity: '0', transform: 'translateY(8px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         slideDown: {
-          '0%': { opacity: '0', transform: 'translateY(-10px)' },
+          '0%': { opacity: '0', transform: 'translateY(-8px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
       }

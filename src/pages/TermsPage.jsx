@@ -20,30 +20,30 @@ export default function TermsPage() {
       <div className="mb-8">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-1"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-neutral-600 dark:text-[#D7E2EA]/70 hover:text-neutral-950 dark:hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-neutral-400 rounded p-1"
         >
           <ArrowLeft size={14} />
           <span>Return to Portfolio</span>
         </Link>
       </div>
 
-      <header className="space-y-3 pb-8 border-b border-slate-200 dark:border-slate-800">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-mono font-medium bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800/60">
+      <header className="space-y-3 pb-8 border-b border-neutral-200 dark:border-white/10">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-mono font-medium bg-neutral-100 dark:bg-white/[0.05] text-neutral-700 dark:text-[#D7E2EA] border border-neutral-200 dark:border-white/10 shadow-xs">
           <FileText size={14} />
           <span>Terms of Service</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 dark:text-[#D7E2EA]">
           Terms & Conditions
         </h1>
-        <p className="text-sm font-mono text-slate-500 dark:text-slate-400">
+        <p className="text-sm font-mono text-neutral-500 dark:text-[#D7E2EA]/60">
           Effective Date: {lastUpdated}
         </p>
       </header>
 
-      <div className="py-8 space-y-8 text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+      <div className="py-8 space-y-8 text-sm sm:text-base text-neutral-700 dark:text-[#D7E2EA]/80 leading-relaxed">
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <Scale size={18} className="text-primary-600 dark:text-primary-400" />
+          <h2 className="text-xl font-bold text-neutral-900 dark:text-[#D7E2EA] flex items-center gap-2">
+            <Scale size={18} className="text-neutral-700 dark:text-[#D7E2EA]" />
             <span>1. Acceptance of Terms</span>
           </h2>
           <p>
@@ -52,8 +52,8 @@ export default function TermsPage() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <CheckCircle size={18} className="text-primary-600 dark:text-primary-400" />
+          <h2 className="text-xl font-bold text-neutral-900 dark:text-[#D7E2EA] flex items-center gap-2">
+            <CheckCircle size={18} className="text-neutral-700 dark:text-[#D7E2EA]" />
             <span>2. Intellectual Property and Open-Source Licensing</span>
           </h2>
           <p>
@@ -65,8 +65,8 @@ export default function TermsPage() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <ShieldAlert size={18} className="text-primary-600 dark:text-primary-400" />
+          <h2 className="text-xl font-bold text-neutral-900 dark:text-[#D7E2EA] flex items-center gap-2">
+            <ShieldAlert size={18} className="text-neutral-700 dark:text-[#D7E2EA]" />
             <span>3. Acceptable Use of Forms and Services</span>
           </h2>
           <p>
@@ -84,7 +84,7 @@ export default function TermsPage() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-xl font-bold text-neutral-900 dark:text-[#D7E2EA]">
             4. Accuracy of Information
           </h2>
           <p>
@@ -93,7 +93,7 @@ export default function TermsPage() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-xl font-bold text-neutral-900 dark:text-[#D7E2EA]">
             5. External Links
           </h2>
           <p>
@@ -102,7 +102,7 @@ export default function TermsPage() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-xl font-bold text-neutral-900 dark:text-[#D7E2EA]">
             6. Limitation of Liability
           </h2>
           <p>
@@ -111,17 +111,17 @@ export default function TermsPage() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-xl font-bold text-neutral-900 dark:text-[#D7E2EA]">
             7. Contact Inquiries
           </h2>
           <p>
             For questions or inquiries regarding these Terms & Conditions, please contact:
           </p>
-          <div className="p-4 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center gap-3">
-            <Mail size={18} className="text-primary-600 dark:text-primary-400 shrink-0" />
+          <div className="p-4 rounded-xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 flex items-center gap-3">
+            <Mail size={18} className="text-neutral-700 dark:text-[#D7E2EA] shrink-0" />
             <a
               href="mailto:harshittrrai@gmail.com"
-              className="font-mono text-sm text-primary-600 dark:text-primary-400 hover:underline"
+              className="font-mono text-sm text-neutral-900 dark:text-[#D7E2EA] hover:underline"
             >
               harshittrrai@gmail.com
             </a>

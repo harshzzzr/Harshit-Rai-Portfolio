@@ -161,18 +161,18 @@ export default function Feedback() {
   const activeRating = hoveredStar || formData.rating;
 
   return (
-    <section id="feedback" className="py-20 bg-slate-50/70 dark:bg-slate-900/40 relative">
+    <section id="feedback" className="py-20 relative border-t border-neutral-200 dark:border-white/10">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-mono font-medium bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800/60 mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-mono font-medium bg-neutral-100 dark:bg-white/[0.05] text-neutral-700 dark:text-[#D7E2EA] border border-neutral-200 dark:border-white/10 mb-3 shadow-xs">
             <MessageSquareQuote size={13} />
             <span>Peer & Professional Reviews</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 dark:text-[#D7E2EA]">
             Feedback & Endorsements
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-slate-600 dark:text-slate-400">
+          <p className="mt-3 text-sm sm:text-base text-neutral-600 dark:text-[#D7E2EA]/70">
             Share your feedback on our collaboration, projects, or technical discussions. All submissions undergo moderation before appearing publicly.
           </p>
         </div>
@@ -183,30 +183,30 @@ export default function Feedback() {
           <div className="lg:col-span-7 space-y-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <MessageSquareQuote size={18} className="text-primary-600 dark:text-primary-400" />
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                <MessageSquareQuote size={18} className="text-neutral-700 dark:text-[#D7E2EA]" />
+                <h3 className="text-lg font-bold text-neutral-900 dark:text-[#D7E2EA]">
                   Approved Endorsements
                 </h3>
               </div>
-              <span className="text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">
+              <span className="text-xs font-mono text-neutral-500 dark:text-[#D7E2EA]/60 bg-neutral-100 dark:bg-[#141516] border border-neutral-200 dark:border-white/10 px-2.5 py-1 rounded-md">
                 {approvedList.length} {approvedList.length === 1 ? 'Review' : 'Reviews'}
               </span>
             </div>
 
             {loadingApproved ? (
-              <div className="p-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex flex-col items-center justify-center space-y-3">
-                <Loader2 size={24} className="animate-spin text-primary-600 dark:text-primary-400" />
-                <p className="text-xs text-slate-500 font-mono">Loading reviews...</p>
+              <div className="p-8 rounded-xl border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] flex flex-col items-center justify-center space-y-3">
+                <Loader2 size={24} className="animate-spin text-neutral-400" />
+                <p className="text-xs text-neutral-500 dark:text-[#D7E2EA]/60 font-mono">Loading reviews...</p>
               </div>
             ) : approvedList.length === 0 ? (
-              <div className="p-8 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 bg-white/60 dark:bg-slate-950/60 text-center space-y-3">
-                <div className="w-12 h-12 mx-auto rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+              <div className="p-8 rounded-xl border border-dashed border-neutral-300 dark:border-white/10 bg-white/60 dark:bg-[#101112]/60 text-center space-y-3">
+                <div className="w-12 h-12 mx-auto rounded-lg bg-neutral-100 dark:bg-[#141516] flex items-center justify-center text-neutral-400">
                   <MessageSquareQuote size={24} />
                 </div>
-                <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                <h4 className="text-sm font-semibold text-neutral-800 dark:text-[#D7E2EA]">
                   No Public Reviews Yet
                 </h4>
-                <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+                <p className="text-xs text-neutral-500 dark:text-[#D7E2EA]/60 max-w-sm mx-auto">
                   Be the first to share an endorsement or feedback. Submitted entries are published here upon administrator approval.
                 </p>
               </div>
@@ -215,10 +215,10 @@ export default function Feedback() {
                 {approvedList.map((item) => (
                   <div
                     key={item.id}
-                    className={`p-4 sm:p-6 rounded-xl border transition-colors ${
+                    className={`p-4 sm:p-6 rounded-xl border transition-all ${
                       item.featured
-                        ? 'border-amber-400 dark:border-amber-500/60 bg-white dark:bg-slate-950 shadow-sm ring-1 ring-amber-400/20'
-                        : 'border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm'
+                        ? 'border-amber-400/40 dark:border-amber-400/30 glass-subtle shadow-sm ring-1 ring-amber-400/15'
+                        : 'border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] shadow-sm'
                     }`}
                   >
                     {/* Top Row: Stars, Featured Pill, and Date */}
@@ -232,25 +232,25 @@ export default function Feedback() {
                               className={`${
                                 s <= item.rating
                                   ? 'text-amber-400 fill-amber-400'
-                                  : 'text-slate-200 dark:text-slate-800'
+                                  : 'text-neutral-200 dark:text-neutral-800'
                               }`}
                             />
                           ))}
                         </div>
-                        <span className="text-[11px] font-mono font-semibold text-slate-600 dark:text-slate-400">
+                        <span className="text-[11px] font-mono font-semibold text-neutral-600 dark:text-[#D7E2EA]/70">
                           {item.rating}.0
                         </span>
                       </div>
 
                       <div className="flex items-center gap-2">
                         {item.featured && (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-mono font-medium px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-700/60 shadow-xs">
+                          <span className="inline-flex items-center gap-1 text-[11px] font-mono font-medium px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-500 dark:text-amber-400 border border-amber-500/25 shadow-xs">
                             <span>Featured</span>
                           </span>
                         )}
 
                         {item.createdAt && (
-                          <div className="flex items-center gap-1 text-[11px] font-mono text-slate-400 dark:text-slate-500">
+                          <div className="flex items-center gap-1 text-[11px] font-mono text-neutral-400 dark:text-[#D7E2EA]/50">
                             <Clock size={11} />
                             <span>
                               {new Date(item.createdAt).toLocaleDateString(undefined, {
@@ -266,26 +266,26 @@ export default function Feedback() {
 
                     {/* Feedback Quote Body */}
                     <div className="relative my-3">
-                      <span className="text-3xl font-serif text-primary-300 dark:text-primary-800 leading-none select-none absolute -top-2 -left-1 opacity-60">
+                      <span className="text-3xl font-serif text-neutral-300 dark:text-white/20 leading-none select-none absolute -top-2 -left-1 opacity-60">
                         “
                       </span>
-                      <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed pl-4 italic break-words">
+                      <p className="text-neutral-700 dark:text-[#D7E2EA]/85 text-sm leading-relaxed pl-4 italic break-words">
                         {item.feedback}
                       </p>
                     </div>
 
                     {/* Author Signature */}
-                    <div className="flex flex-wrap items-center justify-between gap-2 pt-3 mt-2 border-t border-slate-100 dark:border-slate-800/80 text-xs">
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-3 mt-2 border-t border-neutral-100 dark:border-white/10 text-xs">
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-md bg-slate-700 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
+                        <div className="w-7 h-7 rounded-md bg-neutral-800 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
                           {(item.name || 'U').charAt(0).toUpperCase()}
                         </div>
-                        <span className="font-semibold text-slate-900 dark:text-white break-words">
+                        <span className="font-semibold text-neutral-900 dark:text-[#D7E2EA] break-words">
                           {item.name}
                         </span>
                       </div>
 
-                      <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded shrink-0">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 px-2 py-0.5 rounded shrink-0">
                         <ShieldCheck size={11} />
                         <span>Moderated Review</span>
                       </span>
@@ -296,14 +296,14 @@ export default function Feedback() {
             )}
           </div>
 
-          {/* Right Column: Feedback Submission Form (lg: 5 cols) */}
+          {/* Right Column: Feedback Submission Form (lg: 5 cols - Solid Architectural Surface) */}
           <div className="lg:col-span-5">
-            <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-4 sm:p-8 shadow-sm">
+            <div className="rounded-2xl border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] p-4 sm:p-8 shadow-sm">
               <div className="mb-6">
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                <h3 className="text-xl font-bold text-neutral-900 dark:text-[#D7E2EA]">
                   Leave a Review
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                <p className="text-xs sm:text-sm text-neutral-500 dark:text-[#D7E2EA]/60 mt-1">
                   Your feedback helps improve future engineering projects and collaborations.
                 </p>
               </div>
@@ -315,16 +315,16 @@ export default function Feedback() {
                     <CheckCircle2 size={30} aria-hidden="true" />
                   </div>
                   <div>
-                    <h4 className="text-base font-bold text-slate-900 dark:text-white">
+                    <h4 className="text-base font-bold text-neutral-900 dark:text-[#D7E2EA]">
                       Thank You for Your Feedback!
                     </h4>
-                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-sm mx-auto">
+                    <p className="text-xs sm:text-sm text-neutral-600 dark:text-[#D7E2EA]/70 mt-1 max-w-sm mx-auto">
                       Your submission has been recorded with status <span className="font-mono text-amber-600 dark:text-amber-400 font-semibold">pending</span> and will appear publicly once approved by the administrator.
                     </p>
                   </div>
                   <button
                     onClick={handleResetForm}
-                    className="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 bg-primary-50 dark:bg-primary-950/40 hover:bg-primary-100 rounded-lg transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500"
+                    className="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-neutral-900 dark:text-neutral-100 bg-neutral-100 dark:bg-[#141516] hover:bg-neutral-200 dark:hover:bg-[#1a1c1e] border border-neutral-200 dark:border-white/10 rounded-lg transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-neutral-400"
                   >
                     Submit Another Review
                   </button>
@@ -348,7 +348,7 @@ export default function Feedback() {
 
                   {/* General Error Banner */}
                   {submitError && (
-                    <div role="alert" className="p-3 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-300 text-xs flex items-start gap-2">
+                    <div role="alert" className="p-3 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-2">
                       <AlertCircle size={15} className="mt-0.5 shrink-0" aria-hidden="true" />
                       <span>{submitError}</span>
                     </div>
@@ -358,9 +358,9 @@ export default function Feedback() {
                   <div>
                     <label
                       htmlFor="feedback_name"
-                      className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5"
+                      className="block text-xs font-medium text-neutral-700 dark:text-[#D7E2EA]/80 mb-1.5"
                     >
-                      Your Name / Role <span className="text-red-500">*</span>
+                      Your Name / Role <span className="text-rose-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -374,14 +374,14 @@ export default function Feedback() {
                       aria-invalid={Boolean(errors.name)}
                       aria-describedby={errors.name ? 'feedback-name-error' : undefined}
                       placeholder="e.g. Alex Rivera, Tech Lead"
-                      className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 border ${
+                      className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-neutral-50 dark:bg-[#141516] border ${
                         errors.name
-                          ? 'border-red-500 focus:ring-red-500'
-                          : 'border-slate-300 dark:border-slate-800 focus:ring-primary-500'
-                      } text-slate-900 dark:text-white placeholder-slate-400 focus-visible:ring-2 focus-visible:ring-primary-500 transition-all`}
+                          ? 'border-rose-500 focus:ring-rose-500'
+                          : 'border-neutral-200 dark:border-white/10 focus:ring-neutral-400 dark:focus:ring-white/20'
+                      } text-neutral-900 dark:text-[#D7E2EA] placeholder-neutral-400 dark:placeholder-neutral-500 focus-visible:ring-2 transition-all`}
                     />
                     {errors.name && (
-                      <p id="feedback-name-error" role="alert" className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
+                      <p id="feedback-name-error" role="alert" className="mt-1 text-xs text-rose-600 dark:text-rose-400 flex items-center gap-1">
                         <AlertCircle size={12} aria-hidden="true" />
                         <span>{errors.name}</span>
                       </p>
@@ -391,10 +391,10 @@ export default function Feedback() {
                   {/* Star Rating Selection */}
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
-                      <label id="rating-label" className="block text-xs font-medium text-slate-700 dark:text-slate-300">
-                        Rating <span className="text-red-500">*</span>
+                      <label id="rating-label" className="block text-xs font-medium text-neutral-700 dark:text-[#D7E2EA]/80">
+                        Rating <span className="text-rose-500">*</span>
                       </label>
-                      <span className="text-[11px] font-mono text-primary-600 dark:text-primary-400 font-medium">
+                      <span className="text-[11px] font-mono text-neutral-700 dark:text-[#D7E2EA]/90 font-medium">
                         {RATING_LABELS[activeRating] || `${activeRating} Stars`}
                       </span>
                     </div>
@@ -402,7 +402,7 @@ export default function Feedback() {
                     <div
                       role="radiogroup"
                       aria-labelledby="rating-label"
-                      className="flex items-center justify-between sm:justify-start gap-1 sm:gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
+                      className="flex items-center justify-between sm:justify-start gap-1 sm:gap-2 p-2 rounded-lg bg-neutral-50 dark:bg-[#141516] border border-neutral-200 dark:border-white/10"
                     >
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
@@ -425,7 +425,7 @@ export default function Feedback() {
                           }}
                           onMouseEnter={() => setHoveredStar(star)}
                           onMouseLeave={() => setHoveredStar(0)}
-                          className="p-1 rounded transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500"
+                          className="p-1 rounded transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-neutral-400"
                           aria-label={`Rate ${star} star${star > 1 ? 's' : ''}: ${RATING_LABELS[star]}`}
                         >
                           <Star
@@ -433,7 +433,7 @@ export default function Feedback() {
                             className={`sm:w-6 sm:h-6 transition-colors ${
                               star <= activeRating
                                 ? 'text-amber-400 fill-amber-400'
-                                : 'text-slate-300 dark:text-slate-700'
+                                : 'text-neutral-300 dark:text-neutral-700'
                             }`}
                             aria-hidden="true"
                           />
@@ -441,7 +441,7 @@ export default function Feedback() {
                       ))}
                     </div>
                     {errors.rating && (
-                      <p role="alert" className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
+                      <p role="alert" className="mt-1 text-xs text-rose-600 dark:text-rose-400 flex items-center gap-1">
                         <AlertCircle size={12} aria-hidden="true" />
                         <span>{errors.rating}</span>
                       </p>
@@ -453,15 +453,15 @@ export default function Feedback() {
                     <div className="flex items-center justify-between mb-1.5">
                       <label
                         htmlFor="feedback_text"
-                        className="block text-xs font-medium text-slate-700 dark:text-slate-300"
+                        className="block text-xs font-medium text-neutral-700 dark:text-[#D7E2EA]/80"
                       >
-                        Feedback / Review <span className="text-red-500">*</span>
+                        Feedback / Review <span className="text-rose-500">*</span>
                       </label>
                       <span
                         className={`text-[11px] font-mono ${
                           formData.feedback.length > 950
                             ? 'text-amber-600 dark:text-amber-400 font-bold'
-                            : 'text-slate-500 dark:text-slate-400'
+                            : 'text-neutral-500 dark:text-[#D7E2EA]/50'
                         }`}
                       >
                         {formData.feedback.length} / 1000
@@ -479,14 +479,14 @@ export default function Feedback() {
                       aria-invalid={Boolean(errors.feedback)}
                       aria-describedby={errors.feedback ? 'feedback-text-error' : undefined}
                       placeholder="Share your thoughts on collaboration, engineering quality, communication, or project milestones..."
-                      className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 border ${
+                      className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-neutral-50 dark:bg-[#141516] border ${
                         errors.feedback
-                          ? 'border-red-500 focus:ring-red-500'
-                          : 'border-slate-300 dark:border-slate-800 focus:ring-primary-500'
-                      } text-slate-900 dark:text-white placeholder-slate-400 focus-visible:ring-2 focus-visible:ring-primary-500 transition-all resize-none`}
+                          ? 'border-rose-500 focus:ring-rose-500'
+                          : 'border-neutral-200 dark:border-white/10 focus:ring-neutral-400 dark:focus:ring-white/20'
+                      } text-neutral-900 dark:text-[#D7E2EA] placeholder-neutral-400 dark:placeholder-neutral-500 focus-visible:ring-2 transition-all resize-none`}
                     />
                     {errors.feedback && (
-                      <p id="feedback-text-error" role="alert" className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
+                      <p id="feedback-text-error" role="alert" className="mt-1 text-xs text-rose-600 dark:text-rose-400 flex items-center gap-1">
                         <AlertCircle size={12} aria-hidden="true" />
                         <span>{errors.feedback}</span>
                       </p>
@@ -494,10 +494,10 @@ export default function Feedback() {
                   </div>
 
                   {/* Moderation Safety Notice */}
-                  <div className="p-3 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 flex items-start gap-2">
-                    <ShieldCheck size={14} className="mt-0.5 shrink-0 text-primary-600 dark:text-primary-400" />
+                  <div className="p-3 rounded-lg bg-neutral-50 dark:bg-white/[0.03] border border-neutral-200 dark:border-white/10 text-[11px] text-neutral-600 dark:text-[#D7E2EA]/70 flex items-start gap-2">
+                    <ShieldCheck size={14} className="mt-0.5 shrink-0 text-neutral-700 dark:text-[#D7E2EA]" />
                     <span>
-                      Submissions are held as <strong className="text-slate-700 dark:text-slate-300 font-medium">pending</strong> for moderation and only appear publicly upon administrator review.
+                      Submissions are held as <strong className="text-neutral-800 dark:text-[#D7E2EA] font-medium">pending</strong> for moderation and only appear publicly upon administrator review.
                     </span>
                   </div>
 
@@ -505,7 +505,7 @@ export default function Feedback() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm transition-all shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-neutral-900 hover:bg-neutral-800 dark:bg-[#D7E2EA] dark:hover:bg-white text-white dark:text-neutral-900 font-semibold text-sm transition-all shadow-sm disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                   >
                     {submitting ? (
                       <>

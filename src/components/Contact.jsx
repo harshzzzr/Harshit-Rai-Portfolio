@@ -147,47 +147,47 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-100/50 dark:bg-slate-900/40 border-t border-slate-200 dark:border-slate-800/60">
+    <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 relative border-t border-neutral-200 dark:border-white/10">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header */}
         <div className="text-center space-y-2">
-          <p className="text-xs font-mono font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
+          <p className="text-xs font-mono font-semibold uppercase tracking-wider text-neutral-500 dark:text-[#D7E2EA]/60">
             Get In Touch
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 dark:text-[#D7E2EA]">
             Contact Me
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
+          <p className="text-sm sm:text-base text-neutral-600 dark:text-[#D7E2EA]/70 max-w-xl mx-auto">
             Have a project idea, question, or looking to collaborate? Drop a message below.
           </p>
-          <div className="w-12 h-1 bg-primary-500 mx-auto rounded-sm mt-2" />
+          <div className="w-12 h-0.5 bg-neutral-300 dark:bg-white/20 mx-auto rounded-sm mt-3" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: Contact Information */}
-          <div className="lg:col-span-5 p-4 sm:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+          {/* Left Column: Contact Information (Solid Architectural Surface) */}
+          <div className="lg:col-span-5 p-4 sm:p-8 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-sm space-y-6">
             <div className="space-y-2">
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+              <h3 className="text-xl font-bold text-neutral-900 dark:text-[#D7E2EA]">
                 Let's Connect
               </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              <p className="text-sm text-neutral-600 dark:text-[#D7E2EA]/70 leading-relaxed">
                 I'm actively interested in software engineering internships, open-source projects, and collaborative technical challenges.
               </p>
             </div>
 
             <div className="space-y-4 pt-2">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-neutral-50 dark:bg-[#141516] border border-neutral-200 dark:border-white/10">
                 <div className="flex items-start gap-3 min-w-0">
-                  <div className="p-2.5 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 shrink-0">
+                  <div className="p-2.5 rounded-lg bg-neutral-200/60 dark:bg-white/[0.06] text-neutral-900 dark:text-[#D7E2EA] shrink-0">
                     <Mail size={18} />
                   </div>
                   <div className="min-w-0">
-                    <span className="text-xs font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 font-semibold block">
+                    <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 dark:text-[#D7E2EA]/50 font-semibold block">
                       Direct Email
                     </span>
                     <a
                       href={`mailto:${personalInfo.contact.email}`}
-                      className="text-sm font-medium text-slate-800 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 break-all transition-colors"
+                      className="text-sm font-medium text-neutral-800 dark:text-[#D7E2EA] hover:text-neutral-950 dark:hover:text-white break-all transition-colors"
                     >
                       {personalInfo.contact.email}
                     </a>
@@ -198,10 +198,10 @@ export default function Contact() {
                   onClick={handleCopyEmail}
                   aria-label={copiedEmail ? 'Email copied' : 'Copy email address'}
                   title={copiedEmail ? 'Email copied!' : 'Copy Email'}
-                  className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all shrink-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 self-start sm:self-center ${
+                  className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all shrink-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-neutral-400 self-start sm:self-center ${
                     copiedEmail
                       ? 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 shadow-xs'
-                      : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
+                      : 'bg-white dark:bg-[#101112] text-neutral-700 dark:text-[#D7E2EA] border border-neutral-200 dark:border-white/10 hover:bg-neutral-100 dark:hover:bg-[#1a1c1e]'
                   }`}
                 >
                   {copiedEmail ? <Check size={14} className="text-emerald-600 dark:text-emerald-400" /> : <Copy size={14} />}
@@ -210,33 +210,33 @@ export default function Contact() {
               </div>
 
               <div className="flex items-start gap-3 sm:gap-4">
-                <div className="p-3 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 shrink-0">
+                <div className="p-3 rounded-lg bg-neutral-200/60 dark:bg-white/[0.06] text-neutral-900 dark:text-[#D7E2EA] shrink-0">
                   <MapPin size={20} />
                 </div>
                 <div className="min-w-0">
-                  <span className="text-xs font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 font-semibold block">
+                  <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 dark:text-[#D7E2EA]/50 font-semibold block">
                     Availability
                   </span>
-                  <span className="text-sm font-medium text-slate-800 dark:text-slate-200 break-words">
+                  <span className="text-sm font-medium text-neutral-800 dark:text-[#D7E2EA] break-words">
                     {personalInfo.contact.location}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-xs font-mono text-slate-500 dark:text-slate-400 space-y-1">
+            <div className="p-4 rounded-lg bg-neutral-50 dark:bg-white/[0.03] border border-neutral-200 dark:border-white/10 text-xs font-mono text-neutral-500 dark:text-[#D7E2EA]/60 space-y-1">
               <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold">
                 <ShieldCheck size={14} />
                 <span>Cloud Firestore Connected</span>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              <p className="text-[11px] text-neutral-500 dark:text-[#D7E2EA]/60">
                 Messages are delivered securely to Firestore `messages` and protected from public access.
               </p>
             </div>
           </div>
 
-          {/* Right Column: Visual Contact Form */}
-          <div className="lg:col-span-7 p-4 sm:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+          {/* Right Column: Visual Contact Form (Glass Form Container Focal Surface) */}
+          <div className="lg:col-span-7 p-4 sm:p-8 rounded-2xl glass-panel shadow-sm">
             {/* General or Server Error Alert */}
             {(serverError || errors.general) && (
               <div className="mb-5 p-4 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800/80 text-rose-800 dark:text-rose-200 text-xs sm:text-sm flex items-start justify-between gap-3 animate-fade-in">
@@ -265,10 +265,10 @@ export default function Contact() {
                 <div className="w-14 h-14 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center">
                   <CheckCircle2 size={32} aria-hidden="true" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                <h3 className="text-xl font-bold text-neutral-900 dark:text-[#D7E2EA]">
                   Message Delivered Successfully!
                 </h3>
-                <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+                <p className="text-sm text-neutral-600 dark:text-[#D7E2EA]/70 max-w-md mx-auto leading-relaxed">
                   Thank you for reaching out! Your message has been safely saved to Cloud Firestore with an unread status. I'll get back to you as soon as possible.
                 </p>
                 <div className="pt-2">
@@ -278,7 +278,7 @@ export default function Contact() {
                       setServerError(null);
                       setErrors({});
                     }}
-                    className="px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold transition-colors cursor-pointer shadow-sm focus-visible:ring-2 focus-visible:ring-primary-500"
+                    className="px-5 py-2.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 dark:bg-[#D7E2EA] dark:hover:bg-white text-white dark:text-neutral-900 text-sm font-semibold transition-colors cursor-pointer shadow-sm focus-visible:ring-2 focus-visible:ring-neutral-400"
                   >
                     Send Another Message
                   </button>
@@ -303,7 +303,7 @@ export default function Contact() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Name */}
                   <div className="space-y-1.5">
-                    <label htmlFor="name" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    <label htmlFor="name" className="block text-xs font-semibold text-neutral-700 dark:text-[#D7E2EA]/80">
                       Your Name <span className="text-rose-500">*</span>
                     </label>
                     <input
@@ -319,11 +319,11 @@ export default function Contact() {
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="e.g. John Doe"
-                      className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-800 border ${
+                      className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-white/60 dark:bg-white/[0.04] border ${
                         errors.name
                           ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
-                          : 'border-slate-200 dark:border-slate-700 focus:border-primary-500 focus:ring-primary-500/20'
-                      } text-slate-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-500 transition-all disabled:opacity-60`}
+                          : 'border-neutral-200 dark:border-white/10 focus:border-neutral-400 dark:focus:border-white/30 focus:ring-neutral-400/20'
+                      } text-neutral-900 dark:text-[#D7E2EA] focus-visible:ring-2 focus-visible:ring-neutral-400 transition-all disabled:opacity-60`}
                     />
                     {errors.name && (
                       <p id="contact-name-error" role="alert" className="flex items-center gap-1 text-xs text-rose-500">
@@ -335,7 +335,7 @@ export default function Contact() {
 
                   {/* Email */}
                   <div className="space-y-1.5">
-                    <label htmlFor="email" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    <label htmlFor="email" className="block text-xs font-semibold text-neutral-700 dark:text-[#D7E2EA]/80">
                       Your Email <span className="text-rose-500">*</span>
                     </label>
                     <input
@@ -351,11 +351,11 @@ export default function Contact() {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="e.g. john@example.com"
-                      className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-800 border ${
+                      className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-white/60 dark:bg-white/[0.04] border ${
                         errors.email
                           ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
-                          : 'border-slate-200 dark:border-slate-700 focus:border-primary-500 focus:ring-primary-500/20'
-                      } text-slate-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-500 transition-all disabled:opacity-60`}
+                          : 'border-neutral-200 dark:border-white/10 focus:border-neutral-400 dark:focus:border-white/30 focus:ring-neutral-400/20'
+                      } text-neutral-900 dark:text-[#D7E2EA] focus-visible:ring-2 focus-visible:ring-neutral-400 transition-all disabled:opacity-60`}
                     />
                     {errors.email && (
                       <p id="contact-email-error" role="alert" className="flex items-center gap-1 text-xs text-rose-500">
@@ -368,7 +368,7 @@ export default function Contact() {
 
                 {/* Subject */}
                 <div className="space-y-1.5">
-                  <label htmlFor="subject" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label htmlFor="subject" className="block text-xs font-semibold text-neutral-700 dark:text-[#D7E2EA]/80">
                     Subject <span className="text-rose-500">*</span>
                   </label>
                   <input
@@ -384,11 +384,11 @@ export default function Contact() {
                     value={formData.subject}
                     onChange={handleChange}
                     placeholder="e.g. Software Engineering Opportunity"
-                    className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-800 border ${
+                    className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-white/60 dark:bg-white/[0.04] border ${
                       errors.subject
                         ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
-                        : 'border-slate-200 dark:border-slate-700 focus:border-primary-500 focus:ring-primary-500/20'
-                    } text-slate-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-500 transition-all disabled:opacity-60`}
+                        : 'border-neutral-200 dark:border-white/10 focus:border-neutral-400 dark:focus:border-white/30 focus:ring-neutral-400/20'
+                    } text-neutral-900 dark:text-[#D7E2EA] focus-visible:ring-2 focus-visible:ring-neutral-400 transition-all disabled:opacity-60`}
                   />
                   {errors.subject && (
                     <p id="contact-subject-error" role="alert" className="flex items-center gap-1 text-xs text-rose-500">
@@ -401,12 +401,12 @@ export default function Contact() {
                 {/* Message */}
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <label htmlFor="message" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    <label htmlFor="message" className="block text-xs font-semibold text-neutral-700 dark:text-[#D7E2EA]/80">
                       Message <span className="text-rose-500">*</span>
                     </label>
                     <span
                       className={`text-[11px] font-mono ${
-                        formData.message.length > 2800 ? 'text-amber-500 font-bold' : 'text-slate-500 dark:text-slate-400'
+                        formData.message.length > 2800 ? 'text-amber-500 font-bold' : 'text-neutral-500 dark:text-[#D7E2EA]/50'
                       }`}
                     >
                       {formData.message.length} / 3000
@@ -425,11 +425,11 @@ export default function Contact() {
                     value={formData.message}
                     onChange={handleChange}
                     placeholder="Hello Harshit, I'd like to discuss..."
-                    className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-800 border ${
+                    className={`w-full px-3.5 py-2.5 rounded-lg text-sm bg-white/60 dark:bg-white/[0.04] border ${
                       errors.message
                         ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
-                        : 'border-slate-200 dark:border-slate-700 focus:border-primary-500 focus:ring-primary-500/20'
-                    } text-slate-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-500 transition-all resize-none disabled:opacity-60`}
+                        : 'border-neutral-200 dark:border-white/10 focus:border-neutral-400 dark:focus:border-white/30 focus:ring-neutral-400/20'
+                    } text-neutral-900 dark:text-[#D7E2EA] focus-visible:ring-2 focus-visible:ring-neutral-400 transition-all resize-none disabled:opacity-60`}
                   />
                   {errors.message && (
                     <p id="contact-message-error" role="alert" className="flex items-center gap-1 text-xs text-rose-500">
@@ -445,7 +445,7 @@ export default function Contact() {
                     type="submit"
                     disabled={isSubmitting}
                     aria-busy={isSubmitting}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 disabled:opacity-50 cursor-pointer"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-neutral-900 hover:bg-neutral-800 dark:bg-[#D7E2EA] dark:hover:bg-white text-white dark:text-neutral-900 text-sm font-semibold shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-neutral-400 disabled:opacity-50 cursor-pointer"
                   >
                     {isSubmitting ? (
                       <>
@@ -460,13 +460,13 @@ export default function Contact() {
                     )}
                   </button>
 
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  <p className="text-[11px] text-neutral-500 dark:text-[#D7E2EA]/60">
                     Your contact information is protected in accordance with our{' '}
-                    <a href="/privacy" className="text-primary-600 dark:text-primary-400 hover:underline">
+                    <a href="/privacy" className="text-neutral-800 dark:text-[#D7E2EA] hover:underline font-medium">
                       Privacy Policy
                     </a>{' '}
                     and{' '}
-                    <a href="/terms" className="text-primary-600 dark:text-primary-400 hover:underline">
+                    <a href="/terms" className="text-neutral-800 dark:text-[#D7E2EA] hover:underline font-medium">
                       Terms
                     </a>.
                   </p>

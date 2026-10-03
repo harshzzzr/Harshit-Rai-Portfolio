@@ -28,41 +28,41 @@ export default function Education() {
   }, []);
 
   return (
-    <section id="education" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-100/50 dark:bg-slate-900/40 border-t border-slate-200 dark:border-slate-800/60">
+    <section id="education" className="py-20 px-4 sm:px-6 lg:px-8 border-t border-black/5 dark:border-white/10">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-mono font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 mb-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-medium bg-white dark:bg-[#141516] border border-slate-200 dark:border-white/10 text-slate-600 dark:text-[#D7E2EA] mb-1 shadow-xs">
             <span className={`w-2 h-2 rounded-full ${isLive ? 'bg-emerald-500 animate-pulse' : 'bg-primary-500'}`} />
             <span>{isLive ? 'Cloud Firestore Academic Record' : 'Verified Academic Record'}</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-[#D7E2EA] font-sans">
             Education
           </h2>
-          <div className="w-12 h-1 bg-primary-500 mx-auto rounded-sm mt-2" />
+          <div className="w-12 h-0.5 bg-primary-500 mx-auto rounded-xs mt-2" />
         </div>
 
         {/* Loading State */}
         {loading && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div className="lg:col-span-7 p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4 animate-pulse">
+            <div className="lg:col-span-7 p-8 rounded-xl bg-white dark:bg-[#101112] border border-slate-200 dark:border-white/10 space-y-4 animate-pulse">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-800" />
+                <div className="w-12 h-12 rounded-xl bg-slate-200 dark:bg-[#141516]" />
                 <div className="space-y-2">
-                  <div className="h-6 w-48 bg-slate-200 dark:bg-slate-800 rounded" />
-                  <div className="h-4 w-32 bg-slate-200 dark:bg-slate-800 rounded" />
+                  <div className="h-6 w-48 bg-slate-200 dark:bg-[#141516] rounded" />
+                  <div className="h-4 w-32 bg-slate-200 dark:bg-[#141516] rounded" />
                 </div>
               </div>
               <div className="space-y-2 pt-4">
-                <div className="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded" />
-                <div className="h-4 w-5/6 bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-4 w-full bg-slate-200 dark:bg-[#141516] rounded" />
+                <div className="h-4 w-5/6 bg-slate-200 dark:bg-[#141516] rounded" />
               </div>
             </div>
-            <div className="lg:col-span-5 p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4 animate-pulse">
-              <div className="h-6 w-32 bg-slate-200 dark:bg-slate-800 rounded" />
+            <div className="lg:col-span-5 p-8 rounded-xl bg-white dark:bg-[#101112] border border-slate-200 dark:border-white/10 space-y-4 animate-pulse">
+              <div className="h-6 w-32 bg-slate-200 dark:bg-[#141516] rounded" />
               <div className="flex flex-wrap gap-2">
-                <div className="h-8 w-24 bg-slate-200 dark:bg-slate-800 rounded" />
-                <div className="h-8 w-28 bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-8 w-24 bg-slate-200 dark:bg-[#141516] rounded" />
+                <div className="h-8 w-28 bg-slate-200 dark:bg-[#141516] rounded" />
               </div>
             </div>
           </div>
@@ -94,31 +94,31 @@ export default function Education() {
 
         {/* Empty State */}
         {!loading && !error && educationList.length === 0 && (
-          <div className="text-center py-16 px-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 max-w-lg mx-auto space-y-3">
-            <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 mx-auto flex items-center justify-center">
+          <div className="text-center py-16 px-4 rounded-xl border border-dashed border-slate-300 dark:border-white/10 max-w-lg mx-auto space-y-3">
+            <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-[#141516] text-slate-500 mx-auto flex items-center justify-center">
               <GraduationCap size={24} />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-[#D7E2EA]">
               No Education Records
             </h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
+            <p className="text-sm text-slate-500 dark:text-[#D7E2EA]/60">
               Academic information is currently being updated.
             </p>
           </div>
         )}
 
-        {/* Dynamic Education Content */}
+        {/* Dynamic Education Content (80% solid + 20% subtle glass) */}
         {!loading && !error && educationList.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Degree Card(s) */}
+            {/* Degree Card(s) - Solid Structural Surfaces */}
             <div className="lg:col-span-7 space-y-6">
               {educationList.map((edu) => (
                 <div
                   key={edu.id}
-                  className="p-4 sm:p-6 lg:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all space-y-5"
+                  className="p-4 sm:p-6 lg:p-8 rounded-xl bg-white dark:bg-[#101112] border border-slate-200 dark:border-white/10 shadow-xs hover:border-slate-300 dark:hover:border-white/20 transition-all space-y-5"
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="p-2.5 sm:p-3 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 shrink-0">
+                    <div className="p-2.5 sm:p-3 rounded-xl bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 shrink-0 border border-primary-200/50 dark:border-primary-800/40">
                       <GraduationCap size={26} />
                     </div>
                     <div className="min-w-0">
@@ -127,23 +127,23 @@ export default function Education() {
                           {edu.status}
                         </span>
                       )}
-                      <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white break-words">
+                      <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-[#D7E2EA] break-words">
                         {edu.degree}
                       </h3>
-                      <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mt-0.5 break-words">
+                      <p className="text-sm font-medium text-slate-500 dark:text-[#D7E2EA]/65 mt-0.5 break-words">
                         {edu.institution}
                       </p>
                     </div>
                   </div>
 
                   {edu.highlights && edu.highlights.length > 0 && (
-                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 space-y-2.5">
-                      <p className="text-xs font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 font-semibold">
+                    <div className="pt-2 border-t border-slate-100 dark:border-white/8 space-y-2.5">
+                      <p className="text-xs font-mono uppercase tracking-wider text-slate-400 dark:text-[#D7E2EA]/50 font-semibold">
                         Program Highlights
                       </p>
                       <ul className="space-y-2">
                         {edu.highlights.map((item, hIdx) => (
-                          <li key={hIdx} className="flex items-start gap-2.5 text-sm text-slate-600 dark:text-slate-300">
+                          <li key={hIdx} className="flex items-start gap-2.5 text-sm text-slate-600 dark:text-[#D7E2EA]/80">
                             <CheckCircle2 size={16} className="text-primary-500 mt-0.5 shrink-0" />
                             <span className="break-words">{item}</span>
                           </li>
@@ -155,18 +155,18 @@ export default function Education() {
               ))}
             </div>
 
-            {/* Core Coursework Card */}
-            <div className="lg:col-span-5 p-4 sm:p-6 lg:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
+            {/* Core Coursework Card - Subtle Glass Accent */}
+            <div className="lg:col-span-5 p-4 sm:p-6 lg:p-8 rounded-xl glass-subtle shadow-xs space-y-5">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 shrink-0">
+                <div className="p-2.5 rounded-lg bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 shrink-0 border border-primary-200/50 dark:border-primary-800/40">
                   <BookOpen size={22} />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white break-words">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-[#D7E2EA] break-words">
                   Core Coursework
                 </h3>
               </div>
 
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <p className="text-sm text-slate-600 dark:text-[#D7E2EA]/75">
                 Rigorous foundational subjects in computer systems, computation theory, and software engineering.
               </p>
 
@@ -181,7 +181,7 @@ export default function Education() {
                 ]).map((course) => (
                   <span
                     key={course}
-                    className="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300"
+                    className="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-white/80 dark:bg-[#141516] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-[#D7E2EA]"
                   >
                     {course}
                   </span>

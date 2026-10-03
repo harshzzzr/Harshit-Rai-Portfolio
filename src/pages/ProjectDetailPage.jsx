@@ -270,7 +270,7 @@ export default function ProjectDetailPage() {
         <Link
           to="/#projects"
           aria-label="Back to projects list on homepage"
-          className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors group focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-1"
+          className="inline-flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-[#D7E2EA] hover:text-neutral-950 dark:hover:text-white transition-colors group focus-visible:ring-2 focus-visible:ring-neutral-400 rounded p-1"
         >
           <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" aria-hidden="true" />
           <span>Back to Projects</span>
@@ -278,19 +278,19 @@ export default function ProjectDetailPage() {
       </div>
 
       {/* Hero Visual Header Banner */}
-      <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shadow-sm">
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-25 dark:opacity-15 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:20px_20px]" aria-hidden="true" />
+      <div className="relative rounded-2xl overflow-hidden border border-neutral-200 dark:border-white/10 bg-neutral-100 dark:bg-[#101112] shadow-sm">
+        {/* Subtle architectural grid pattern */}
+        <div className="absolute inset-0 opacity-20 dark:opacity-10 bg-architectural-grid pointer-events-none" aria-hidden="true" />
 
         <div className="relative p-5 sm:p-8 lg:p-12 space-y-6">
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-md text-xs font-mono font-semibold bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800">
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-md text-xs font-mono font-semibold bg-neutral-100 dark:bg-white/[0.05] text-neutral-800 dark:text-[#D7E2EA] border border-neutral-200 dark:border-white/10">
               <FolderGit2 size={13} aria-hidden="true" />
               <span>{project.badge || 'Engineering Project'}</span>
             </span>
 
             {project.featured && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-md text-xs font-semibold bg-amber-500 text-white shadow-sm">
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-md text-xs font-mono font-medium bg-amber-500/10 text-amber-500 dark:text-amber-400 border border-amber-500/25 shadow-xs">
                 <Sparkles size={12} aria-hidden="true" />
                 <span>Featured Project</span>
               </span>
@@ -298,11 +298,11 @@ export default function ProjectDetailPage() {
           </div>
 
           <div className="space-y-3">
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white break-words">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-neutral-900 dark:text-[#D7E2EA] break-words">
               {project.title}
             </h1>
             {(project.shortDescription || project.tagline) && (
-              <p className="text-sm sm:text-base lg:text-xl text-slate-700 dark:text-slate-300 max-w-3xl leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-xl text-neutral-600 dark:text-[#D7E2EA]/75 max-w-3xl leading-relaxed">
                 {project.shortDescription || project.tagline}
               </p>
             )}
@@ -316,7 +316,7 @@ export default function ProjectDetailPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`View source code for ${project.title} on GitHub (opens in new tab)`}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-semibold hover:opacity-90 transition-all shadow-sm focus-visible:ring-2 focus-visible:ring-primary-500"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-neutral-900 dark:bg-[#D7E2EA] text-white dark:text-neutral-900 text-sm font-semibold hover:opacity-90 transition-all shadow-sm focus-visible:ring-2 focus-visible:ring-neutral-400"
               >
                 <GithubIcon size={18} />
                 <span>View Repository</span>
@@ -329,7 +329,7 @@ export default function ProjectDetailPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`View live demonstration of ${project.title} (opens in new tab)`}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold transition-all shadow-sm focus-visible:ring-2 focus-visible:ring-primary-500"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white dark:bg-[#141516] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] hover:bg-neutral-50 dark:hover:bg-[#1a1c1e] text-sm font-semibold transition-all shadow-sm focus-visible:ring-2 focus-visible:ring-neutral-400"
               >
                 <ExternalLink size={18} aria-hidden="true" />
                 <span>Live Demonstration</span>
@@ -345,14 +345,14 @@ export default function ProjectDetailPage() {
         <div className="lg:col-span-8 space-y-6 sm:space-y-8">
           {/* Full Description / Overview */}
           {(project.fullDescription || project.overview) && (
-            <section className="p-4 sm:p-6 lg:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
-              <div className="flex items-center gap-2.5 text-primary-600 dark:text-primary-400">
+            <section className="p-4 sm:p-6 lg:p-8 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-sm space-y-3">
+              <div className="flex items-center gap-2.5 text-neutral-900 dark:text-[#D7E2EA]">
                 <Layers size={20} />
-                <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                <h2 className="text-lg sm:text-xl font-bold text-neutral-900 dark:text-[#D7E2EA]">
                   Project Overview
                 </h2>
               </div>
-              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+              <p className="text-sm sm:text-base text-neutral-700 dark:text-[#D7E2EA]/80 leading-relaxed">
                 {project.fullDescription || project.overview}
               </p>
             </section>
@@ -360,14 +360,14 @@ export default function ProjectDetailPage() {
 
           {/* Problem Statement */}
           {project.problem && (
-            <section className="p-4 sm:p-6 lg:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
-              <div className="flex items-center gap-2.5 text-amber-600 dark:text-amber-400">
+            <section className="p-4 sm:p-6 lg:p-8 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-sm space-y-3">
+              <div className="flex items-center gap-2.5 text-amber-500 dark:text-amber-400">
                 <Target size={20} />
-                <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                <h2 className="text-lg sm:text-xl font-bold text-neutral-900 dark:text-[#D7E2EA]">
                   The Problem
                 </h2>
               </div>
-              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+              <p className="text-sm sm:text-base text-neutral-700 dark:text-[#D7E2EA]/80 leading-relaxed">
                 {project.problem}
               </p>
             </section>
@@ -375,14 +375,14 @@ export default function ProjectDetailPage() {
 
           {/* Proposed Solution */}
           {project.solution && (
-            <section className="p-4 sm:p-6 lg:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
-              <div className="flex items-center gap-2.5 text-emerald-600 dark:text-emerald-400">
+            <section className="p-4 sm:p-6 lg:p-8 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-sm space-y-3">
+              <div className="flex items-center gap-2.5 text-emerald-500 dark:text-emerald-400">
                 <Lightbulb size={20} />
-                <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                <h2 className="text-lg sm:text-xl font-bold text-neutral-900 dark:text-[#D7E2EA]">
                   The Solution & Architecture
                 </h2>
               </div>
-              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+              <p className="text-sm sm:text-base text-neutral-700 dark:text-[#D7E2EA]/80 leading-relaxed">
                 {project.solution}
               </p>
             </section>
@@ -390,14 +390,14 @@ export default function ProjectDetailPage() {
 
           {/* Key Features */}
           {project.features && project.features.length > 0 && (
-            <section className="p-4 sm:p-6 lg:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-              <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+            <section className="p-4 sm:p-6 lg:p-8 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-sm space-y-4">
+              <h2 className="text-lg sm:text-xl font-bold text-neutral-900 dark:text-[#D7E2EA]">
                 Key Features & Capabilities
               </h2>
               <ul className="space-y-3">
                 {project.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-sm sm:text-base text-slate-600 dark:text-slate-300">
-                    <CheckCircle2 size={18} className="text-primary-500 mt-0.5 shrink-0" />
+                  <li key={idx} className="flex items-start gap-3 text-sm sm:text-base text-neutral-700 dark:text-[#D7E2EA]/80">
+                    <CheckCircle2 size={18} className="text-emerald-500 dark:text-emerald-400 mt-0.5 shrink-0" />
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -407,28 +407,28 @@ export default function ProjectDetailPage() {
 
           {/* Screenshots Gallery (Rendered only when valid screenshots exist) */}
           {project.screenshots && project.screenshots.length > 0 && (
-            <section className="p-4 sm:p-6 lg:p-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <section className="p-4 sm:p-6 lg:p-8 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-sm space-y-4">
               <div className="flex items-center gap-2.5">
-                <ImageIcon size={20} className="text-primary-500" />
-                <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                <ImageIcon size={20} className="text-neutral-500 dark:text-[#D7E2EA]/70" />
+                <h2 className="text-lg sm:text-xl font-bold text-neutral-900 dark:text-[#D7E2EA]">
                   Screenshots & Interface Previews
                 </h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {project.screenshots.map((shot, idx) => (
-                  <div key={idx} className="rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800">
+                  <div key={idx} className="rounded-xl overflow-hidden border border-neutral-200 dark:border-white/10 bg-neutral-100 dark:bg-[#141516]">
                     <SafeImage
                       src={shot.url || shot}
                       alt={shot.caption || `Screenshot ${idx + 1}`}
                       className="w-full h-auto min-h-[160px] object-cover"
                       fallbackComponent={
-                        <div className="h-40 flex items-center justify-center text-slate-400 text-xs font-mono">
+                        <div className="h-40 flex items-center justify-center text-neutral-400 dark:text-[#D7E2EA]/50 text-xs font-mono">
                           Image preview unavailable
                         </div>
                       }
                     />
                     {shot.caption && (
-                      <p className="p-2 text-xs font-mono text-slate-500 text-center">{shot.caption}</p>
+                      <p className="p-2 text-xs font-mono text-neutral-500 dark:text-[#D7E2EA]/60 text-center">{shot.caption}</p>
                     )}
                   </div>
                 ))}
@@ -440,15 +440,15 @@ export default function ProjectDetailPage() {
         {/* Right Column: Metadata & Tech Specs */}
         <div className="lg:col-span-4 space-y-6">
           {/* Technologies Card */}
-          <div className="p-4 sm:p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+          <div className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-sm space-y-4">
+            <h3 className="text-base font-bold text-neutral-900 dark:text-[#D7E2EA]">
               Technologies Used
             </h3>
             <div className="flex flex-wrap gap-2">
               {project.technologies.map((tech) => (
                 <span
                   key={tech}
-                  className="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 break-words"
+                  className="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-neutral-100 dark:bg-[#141516] border border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-[#D7E2EA] break-words"
                 >
                   {tech}
                 </span>
@@ -457,14 +457,14 @@ export default function ProjectDetailPage() {
           </div>
 
           {/* Quick Info Summary */}
-          <div className="p-4 sm:p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3 text-xs sm:text-sm">
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+          <div className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-sm space-y-3 text-xs sm:text-sm">
+            <h3 className="text-base font-bold text-neutral-900 dark:text-[#D7E2EA]">
               Project Specification
             </h3>
-            <div className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-600 dark:text-slate-400">
+            <div className="divide-y divide-neutral-100 dark:divide-white/10 text-neutral-600 dark:text-[#D7E2EA]/70">
               <div className="py-2.5 flex justify-between">
                 <span className="font-medium">Category</span>
-                <span className="font-mono text-slate-900 dark:text-white">{project.badge || 'Engineering'}</span>
+                <span className="font-mono text-neutral-900 dark:text-[#D7E2EA]">{project.badge || 'Engineering'}</span>
               </div>
               <div className="py-2.5 flex justify-between">
                 <span className="font-medium">Status</span>
@@ -472,12 +472,12 @@ export default function ProjectDetailPage() {
               </div>
               <div className="py-2.5 flex justify-between">
                 <span className="font-medium">Code Availability</span>
-                <span className="font-mono text-slate-900 dark:text-white">Public Repository</span>
+                <span className="font-mono text-neutral-900 dark:text-[#D7E2EA]">Public Repository</span>
               </div>
               {project.order && (
                 <div className="py-2.5 flex justify-between">
                   <span className="font-medium">Catalog Index</span>
-                  <span className="font-mono text-slate-900 dark:text-white">#{project.order}</span>
+                  <span className="font-mono text-neutral-900 dark:text-[#D7E2EA]">#{project.order}</span>
                 </div>
               )}
             </div>
@@ -486,7 +486,7 @@ export default function ProjectDetailPage() {
           {/* Return button */}
           <Link
             to="/#projects"
-            className="w-full flex items-center justify-center gap-2 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm font-semibold transition-colors cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 p-3 rounded-xl border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] hover:bg-neutral-50 dark:hover:bg-[#141516] text-neutral-800 dark:text-[#D7E2EA] text-sm font-semibold transition-colors cursor-pointer"
           >
             <ArrowLeft size={16} />
             <span>Back to All Projects</span>

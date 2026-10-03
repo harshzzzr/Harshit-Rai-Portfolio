@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 
 export default function MainLayout({ children }) {
   return (
-    <div className="flex flex-col min-h-screen w-full overflow-x-clip bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
+    <div className="flex flex-col min-h-screen w-full overflow-x-clip bg-transparent text-slate-900 dark:text-[#D7E2EA] transition-colors duration-200">
       {/* Accessibility: Skip to Main Content Link for Keyboard and Screen-Reader Visitors */}
       <a
         href="#main-content"

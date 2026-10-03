@@ -49,10 +49,10 @@ export function ToastProvider({ children }) {
   };
 
   const toastStyles = {
-    success: 'bg-emerald-50 dark:bg-emerald-950/90 text-emerald-800 dark:text-emerald-200 border-emerald-200 dark:border-emerald-800',
-    error: 'bg-red-50 dark:bg-red-950/90 text-red-800 dark:text-red-200 border-red-200 dark:border-red-800',
-    warning: 'bg-amber-50 dark:bg-amber-950/90 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-800',
-    info: 'bg-primary-50 dark:bg-primary-950/90 text-primary-800 dark:text-primary-200 border-primary-200 dark:border-primary-800',
+    success: 'glass-panel text-emerald-900 dark:text-emerald-200 border-emerald-500/30 dark:border-emerald-500/25',
+    error: 'glass-panel text-rose-900 dark:text-rose-200 border-rose-500/30 dark:border-rose-500/25',
+    warning: 'glass-panel text-amber-900 dark:text-amber-200 border-amber-500/30 dark:border-amber-500/25',
+    info: 'glass-panel text-neutral-900 dark:text-[#D7E2EA] border-neutral-300 dark:border-white/15',
   };
 
   const toastContainer = typeof document !== 'undefined' && toasts.length > 0 && createPortal(

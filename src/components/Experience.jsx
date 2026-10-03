@@ -76,21 +76,21 @@ export default function Experience() {
   };
 
   return (
-    <section id="experience" className="py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-200 dark:border-slate-800/60">
+    <section id="experience" className="py-20 px-4 sm:px-6 lg:px-8 border-t border-black/5 dark:border-white/10">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-mono font-medium bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 mb-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-medium bg-white dark:bg-[#141516] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-[#D7E2EA] mb-1 shadow-xs">
             <span className={`w-2 h-2 rounded-full ${isLive ? 'bg-emerald-500 animate-pulse' : 'bg-primary-500'}`} aria-hidden="true" />
             <span>{isLive ? 'Cloud Firestore Verified Timeline' : 'Verified Career & Project Timeline'}</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-[#D7E2EA] font-sans">
             Experience & Journey
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-[#D7E2EA]/75 max-w-xl mx-auto">
             Practical engineering experience, hackathons, academic research, and technical certifications.
           </p>
-          <div className="w-12 h-1 bg-primary-500 mx-auto rounded-sm mt-2" aria-hidden="true" />
+          <div className="w-12 h-0.5 bg-primary-500 mx-auto rounded-xs mt-2" aria-hidden="true" />
         </div>
 
         {/* Category Navigation Tabs */}
@@ -112,8 +112,8 @@ export default function Experience() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 ${
                     isActive
-                      ? 'bg-primary-600 text-white shadow-sm'
-                      : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                      ? 'bg-slate-900 text-white dark:bg-[#D7E2EA] dark:text-[#0C0C0C] font-semibold shadow-xs'
+                      : 'bg-white dark:bg-[#101112] text-slate-700 dark:text-[#D7E2EA]/85 border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-[#141516]'
                   }`}
                 >
                   <Icon size={15} aria-hidden="true" />
@@ -121,8 +121,8 @@ export default function Experience() {
                   <span
                     className={`text-[11px] font-mono px-1.5 py-0.2 rounded-md ${
                       isActive
-                        ? 'bg-primary-700 text-white'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                        ? 'bg-slate-800 text-white dark:bg-white/30 dark:text-[#0C0C0C]'
+                        : 'bg-slate-100 dark:bg-[#141516] text-slate-600 dark:text-[#D7E2EA]/70'
                     }`}
                   >
                     {count}
@@ -139,14 +139,14 @@ export default function Experience() {
             {[1, 2].map((idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3 animate-pulse"
+                className="p-6 rounded-xl bg-white dark:bg-[#101112] border border-slate-200 dark:border-white/10 space-y-3 animate-pulse"
               >
                 <div className="flex justify-between">
-                  <div className="h-5 w-48 bg-slate-200 dark:bg-slate-800 rounded" />
-                  <div className="h-5 w-24 bg-slate-200 dark:bg-slate-800 rounded" />
+                  <div className="h-5 w-48 bg-slate-200 dark:bg-[#141516] rounded" />
+                  <div className="h-5 w-24 bg-slate-200 dark:bg-[#141516] rounded" />
                 </div>
-                <div className="h-4 w-36 bg-slate-200 dark:bg-slate-800 rounded" />
-                <div className="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-4 w-36 bg-slate-200 dark:bg-[#141516] rounded" />
+                <div className="h-4 w-full bg-slate-200 dark:bg-[#141516] rounded" />
               </div>
             ))}
           </div>
@@ -178,11 +178,11 @@ export default function Experience() {
 
         {/* Empty State */}
         {!loading && !error && items.length === 0 && (
-          <div className="text-center py-12 px-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 max-w-md mx-auto space-y-2">
-            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 mx-auto flex items-center justify-center">
+          <div className="text-center py-12 px-4 rounded-xl border border-dashed border-slate-300 dark:border-white/10 max-w-md mx-auto space-y-2">
+            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-[#141516] text-slate-500 mx-auto flex items-center justify-center">
               <FolderX size={20} />
             </div>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-500 dark:text-[#D7E2EA]/60">
               No verified records currently found for {tabs.find((t) => t.id === activeTab)?.label}.
             </p>
           </div>
@@ -196,41 +196,50 @@ export default function Experience() {
             aria-labelledby={`tab-${activeTab}`}
             className="max-w-3xl mx-auto"
           >
-            <div className="relative border-l-2 border-slate-200 dark:border-slate-800 ml-2 sm:ml-6 space-y-6 sm:space-y-8 py-2">
-              {items.map((item) => (
-                <div key={item.id} className="relative pl-4 sm:pl-8 group">
-                  {/* Timeline Dot */}
-                  <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-white dark:bg-slate-950 border-2 border-primary-500" />
+            <div className="relative border-l-2 border-slate-200 dark:border-white/10 ml-2 sm:ml-6 space-y-6 sm:space-y-8 py-2">
+              {items.map((item, idx) => {
+                const isSelectedGlassEntry = idx === 0; // selected latest milestone has glass treatment
+                return (
+                  <div key={item.id} className="relative pl-4 sm:pl-8 group">
+                    {/* Timeline Dot */}
+                    <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-white dark:bg-[#0C0C0C] border-2 border-primary-500" />
 
-                  {/* Card */}
-                  <div className="p-4 sm:p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all">
-                    <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white break-words">
-                        {item.title}
-                      </h3>
-                      {item.period && (
-                        <div className="inline-flex items-center gap-1.5 text-xs font-mono text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded shrink-0">
-                          <Calendar size={13} />
-                          <span>{item.period}</span>
+                    {/* Card (Solid vs Selected Glass Entry - Section 23) */}
+                    <div
+                      className={`p-4 sm:p-6 rounded-xl transition-all ${
+                        isSelectedGlassEntry
+                          ? 'glass-panel hover:border-black/20 dark:hover:border-white/25'
+                          : 'bg-white dark:bg-[#101112] border border-slate-200 dark:border-white/10 shadow-xs hover:border-slate-300 dark:hover:border-white/20'
+                      }`}
+                    >
+                      <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
+                        <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-[#D7E2EA] break-words">
+                          {item.title}
+                        </h3>
+                        {item.period && (
+                          <div className="inline-flex items-center gap-1.5 text-xs font-mono text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/60 border border-primary-200/50 dark:border-primary-800/40 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md shrink-0">
+                            <Calendar size={13} />
+                            <span>{item.period}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {(item.role || item.organization) && (
+                        <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-medium text-slate-500 dark:text-[#D7E2EA]/65 mb-3">
+                          <Building2 size={15} className="shrink-0" />
+                          <span className="break-words">
+                            {item.role} {item.organization ? `• ${item.organization}` : ''}
+                          </span>
                         </div>
                       )}
+
+                      <p className="text-sm text-slate-600 dark:text-[#D7E2EA]/75 leading-relaxed">
+                        {item.description}
+                      </p>
                     </div>
-
-                    {(item.role || item.organization) && (
-                      <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 mb-3">
-                        <Building2 size={15} className="shrink-0" />
-                        <span className="break-words">
-                          {item.role} {item.organization ? `• ${item.organization}` : ''}
-                        </span>
-                      </div>
-                    )}
-
-                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                      {item.description}
-                    </p>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
