@@ -80,15 +80,12 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
     try {
       const res = await getTimelineData({ includeHidden: true });
       setItems(res.rawList || []);
-      if (typeof onTimelineChanged === 'function') {
-        onTimelineChanged();
-      }
     } catch {
       setFeedback({ type: 'error', message: 'Failed to load milestones catalog.' });
     } finally {
       setLoading(false);
     }
-  }, [onTimelineChanged]);
+  }, []);
 
   useEffect(() => {
     fetchTimeline();
@@ -153,6 +150,7 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
           showToast(`Milestone "${formData.title}" updated.`, 'success');
           setModalOpen(false);
           await fetchTimeline();
+          if (typeof onTimelineChanged === 'function') onTimelineChanged();
         } else {
           showToast(res.error || 'Failed to update milestone.', 'error');
         }
@@ -163,6 +161,7 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
           showToast(`Milestone "${formData.title}" added to catalog.`, 'success');
           setModalOpen(false);
           await fetchTimeline();
+          if (typeof onTimelineChanged === 'function') onTimelineChanged();
         } else {
           showToast(res.error || 'Failed to create milestone.', 'error');
         }
@@ -183,6 +182,7 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
         showToast(`Milestone "${deleteConfirmItem.title}" deleted.`, 'success');
         setDeleteConfirmItem(null);
         await fetchTimeline();
+        if (typeof onTimelineChanged === 'function') onTimelineChanged();
       } else {
         showToast(res.error || 'Failed to delete milestone.', 'error');
       }
@@ -197,6 +197,7 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
     try {
       await toggleTimelineItemVisibility(item.id, item.visible);
       await fetchTimeline();
+      if (typeof onTimelineChanged === 'function') onTimelineChanged();
       showToast(
         `Milestone "${item.title}" is now ${item.visible ? 'hidden' : 'visible'}.`,
         'success'

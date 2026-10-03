@@ -66,15 +66,12 @@ export default function SkillManager({ onSkillChanged }) {
     try {
       const res = await getSkills({ includeHidden: true });
       setSkills(res.rawList || []);
-      if (typeof onSkillChanged === 'function') {
-        onSkillChanged();
-      }
     } catch {
       setFeedback({ type: 'error', message: 'Failed to load skills catalog.' });
     } finally {
       setLoading(false);
     }
-  }, [onSkillChanged]);
+  }, []);
 
   useEffect(() => {
     fetchSkillsList();
@@ -133,6 +130,7 @@ export default function SkillManager({ onSkillChanged }) {
           showToast({ type: 'success', message: `Skill "${formData.name}" updated successfully.` });
           setModalOpen(false);
           await fetchSkillsList();
+          if (typeof onSkillChanged === 'function') onSkillChanged();
         } else {
           setFeedback({ type: 'error', message: res.error || 'Failed to update skill.' });
           showToast({ type: 'error', message: res.error || 'Failed to update skill.' });
@@ -145,6 +143,7 @@ export default function SkillManager({ onSkillChanged }) {
           showToast({ type: 'success', message: `Skill "${formData.name}" added to catalog.` });
           setModalOpen(false);
           await fetchSkillsList();
+          if (typeof onSkillChanged === 'function') onSkillChanged();
         } else {
           setFeedback({ type: 'error', message: res.error || 'Failed to create skill.' });
           showToast({ type: 'error', message: res.error || 'Failed to create skill.' });
@@ -168,6 +167,7 @@ export default function SkillManager({ onSkillChanged }) {
         showToast({ type: 'success', message: `Skill "${deleteConfirmSkill.name}" deleted.` });
         setDeleteConfirmSkill(null);
         await fetchSkillsList();
+        if (typeof onSkillChanged === 'function') onSkillChanged();
       } else {
         setFeedback({ type: 'error', message: res.error || 'Failed to delete skill.' });
         showToast({ type: 'error', message: res.error || 'Failed to delete skill.' });
@@ -184,6 +184,7 @@ export default function SkillManager({ onSkillChanged }) {
     try {
       await toggleSkillVisibility(skill.id, skill.visible);
       await fetchSkillsList();
+      if (typeof onSkillChanged === 'function') onSkillChanged();
       setFeedback({
         type: 'success',
         message: `Skill "${skill.name}" is now ${skill.visible ? 'hidden' : 'visible'}.`,

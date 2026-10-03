@@ -43,15 +43,12 @@ export default function FeedbackManager({ onFeedbackChanged }) {
     try {
       const res = await getAllFeedback();
       setFeedbackList(res.data || []);
-      if (typeof onFeedbackChanged === 'function') {
-        onFeedbackChanged();
-      }
     } catch {
       showToast('Failed to load feedback records.', 'error');
     } finally {
       setLoading(false);
     }
-  }, [onFeedbackChanged, showToast]);
+  }, [showToast]);
 
   useEffect(() => {
     fetchFeedback();
@@ -141,6 +138,9 @@ export default function FeedbackManager({ onFeedbackChanged }) {
         }.`,
         'success'
       );
+      if (typeof onFeedbackChanged === 'function') {
+        onFeedbackChanged();
+      }
     } catch (err) {
       showToast(err.message || 'Failed to update featured status.', 'error');
     }

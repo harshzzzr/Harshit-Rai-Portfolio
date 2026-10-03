@@ -60,15 +60,12 @@ export default function EducationManager({ onEducationChanged }) {
     try {
       const res = await getEducation({ includeHidden: true });
       setEducationList(res.rawList || res.data || []);
-      if (typeof onEducationChanged === 'function') {
-        onEducationChanged();
-      }
     } catch {
       setFeedback({ type: 'error', message: 'Failed to load education records.' });
     } finally {
       setLoading(false);
     }
-  }, [onEducationChanged]);
+  }, []);
 
   useEffect(() => {
     fetchEducationList();
@@ -167,6 +164,7 @@ export default function EducationManager({ onEducationChanged }) {
           showToast({ type: 'success', message: `Education record "${formData.degree}" updated.` });
           setModalOpen(false);
           await fetchEducationList();
+          if (typeof onEducationChanged === 'function') onEducationChanged();
         } else {
           setFeedback({ type: 'error', message: res.error || 'Failed to update record.' });
           showToast({ type: 'error', message: res.error || 'Failed to update record.' });
@@ -179,6 +177,7 @@ export default function EducationManager({ onEducationChanged }) {
           showToast({ type: 'success', message: `Education record "${formData.degree}" added.` });
           setModalOpen(false);
           await fetchEducationList();
+          if (typeof onEducationChanged === 'function') onEducationChanged();
         } else {
           setFeedback({ type: 'error', message: res.error || 'Failed to create record.' });
           showToast({ type: 'error', message: res.error || 'Failed to create record.' });
@@ -202,6 +201,7 @@ export default function EducationManager({ onEducationChanged }) {
         showToast({ type: 'success', message: `Education record deleted.` });
         setDeleteConfirmEdu(null);
         await fetchEducationList();
+        if (typeof onEducationChanged === 'function') onEducationChanged();
       } else {
         setFeedback({ type: 'error', message: res.error || 'Failed to delete record.' });
         showToast({ type: 'error', message: res.error || 'Failed to delete record.' });
@@ -218,6 +218,7 @@ export default function EducationManager({ onEducationChanged }) {
     try {
       await toggleEducationVisibility(edu.id, edu.visible);
       await fetchEducationList();
+      if (typeof onEducationChanged === 'function') onEducationChanged();
       setFeedback({
         type: 'success',
         message: `Education record is now ${edu.visible ? 'hidden' : 'visible'}.`,

@@ -45,15 +45,12 @@ export default function ProjectManager({ onProjectChanged }) {
     try {
       const res = await getProjects({ includeHidden: true });
       setProjects(res.data || []);
-      if (typeof onProjectChanged === 'function') {
-        onProjectChanged();
-      }
     } catch {
       setFeedback({ type: 'error', message: 'Failed to load projects' });
     } finally {
       setLoading(false);
     }
-  }, [onProjectChanged]);
+  }, []);
 
   useEffect(() => {
     fetchProjects();
@@ -72,6 +69,7 @@ export default function ProjectManager({ onProjectChanged }) {
   const handleFormSaved = async (msg, refresh = true) => {
     if (msg) setFeedback(msg);
     if (refresh) await fetchProjects();
+    if (typeof onProjectChanged === 'function') onProjectChanged();
   };
 
   // Handle Quick Toggle Featured
@@ -125,6 +123,7 @@ export default function ProjectManager({ onProjectChanged }) {
         showToast({ type: 'success', message: `Deleted "${deleteConfirmProject.title}".` });
         setDeleteConfirmProject(null);
         await fetchProjects();
+        if (typeof onProjectChanged === 'function') onProjectChanged();
       } else {
         setFeedback({ type: 'error', message: res.error || 'Failed to delete project.' });
         showToast({ type: 'error', message: res.error || 'Failed to delete project.' });

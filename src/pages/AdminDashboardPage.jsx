@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AdminLayout from '../layouts/AdminLayout';
 import { getProjects } from '../services/projectService';
 import { getSkills } from '../services/skillService';
@@ -33,6 +33,7 @@ import { useAdminToast } from '../components/admin/ui/AdminToast';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { SITE_CONFIG } from '../config/site';
+import AdminErrorBoundary from '../components/admin/ui/AdminErrorBoundary';
 
 export default function AdminDashboardPage() {
   const { showToast } = useAdminToast();
@@ -59,7 +60,7 @@ export default function AdminDashboardPage() {
   const [skillCategoriesList, setSkillCategoriesList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     setLoading(true);
     try {
       // 1. Projects
@@ -112,7 +113,7 @@ export default function AdminDashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const handleResetDashboardView = async () => {
     setActiveTab('dashboard');
@@ -132,7 +133,7 @@ export default function AdminDashboardPage() {
 
   useEffect(() => {
     fetchDashboardData();
-  }, []);
+  }, [fetchDashboardData]);
 
   return (
     <AdminLayout activeTab={activeTab} onSelectTab={setActiveTab}>
@@ -328,7 +329,7 @@ export default function AdminDashboardPage() {
                           {proj.title}
                         </p>
                         <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
-                          {proj.badge || 'Engineering'} • {proj.technologies.slice(0, 3).join(', ')}
+                          {proj.badge || 'Engineering'} • {(proj.technologies || []).slice(0, 3).join(', ')}
                         </p>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
@@ -364,7 +365,7 @@ export default function AdminDashboardPage() {
                         {catGroup.category}
                       </span>
                       <span className="font-mono px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-semibold text-primary-600 dark:text-primary-400">
-                        {catGroup.skills.length} skills
+                        {(catGroup.skills || []).length} skills
                       </span>
                     </div>
                   ))}
@@ -404,47 +405,50 @@ export default function AdminDashboardPage() {
           </div>
         )}
 
-        {/* Projects Management CRUD View */}
-        {activeTab === 'projects' && (
-          <ProjectManager onProjectChanged={fetchDashboardData} />
-        )}
+        {/* Isolated Tab Views with Fault-Tolerant Error Boundary */}
+        <AdminErrorBoundary key={activeTab} onResetTab={() => setActiveTab('dashboard')}>
+          {/* Projects Management CRUD View */}
+          {activeTab === 'projects' && (
+            <ProjectManager onProjectChanged={fetchDashboardData} />
+          )}
 
-        {/* Skills Management CRUD View */}
-        {activeTab === 'skills' && (
-          <SkillManager onSkillChanged={fetchDashboardData} />
-        )}
+          {/* Skills Management CRUD View */}
+          {activeTab === 'skills' && (
+            <SkillManager onSkillChanged={fetchDashboardData} />
+          )}
 
-        {/* Education Management CRUD View */}
-        {activeTab === 'education' && (
-          <EducationManager onEducationChanged={fetchDashboardData} />
-        )}
+          {/* Education Management CRUD View */}
+          {activeTab === 'education' && (
+            <EducationManager onEducationChanged={fetchDashboardData} />
+          )}
 
-        {/* Milestones Management CRUD View (Experience, Hackathons, Research, Achievements, Certifications) */}
-        {(activeTab === 'experience' ||
-          activeTab === 'hackathons' ||
-          activeTab === 'research' ||
-          activeTab === 'achievements' ||
-          activeTab === 'certifications') && (
-          <TimelineManager
-            initialType={activeTab}
-            onTimelineChanged={fetchDashboardData}
-          />
-        )}
+          {/* Milestones Management CRUD View (Experience, Hackathons, Research, Achievements, Certifications) */}
+          {(activeTab === 'experience' ||
+            activeTab === 'hackathons' ||
+            activeTab === 'research' ||
+            activeTab === 'achievements' ||
+            activeTab === 'certifications') && (
+            <TimelineManager
+              initialType={activeTab}
+              onTimelineChanged={fetchDashboardData}
+            />
+          )}
 
-        {/* Messages Inbox View */}
-        {activeTab === 'messages' && (
-          <MessageManager onMessageChanged={fetchDashboardData} />
-        )}
+          {/* Messages Inbox View */}
+          {activeTab === 'messages' && (
+            <MessageManager onMessageChanged={fetchDashboardData} />
+          )}
 
-        {/* Feedback Moderation View */}
-        {activeTab === 'feedback' && (
-          <FeedbackManager onFeedbackChanged={fetchDashboardData} />
-        )}
+          {/* Feedback Moderation View */}
+          {activeTab === 'feedback' && (
+            <FeedbackManager onFeedbackChanged={fetchDashboardData} />
+          )}
 
-        {/* Analytics Console View */}
-        {activeTab === 'analytics' && (
-          <AnalyticsManager onDataChanged={fetchDashboardData} />
-        )}
+          {/* Analytics Console View */}
+          {activeTab === 'analytics' && (
+            <AnalyticsManager onDataChanged={fetchDashboardData} />
+          )}
+        </AdminErrorBoundary>
 
         {/* Settings View */}
         {activeTab === 'settings' && (

@@ -43,15 +43,12 @@ export default function MessageManager({ onMessageChanged }) {
     try {
       const res = await getMessages();
       setMessages(res.data || []);
-      if (typeof onMessageChanged === 'function') {
-        onMessageChanged();
-      }
     } catch {
       showToast('Failed to load inbox messages.', 'error');
     } finally {
       setLoading(false);
     }
-  }, [onMessageChanged, showToast]);
+  }, [showToast]);
 
   useEffect(() => {
     fetchInbox();
@@ -148,6 +145,9 @@ export default function MessageManager({ onMessageChanged }) {
         }
         setDeleteConfirmMessage(null);
         await fetchInbox();
+        if (typeof onMessageChanged === 'function') {
+          onMessageChanged();
+        }
       } else {
         showToast(res.error || 'Failed to delete message.', 'error');
       }
