@@ -36,8 +36,8 @@ export default function Hero() {
           <p className="text-base sm:text-lg font-medium text-slate-600 dark:text-slate-400">
             Hi, I'm
           </p>
-          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white break-words">
-            {personalInfo.name.toUpperCase()}
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white break-words uppercase">
+            {personalInfo.name}
           </h1>
           <p className="text-lg sm:text-2xl md:text-3xl font-semibold text-primary-600 dark:text-primary-400">
             {personalInfo.role}

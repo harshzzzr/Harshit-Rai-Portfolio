@@ -6,7 +6,7 @@
     <title>Harshit Rai | Developer Portfolio</title>
     
     <!-- Primary Metadata -->
-    <meta name="description" content="Personal portfolio of Harshit Rai: Computer Engineering student and developer specializing in full-stack web applications, C++, system architecture, and algorithmic problem solving." />
+    <meta name="description" content="Harshit Rai's personal developer portfolio featuring projects, technical skills, education, experience, and technology work." />
     <meta name="author" content="Harshit Rai" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://harshit-rai-portfolio.vercel.app/" />
@@ -21,7 +21,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Harshit Rai Developer Portfolio" />
     <meta property="og:title" content="Harshit Rai | Developer Portfolio" />
-    <meta property="og:description" content="Explore the portfolio of Harshit Rai: Computer Engineering student and developer specializing in C++, React, Node.js, and high-performance software systems." />
+    <meta property="og:description" content="Harshit Rai's personal developer portfolio featuring projects, technical skills, education, experience, and technology work." />
     <meta property="og:url" content="https://harshit-rai-portfolio.vercel.app/" />
     <meta property="og:image" content="https://harshit-rai-portfolio.vercel.app/images/og-preview.png" />
     <meta property="og:image:secure_url" content="https://harshit-rai-portfolio.vercel.app/images/og-preview.png" />
@@ -34,32 +34,62 @@
     <!-- Twitter / X Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Harshit Rai | Developer Portfolio" />
-    <meta name="twitter:description" content="Explore the portfolio of Harshit Rai: Computer Engineering student and developer specializing in C++, React, Node.js, and high-performance software systems." />
+    <meta name="twitter:description" content="Harshit Rai's personal developer portfolio featuring projects, technical skills, education, experience, and technology work." />
     <meta name="twitter:image" content="https://harshit-rai-portfolio.vercel.app/images/og-preview.png" />
     <meta name="twitter:image:alt" content="Harshit Rai - Developer Portfolio Preview" />
 
-    <!-- JSON-LD Structured Data: Person Schema -->
+    <!-- JSON-LD Structured Data: Schema.org Graph -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Harshit Rai",
-      "url": "https://harshit-rai-portfolio.vercel.app/",
-      "jobTitle": "Computer Engineering Student & Full-Stack Developer",
-      "sameAs": [
-        "https://github.com/harshzzzr",
-        "https://www.linkedin.com/in/harshit-rai-/",
-        "https://leetcode.com/u/GkKWasfX4F/",
-        "https://open.spotify.com/user/31b6a5xevyjjpxunwv3fr2f662mu"
-      ],
-      "knowsAbout": [
-        "Computer Engineering",
-        "Full-Stack Web Development",
-        "C++",
-        "React",
-        "Node.js",
-        "Relational Databases",
-        "Algorithms & Data Structures"
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://harshit-rai-portfolio.vercel.app/#website",
+          "url": "https://harshit-rai-portfolio.vercel.app/",
+          "name": "Harshit Rai",
+          "description": "Harshit Rai's personal developer portfolio featuring projects, technical skills, education, experience, and technology work.",
+          "publisher": {
+            "@id": "https://harshit-rai-portfolio.vercel.app/#person"
+          },
+          "inLanguage": "en-US"
+        },
+        {
+          "@type": "ProfilePage",
+          "@id": "https://harshit-rai-portfolio.vercel.app/#profilepage",
+          "url": "https://harshit-rai-portfolio.vercel.app/",
+          "name": "Harshit Rai | Developer Portfolio",
+          "isPartOf": {
+            "@id": "https://harshit-rai-portfolio.vercel.app/#website"
+          },
+          "mainEntity": {
+            "@id": "https://harshit-rai-portfolio.vercel.app/#person"
+          }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://harshit-rai-portfolio.vercel.app/#person",
+          "name": "Harshit Rai",
+          "url": "https://harshit-rai-portfolio.vercel.app/",
+          "image": "https://harshit-rai-portfolio.vercel.app/images/og-preview.png",
+          "description": "Harshit Rai's personal developer portfolio featuring projects, technical skills, education, experience, and technology work.",
+          "jobTitle": "Computer Engineering Student & Full-Stack Developer",
+          "sameAs": [
+            "https://github.com/harshzzzr",
+            "https://www.linkedin.com/in/harshit-rai-/",
+            "https://leetcode.com/u/GkKWasfX4F/",
+            "https://open.spotify.com/user/31b6a5xevyjjpxunwv3fr2f662mu"
+          ],
+          "knowsAbout": [
+            "Computer Engineering",
+            "Full-Stack Web Development",
+            "C++",
+            "React",
+            "Node.js",
+            "Relational Databases",
+            "Algorithms & Data Structures"
+          ]
+        }
       ]
     }
     </script>

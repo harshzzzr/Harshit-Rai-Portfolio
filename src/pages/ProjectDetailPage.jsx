@@ -179,7 +179,7 @@ export default function ProjectDetailPage() {
     return (
       <div className="min-h-[70vh] flex items-center justify-center px-4">
         <SEO
-          title="Project Not Found | Harshit Rai Developer Portfolio"
+          title="Project Not Found | Harshit Rai"
           description="The requested project could not be found in the portfolio repository."
           noindex={true}
         />
@@ -207,22 +207,52 @@ export default function ProjectDetailPage() {
     );
   }
 
-  const projectSeoTitle = `${project.title} | Harshit Rai Developer Portfolio`;
+  const projectSeoTitle = `${project.title} | Harshit Rai`;
   const projectSeoDesc = project.shortDescription || project.description || `${project.title} software engineering project by Harshit Rai, built with ${(project.technologies || []).join(', ')}.`;
   const projectCanonical = `${SITE_CONFIG.url}projects/${projectId}`;
   const projectJsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'SoftwareSourceCode',
-    'name': project.title,
-    'headline': project.tagline || project.title,
-    'description': projectSeoDesc,
-    'programmingLanguage': (project.technologies || []).join(', '),
-    'codeRepository': project.githubUrl || undefined,
-    'author': {
-      '@type': 'Person',
-      'name': 'Harshit Rai',
-      'url': SITE_CONFIG.url
-    }
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${projectCanonical}#breadcrumb`,
+        'itemListElement': [
+          {
+            '@type': 'ListItem',
+            'position': 1,
+            'name': 'Home',
+            'item': SITE_CONFIG.url
+          },
+          {
+            '@type': 'ListItem',
+            'position': 2,
+            'name': 'Projects',
+            'item': `${SITE_CONFIG.url}#projects`
+          },
+          {
+            '@type': 'ListItem',
+            'position': 3,
+            'name': project.title,
+            'item': projectCanonical
+          }
+        ]
+      },
+      {
+        '@type': 'SoftwareSourceCode',
+        '@id': `${projectCanonical}#software`,
+        'name': project.title,
+        'headline': project.tagline || project.title,
+        'description': projectSeoDesc,
+        'programmingLanguage': (project.technologies || []).join(', '),
+        'codeRepository': project.githubUrl || undefined,
+        'author': {
+          '@type': 'Person',
+          '@id': `${SITE_CONFIG.url}#person`,
+          'name': 'Harshit Rai',
+          'url': SITE_CONFIG.url
+        }
+      }
+    ]
   };
 
   return (

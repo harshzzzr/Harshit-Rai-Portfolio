@@ -6,7 +6,8 @@ export const SITE_CONFIG = {
   name: 'Harshit Rai',
   url: 'https://harshit-rai-portfolio.vercel.app/',
   title: 'Harshit Rai | Developer Portfolio',
-  description: 'Personal portfolio of Harshit Rai — Computer Engineering student and software developer specializing in C++, full-stack web systems, and algorithmic problem solving.',
+  description:
+    "Harshit Rai's personal developer portfolio featuring projects, technical skills, education, experience, and technology work.",
   role: 'Computer Engineering Student & Full-Stack Developer',
   email: 'harshittrrai@gmail.com',
   links: {

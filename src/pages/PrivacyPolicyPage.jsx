@@ -10,7 +10,7 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="w-full py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
       <SEO
-        title="Privacy Policy | Harshit Rai Portfolio"
+        title="Privacy Policy | Harshit Rai"
         description="Privacy policy and data protection transparency for Harshit Rai's developer portfolio."
         canonicalUrl={`${SITE_CONFIG.url}privacy`}
         ogType="website"

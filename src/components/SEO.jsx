@@ -23,7 +23,7 @@ function setLinkTag(rel, href) {
   let element = document.querySelector(`link[rel="${rel}"]`);
   if (!element) {
     element = document.createElement('link');
-    element.setAttribute(rel, rel);
+    element.setAttribute('rel', rel);
     document.head.appendChild(element);
   }
   element.setAttribute('href', href || '');

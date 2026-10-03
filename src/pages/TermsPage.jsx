@@ -10,7 +10,7 @@ export default function TermsPage() {
   return (
     <div className="w-full py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
       <SEO
-        title="Terms and Conditions | Harshit Rai Portfolio"
+        title="Terms and Conditions | Harshit Rai"
         description="Terms of service and acceptable use conditions for Harshit Rai's developer portfolio."
         canonicalUrl={`${SITE_CONFIG.url}terms`}
         ogType="website"

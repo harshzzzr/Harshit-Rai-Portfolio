@@ -136,7 +136,7 @@ export default function AdminDashboardPage() {
 
   return (
     <AdminLayout activeTab={activeTab} onSelectTab={setActiveTab}>
-      <SEO title="Admin Console | Harshit Rai Developer Portfolio" noindex={true} />
+      <SEO title="Admin Console | Harshit Rai" noindex={true} />
       <div className="max-w-6xl mx-auto space-y-8 animate-fade-in">
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
