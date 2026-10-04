@@ -81,16 +81,16 @@ export default function AdminLoginPage() {
     return (
       <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
         <SEO title="Admin Console | Harshit Rai" noindex={true} />
-        <div className="max-w-md w-full p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-6 shadow-lg animate-fade-in">
-          <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center">
+        <div className="max-w-md w-full p-8 rounded-2xl bg-white/90 dark:bg-[#141516]/90 border border-neutral-300/80 dark:border-white/10 text-center space-y-6 shadow-xl backdrop-blur-xl animate-fade-in">
+          <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center border border-emerald-500/20">
             <ShieldCheck size={36} />
           </div>
 
           <div className="space-y-2">
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+            <h1 className="text-2xl font-bold text-neutral-900 dark:text-white tracking-tight">
               Administrator Authenticated
             </h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
               Signed in as <span className="font-mono font-semibold text-primary-600 dark:text-primary-400">{currentUser.email}</span>
             </p>
           </div>
@@ -98,23 +98,23 @@ export default function AdminLoginPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Link
               to="/admin"
-              className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold transition-colors shadow-sm"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-colors shadow-md shadow-primary-500/20"
             >
               Access Admin Area
             </Link>
             <button
               onClick={() => logout()}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-semibold transition-colors cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/[0.05] text-sm font-semibold transition-colors cursor-pointer"
             >
               <LogOut size={16} />
               <span>Log Out</span>
             </button>
           </div>
 
-          <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+          <div className="pt-4 border-t border-neutral-100 dark:border-white/10">
             <Link
               to="/"
-              className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs text-neutral-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
             >
               <ArrowLeft size={13} />
               <span>Return to Public Website</span>
@@ -128,16 +128,16 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">
       <SEO title="Admin Login | Harshit Rai" noindex={true} />
-      <div className="max-w-md w-full p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6 animate-fade-in">
+      <div className="max-w-md w-full p-6 sm:p-8 rounded-2xl bg-white/90 dark:bg-[#141516]/90 border border-neutral-300/80 dark:border-white/10 shadow-2xl backdrop-blur-xl space-y-6 animate-fade-in">
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 mx-auto flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-white/[0.04] border border-neutral-200 dark:border-white/10 text-primary-600 dark:text-primary-400 mx-auto flex items-center justify-center">
             <Lock size={24} />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white">
             Admin Authentication
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
             Secure administrator access to manage portfolio data
           </p>
         </div>
@@ -162,11 +162,11 @@ export default function AdminLoginPage() {
         <form onSubmit={handleSubmit} noValidate className="space-y-4" autoComplete="off">
           {/* Email Field */}
           <div className="space-y-1.5">
-            <label htmlFor="admin-email" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            <label htmlFor="admin-email" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
               Admin Email <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400" aria-hidden="true">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-400" aria-hidden="true">
                 <Mail size={16} />
               </span>
               <input
@@ -182,18 +182,18 @@ export default function AdminLoginPage() {
                 spellCheck="false"
                 autoCapitalize="none"
                 disabled={loading}
-                className="w-full pl-10 pr-3.5 py-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-500 transition-all disabled:opacity-50"
+                className="w-full pl-10 pr-3.5 py-2.5 rounded-xl text-sm bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus-visible:ring-2 focus-visible:ring-primary-500 transition-all disabled:opacity-50"
               />
             </div>
           </div>
 
           {/* Password Field */}
           <div className="space-y-1.5">
-            <label htmlFor="admin-password" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            <label htmlFor="admin-password" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
               Password <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400" aria-hidden="true">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-400" aria-hidden="true">
                 <Lock size={16} />
               </span>
               <input
@@ -207,13 +207,13 @@ export default function AdminLoginPage() {
                 placeholder=""
                 autoComplete="new-password"
                 disabled={loading}
-                className="w-full pl-10 pr-10 py-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-500 transition-all disabled:opacity-50"
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus-visible:ring-2 focus-visible:ring-primary-500 transition-all disabled:opacity-50"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
               >
                 {showPassword ? <EyeOff size={16} aria-hidden="true" /> : <Eye size={16} aria-hidden="true" />}
               </button>
@@ -225,7 +225,7 @@ export default function AdminLoginPage() {
             type="submit"
             disabled={loading}
             aria-busy={loading}
-            className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold shadow-md shadow-primary-500/20 transition-all disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500"
+            className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold shadow-md shadow-primary-500/20 transition-all disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 active:scale-[0.99]"
           >
             {loading ? (
               <>
@@ -242,7 +242,7 @@ export default function AdminLoginPage() {
         <div className="pt-2 text-center">
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-1"
+            className="inline-flex items-center gap-1.5 text-xs text-neutral-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-1"
           >
             <ArrowLeft size={13} aria-hidden="true" />
             <span>Back to Public Website</span>

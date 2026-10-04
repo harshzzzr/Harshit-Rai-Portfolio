@@ -182,7 +182,7 @@ export default function ProjectForm({
         type="submit"
         form="project-editor-form"
         disabled={saving}
-        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 transition-colors shadow-sm cursor-pointer disabled:opacity-50"
+        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-primary-600 hover:bg-primary-500 transition-colors shadow-sm cursor-pointer disabled:opacity-50"
       >
         {saving ? (
           <>
@@ -218,7 +218,7 @@ export default function ProjectForm({
         {/* 1. Core Metadata Row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
               Project Title *
             </label>
             <input
@@ -226,15 +226,15 @@ export default function ProjectForm({
               value={formData.title}
               onChange={handleTitleChange}
               placeholder="e.g. Drone Detection System"
-              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border ${
-                formErrors.title ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'
-              } text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500`}
+              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl bg-neutral-50 dark:bg-[#101112] border ${
+                formErrors.title ? 'border-red-500' : 'border-neutral-200 dark:border-white/10'
+              } text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500`}
             />
             {formErrors.title && <p className="text-[11px] text-red-500">{formErrors.title}</p>}
           </div>
 
           <div className="space-y-1">
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
               URL Slug *
             </label>
             <input
@@ -242,14 +242,14 @@ export default function ProjectForm({
               value={formData.slug}
               onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
               placeholder="drone-detection-system"
-              className="w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-xl bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
         </div>
 
         {/* 2. Tagline */}
         <div className="space-y-1">
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+          <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
             Tagline / Focus Headline
           </label>
           <input
@@ -257,13 +257,13 @@ export default function ProjectForm({
             value={formData.tagline}
             onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
             placeholder="Real-Time Aerial Surveillance & Acoustic Signal Classifier"
-            className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
 
         {/* 3. Short Description */}
         <div className="space-y-1">
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+          <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
             Short Description (Grid card preview) *
           </label>
           <textarea
@@ -271,9 +271,9 @@ export default function ProjectForm({
             value={formData.shortDescription}
             onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
             placeholder="Brief overview explaining what the project achieves..."
-            className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border ${
-              formErrors.shortDescription ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'
-            } text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500`}
+            className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl bg-neutral-50 dark:bg-[#101112] border ${
+              formErrors.shortDescription ? 'border-red-500' : 'border-neutral-200 dark:border-white/10'
+            } text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500`}
           />
           {formErrors.shortDescription && (
             <p className="text-[11px] text-red-500">{formErrors.shortDescription}</p>
@@ -282,7 +282,7 @@ export default function ProjectForm({
 
         {/* 4. Full Overview */}
         <div className="space-y-1">
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+          <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
             Full Description (Detail page architecture overview)
           </label>
           <textarea
@@ -290,13 +290,13 @@ export default function ProjectForm({
             value={formData.fullDescription}
             onChange={(e) => setFormData({ ...formData, fullDescription: e.target.value })}
             placeholder="Detailed architectural summary and engineering methodology..."
-            className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
 
         {/* 5. Technologies */}
         <div className="space-y-1">
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+          <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
             Technologies (comma-separated) *
           </label>
           <input
@@ -304,9 +304,9 @@ export default function ProjectForm({
             value={formData.technologies}
             onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
             placeholder="C++, OpenCV, PyTorch, React, WebSockets"
-            className={`w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800 border ${
-              formErrors.technologies ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'
-            } text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500`}
+            className={`w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-xl bg-neutral-50 dark:bg-[#101112] border ${
+              formErrors.technologies ? 'border-red-500' : 'border-neutral-200 dark:border-white/10'
+            } text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500`}
           />
           {formErrors.technologies && (
             <p className="text-[11px] text-red-500">{formErrors.technologies}</p>
@@ -316,7 +316,7 @@ export default function ProjectForm({
         {/* 6. URLs */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
               GitHub Repository URL
             </label>
             <input
@@ -324,12 +324,12 @@ export default function ProjectForm({
               value={formData.githubUrl}
               onChange={(e) => setFormData({ ...formData, githubUrl: e.target.value })}
               placeholder="https://github.com/harshzzzr/repository"
-              className="w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-xl bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
               Live Demo / Product URL
             </label>
             <input
@@ -337,14 +337,14 @@ export default function ProjectForm({
               value={formData.liveUrl}
               onChange={(e) => setFormData({ ...formData, liveUrl: e.target.value })}
               placeholder="https://my-app.example.com (optional)"
-              className="w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 text-xs sm:text-sm font-mono rounded-xl bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
         </div>
 
         {/* 7. Image Upload */}
         <div className="space-y-1">
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+          <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
             Project Banner Image (URL or Firebase Storage upload)
           </label>
           <div className="flex gap-2">
@@ -353,9 +353,9 @@ export default function ProjectForm({
               value={formData.image}
               onChange={(e) => setFormData({ ...formData, image: e.target.value })}
               placeholder="/images/projects/banner.png or https://..."
-              className="flex-1 px-3 py-2 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="flex-1 px-3 py-2 text-xs sm:text-sm font-mono rounded-xl bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
-            <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold cursor-pointer transition-colors border border-slate-300 dark:border-slate-700 shrink-0">
+            <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-neutral-100 dark:bg-white/[0.05] hover:bg-neutral-200 dark:hover:bg-white/[0.08] text-neutral-700 dark:text-neutral-300 text-xs font-semibold cursor-pointer transition-colors border border-neutral-300 dark:border-white/10 shrink-0">
               <Upload size={14} />
               <span>{uploadingImage ? 'Uploading...' : 'Upload'}</span>
               <input
@@ -370,28 +370,28 @@ export default function ProjectForm({
         </div>
 
         {/* 8. Badge, Order, Featured, Visible */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-3.5 rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-neutral-200/80 dark:border-white/05">
           <div className="space-y-1">
-            <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+            <label className="block text-[11px] font-semibold text-neutral-700 dark:text-neutral-300">
               Category Badge
             </label>
             <input
               type="text"
               value={formData.badge}
               onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-              className="w-full px-2.5 py-1.5 text-xs rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className="w-full px-2.5 py-1.5 text-xs rounded-lg bg-white dark:bg-[#141516] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] focus:outline-none focus:ring-1 focus:ring-primary-500"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+            <label className="block text-[11px] font-semibold text-neutral-700 dark:text-neutral-300">
               Display Order
             </label>
             <input
               type="number"
               value={formData.order}
               onChange={(e) => setFormData({ ...formData, order: e.target.value })}
-              className="w-full px-2.5 py-1.5 text-xs rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className="w-full px-2.5 py-1.5 text-xs rounded-lg bg-white dark:bg-[#141516] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] focus:outline-none focus:ring-1 focus:ring-primary-500"
             />
           </div>
 
@@ -401,11 +401,11 @@ export default function ProjectForm({
               id="proj-featured-toggle"
               checked={formData.featured}
               onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-              className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300 dark:border-slate-700 cursor-pointer"
+              className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-neutral-300 dark:border-white/10 cursor-pointer"
             />
             <label
               htmlFor="proj-featured-toggle"
-              className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer select-none"
+              className="text-xs font-medium text-neutral-700 dark:text-neutral-300 cursor-pointer select-none"
             >
               Featured
             </label>
@@ -417,11 +417,11 @@ export default function ProjectForm({
               id="proj-visible-toggle"
               checked={formData.visible}
               onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
-              className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300 dark:border-slate-700 cursor-pointer"
+              className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-neutral-300 dark:border-white/10 cursor-pointer"
             />
             <label
               htmlFor="proj-visible-toggle"
-              className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer select-none"
+              className="text-xs font-medium text-neutral-700 dark:text-neutral-300 cursor-pointer select-none"
             >
               Published
             </label>
@@ -431,7 +431,7 @@ export default function ProjectForm({
         {/* 9. Problem & Solution */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
               Problem Statement
             </label>
             <textarea
@@ -439,12 +439,12 @@ export default function ProjectForm({
               value={formData.problem}
               onChange={(e) => setFormData({ ...formData, problem: e.target.value })}
               placeholder="The challenge or bottleneck addressed..."
-              className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
               Solution & Engineering
             </label>
             <textarea
@@ -452,14 +452,14 @@ export default function ProjectForm({
               value={formData.solution}
               onChange={(e) => setFormData({ ...formData, solution: e.target.value })}
               placeholder="How the technical stack resolved the problem..."
-              className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
         </div>
 
         {/* 10. Key Features */}
         <div className="space-y-1">
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+          <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
             Key Features (One item per line)
           </label>
           <textarea
@@ -467,7 +467,7 @@ export default function ProjectForm({
             value={formData.features}
             onChange={(e) => setFormData({ ...formData, features: e.target.value })}
             placeholder="Feature point 1&#10;Feature point 2&#10;Feature point 3"
-            className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
       </form>

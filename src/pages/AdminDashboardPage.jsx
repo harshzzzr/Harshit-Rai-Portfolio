@@ -142,10 +142,10 @@ export default function AdminDashboardPage() {
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white capitalize">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-white capitalize">
               {activeTab === 'dashboard' ? 'Portfolio Overview' : `${activeTab} Management`}
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1">
               {activeTab === 'dashboard'
                 ? 'High-level inventory of verified portfolio resources and incoming data'
                 : `Dedicated administrative console for ${activeTab}`}
@@ -156,7 +156,7 @@ export default function AdminDashboardPage() {
             <button
               onClick={handleResetDashboardView}
               disabled={loading}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-[#D7E2EA] hover:bg-neutral-50 dark:hover:bg-white/[0.04] text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
               title="Reset dashboard view to default"
             >
               <RotateCcw size={13} />
@@ -165,7 +165,7 @@ export default function AdminDashboardPage() {
             <button
               onClick={fetchDashboardData}
               disabled={loading}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-[#D7E2EA] hover:bg-neutral-50 dark:hover:bg-white/[0.04] text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
               title="Refresh inventory counts"
             >
               <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
@@ -175,7 +175,7 @@ export default function AdminDashboardPage() {
               to="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold transition-colors shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-xs font-semibold transition-colors shadow-xs"
             >
               <span>View Site</span>
               <ExternalLink size={13} />
@@ -191,21 +191,21 @@ export default function AdminDashboardPage() {
               {/* Analytics Card */}
               <div
                 onClick={() => setActiveTab('analytics')}
-                className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all cursor-pointer group"
+                className="p-6 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-xs hover:border-neutral-300 dark:hover:border-white/20 transition-all cursor-pointer group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  <span className="text-xs font-mono font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                     Page Views
                   </span>
-                  <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950 text-sky-600 dark:text-sky-400">
+                  <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 border border-sky-100 dark:border-sky-900/40">
                     <BarChart3 size={20} />
                   </div>
                 </div>
                 <div className="mt-4 space-y-1">
-                  <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+                  <div className="text-3xl font-extrabold text-neutral-900 dark:text-white">
                     {loading ? '...' : counts.pageViews.toLocaleString()}
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
                     <span className="font-semibold text-sky-600 dark:text-sky-400">{counts.uniqueSessions}</span> tab sessions
                   </p>
                 </div>
@@ -214,21 +214,21 @@ export default function AdminDashboardPage() {
               {/* Projects Card */}
               <div
                 onClick={() => setActiveTab('projects')}
-                className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all cursor-pointer group"
+                className="p-6 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-xs hover:border-neutral-300 dark:hover:border-white/20 transition-all cursor-pointer group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  <span className="text-xs font-mono font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                     Projects
                   </span>
-                  <div className="p-2 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 group-hover:scale-110 transition-transform">
+                  <div className="p-2 rounded-xl bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-900/40 group-hover:scale-105 transition-transform">
                     <FolderGit2 size={20} />
                   </div>
                 </div>
                 <div className="mt-4 space-y-1">
-                  <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+                  <div className="text-3xl font-extrabold text-neutral-900 dark:text-white">
                     {loading ? '...' : counts.projects}
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
                     <span className="font-semibold text-primary-600 dark:text-primary-400">{counts.featuredProjects}</span> featured builds
                   </p>
                 </div>
@@ -237,21 +237,21 @@ export default function AdminDashboardPage() {
               {/* Skills Card */}
               <div
                 onClick={() => setActiveTab('skills')}
-                className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all cursor-pointer group"
+                className="p-6 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-xs hover:border-neutral-300 dark:hover:border-white/20 transition-all cursor-pointer group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  <span className="text-xs font-mono font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                     Skills
                   </span>
-                  <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+                  <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/40 group-hover:scale-105 transition-transform">
                     <Code size={20} />
                   </div>
                 </div>
                 <div className="mt-4 space-y-1">
-                  <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+                  <div className="text-3xl font-extrabold text-neutral-900 dark:text-white">
                     {loading ? '...' : counts.skills}
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
                     Across <span className="font-semibold text-emerald-600 dark:text-emerald-400">{counts.skillCategories}</span> categories
                   </p>
                 </div>
@@ -260,21 +260,21 @@ export default function AdminDashboardPage() {
               {/* Messages Card */}
               <div
                 onClick={() => setActiveTab('messages')}
-                className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all cursor-pointer group"
+                className="p-6 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-xs hover:border-neutral-300 dark:hover:border-white/20 transition-all cursor-pointer group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  <span className="text-xs font-mono font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                     Messages
                   </span>
-                  <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950 text-sky-600 dark:text-sky-400 group-hover:scale-110 transition-transform">
+                  <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 border border-sky-100 dark:border-sky-900/40 group-hover:scale-105 transition-transform">
                     <Mail size={20} />
                   </div>
                 </div>
                 <div className="mt-4 space-y-1">
-                  <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+                  <div className="text-3xl font-extrabold text-neutral-900 dark:text-white">
                     {loading ? '...' : counts.messages}
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
                     Inquiries received
                   </p>
                 </div>
@@ -283,21 +283,21 @@ export default function AdminDashboardPage() {
               {/* Feedback Card */}
               <div
                 onClick={() => setActiveTab('feedback')}
-                className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all cursor-pointer group"
+                className="p-6 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-xs hover:border-neutral-300 dark:hover:border-white/20 transition-all cursor-pointer group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  <span className="text-xs font-mono font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                     Feedback
                   </span>
-                  <div className="p-2 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform">
+                  <div className="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-900/40 group-hover:scale-105 transition-transform">
                     <MessageSquareQuote size={20} />
                   </div>
                 </div>
                 <div className="mt-4 space-y-1">
-                  <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+                  <div className="text-3xl font-extrabold text-neutral-900 dark:text-white">
                     {loading ? '...' : counts.feedback}
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
                     Testimonials registered
                   </p>
                 </div>
@@ -307,9 +307,9 @@ export default function AdminDashboardPage() {
             {/* Trajectory Highlights & Quick Inventory */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               {/* Recent Projects Summary */}
-              <div className="lg:col-span-7 p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+              <div className="lg:col-span-7 p-6 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-xs space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  <h3 className="text-base font-bold text-neutral-900 dark:text-white">
                     Cataloged Projects ({counts.projects})
                   </h3>
                   <button
@@ -321,27 +321,27 @@ export default function AdminDashboardPage() {
                   </button>
                 </div>
 
-                <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                <div className="divide-y divide-neutral-100 dark:divide-white/05">
                   {recentProjects.map((proj) => (
                     <div key={proj.id} className="py-3 flex items-center justify-between gap-4">
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                        <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate">
                           {proj.title}
                         </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
                           {proj.badge || 'Engineering'} • {(proj.technologies || []).slice(0, 3).join(', ')}
                         </p>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         {proj.featured && (
-                          <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium">
+                          <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 font-medium border border-primary-200/60 dark:border-primary-900/40">
                             Featured
                           </span>
                         )}
                         <Link
                           to={`/projects/${proj.id}`}
                           target="_blank"
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                          className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.05]"
                           title="Preview public project page"
                         >
                           <ExternalLink size={14} />
@@ -353,24 +353,24 @@ export default function AdminDashboardPage() {
               </div>
 
               {/* Skills & Academic Inventory */}
-              <div className="lg:col-span-5 p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              <div className="lg:col-span-5 p-6 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-xs space-y-4">
+                <h3 className="text-base font-bold text-neutral-900 dark:text-white">
                   Skills & Content Inventory
                 </h3>
 
                 <div className="space-y-3 text-xs sm:text-sm">
                   {skillCategoriesList.map((catGroup) => (
-                    <div key={catGroup.category} className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-                      <span className="font-medium text-slate-700 dark:text-slate-300">
+                    <div key={catGroup.category} className="flex items-center justify-between p-2.5 rounded-xl bg-neutral-50 dark:bg-white/[0.03] border border-neutral-100 dark:border-white/05">
+                      <span className="font-medium text-neutral-700 dark:text-neutral-300">
                         {catGroup.category}
                       </span>
-                      <span className="font-mono px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-semibold text-primary-600 dark:text-primary-400">
+                      <span className="font-mono px-2 py-0.5 rounded-md bg-white dark:bg-[#141516] border border-neutral-200 dark:border-white/10 font-semibold text-primary-600 dark:text-primary-400">
                         {(catGroup.skills || []).length} skills
                       </span>
                     </div>
                   ))}
 
-                  <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex justify-between text-xs text-slate-500">
+                  <div className="pt-2 border-t border-neutral-100 dark:border-white/05 flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
                     <span>Education: {counts.education} degree program</span>
                     <span>Milestones: {counts.experience + counts.hackathons + counts.research + counts.achievements + counts.certifications} entries</span>
                   </div>
@@ -379,16 +379,16 @@ export default function AdminDashboardPage() {
             </div>
 
             {/* Quick Analytics Inbound Banner */}
-            <div className="p-5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="p-5 rounded-xl bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-lg bg-sky-100 dark:bg-sky-950 text-sky-600 dark:text-sky-400">
+                <div className="p-2.5 rounded-lg bg-sky-100 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 border border-sky-200/60 dark:border-sky-900/40">
                   <BarChart3 size={20} />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                  <h4 className="text-sm font-bold text-neutral-900 dark:text-white">
                     Privacy-Conscious Visitor Telemetry Active
                   </h4>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
                     Tracking anonymous page views, project popularity, and referral channels with zero PII.
                   </p>
                 </div>
@@ -396,7 +396,7 @@ export default function AdminDashboardPage() {
 
               <button
                 onClick={() => setActiveTab('analytics')}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-xs transition-colors cursor-pointer shrink-0"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-[#141516] hover:bg-neutral-50 dark:hover:bg-white/[0.04] border border-neutral-200 dark:border-white/10 text-xs font-semibold text-neutral-800 dark:text-[#D7E2EA] shadow-xs transition-colors cursor-pointer shrink-0"
               >
                 <span>Open Analytics Console</span>
                 <ArrowRight size={14} className="text-primary-600 dark:text-primary-400" />
@@ -455,51 +455,51 @@ export default function AdminDashboardPage() {
           <div className="space-y-6 animate-fade-in">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Card 1: Admin Preferences */}
-              <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
+              <div className="p-6 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-xs space-y-5">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400">
+                  <div className="p-2.5 rounded-xl bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-900/40">
                     <Sliders size={20} />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                    <h3 className="text-base font-bold text-neutral-900 dark:text-white">
                       Console Preferences
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
                       Configure your local admin interface preferences
                     </p>
                   </div>
                 </div>
 
                 <div className="space-y-3 pt-2">
-                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-neutral-50 dark:bg-white/[0.03] border border-neutral-100 dark:border-white/05">
                     <div>
-                      <div className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                      <div className="text-xs font-semibold text-neutral-800 dark:text-neutral-200">
                         Theme Mode
                       </div>
-                      <div className="text-[11px] text-slate-500">
+                      <div className="text-[11px] text-neutral-500">
                         Currently: <span className="font-mono capitalize font-medium">{theme}</span> mode
                       </div>
                     </div>
                     <button
                       onClick={toggleTheme}
-                      className="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                      className="px-3 py-1.5 rounded-lg bg-white dark:bg-[#141516] border border-neutral-200 dark:border-white/10 text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors cursor-pointer"
                     >
                       Toggle Theme
                     </button>
                   </div>
 
-                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-neutral-50 dark:bg-white/[0.03] border border-neutral-100 dark:border-white/05">
                     <div>
-                      <div className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                      <div className="text-xs font-semibold text-neutral-800 dark:text-neutral-200">
                         Reset Admin Preferences
                       </div>
-                      <div className="text-[11px] text-slate-500">
+                      <div className="text-[11px] text-neutral-500">
                         Restores default UI filters and local caches without modifying database
                       </div>
                     </div>
                     <button
                       onClick={handleResetAdminPreferences}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 text-xs font-medium transition-colors cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-200/80 dark:bg-white/[0.06] hover:bg-neutral-300 dark:hover:bg-white/[0.10] text-neutral-800 dark:text-neutral-200 border border-neutral-300/60 dark:border-white/10 text-xs font-medium transition-colors cursor-pointer"
                     >
                       <RotateCcw size={13} />
                       <span>Reset</span>
@@ -509,24 +509,24 @@ export default function AdminDashboardPage() {
               </div>
 
               {/* Card 2: Environment & Production Health */}
-              <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
+              <div className="p-6 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-xs space-y-5">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400">
+                  <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/40">
                     <ShieldCheck size={20} />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                    <h3 className="text-base font-bold text-neutral-900 dark:text-white">
                       Deployment & Environment
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
                       Verified infrastructure parameters and live configuration
                     </p>
                   </div>
                 </div>
 
                 <div className="space-y-3 pt-2 text-xs">
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-                    <span className="text-slate-500">Production URL:</span>
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.03] border border-neutral-100 dark:border-white/05">
+                    <span className="text-neutral-500">Production URL:</span>
                     <a
                       href={SITE_CONFIG.url}
                       target="_blank"
@@ -538,24 +538,24 @@ export default function AdminDashboardPage() {
                     </a>
                   </div>
 
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-                    <span className="text-slate-500">Firebase Backend:</span>
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.03] border border-neutral-100 dark:border-white/05">
+                    <span className="text-neutral-500">Firebase Backend:</span>
                     <span className="inline-flex items-center gap-1 font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
                       <CheckCircle2 size={13} />
                       <span>Online / Active</span>
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-                    <span className="text-slate-500">Active Admin Session:</span>
-                    <span className="font-mono text-slate-700 dark:text-slate-300 font-medium truncate max-w-[200px]">
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.03] border border-neutral-100 dark:border-white/05">
+                    <span className="text-neutral-500">Active Admin Session:</span>
+                    <span className="font-mono text-neutral-700 dark:text-neutral-300 font-medium truncate max-w-[200px]">
                       {currentUser?.email || 'admin@portfolio'}
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-                    <span className="text-slate-500">Deployment Target:</span>
-                    <span className="font-mono text-slate-700 dark:text-slate-300 font-semibold">
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.03] border border-neutral-100 dark:border-white/05">
+                    <span className="text-neutral-500">Deployment Target:</span>
+                    <span className="font-mono text-neutral-700 dark:text-neutral-300 font-semibold">
                       Vercel Production
                     </span>
                   </div>
@@ -564,16 +564,16 @@ export default function AdminDashboardPage() {
             </div>
 
             {/* Reset & Quick Actions Bar */}
-            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="p-5 rounded-2xl bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-primary-100 dark:bg-primary-950 text-primary-600 dark:text-primary-400">
+                <div className="p-2.5 rounded-xl bg-primary-100 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-900/40">
                   <BarChart3 size={20} />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                  <h4 className="text-xs font-bold text-neutral-900 dark:text-white">
                     Need to inspect or reset traffic metrics?
                   </h4>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  <p className="text-[11px] text-neutral-500 dark:text-neutral-400">
                     Visitor analytics buffer and telemetry events are maintained under the Analytics console.
                   </p>
                 </div>
@@ -581,7 +581,7 @@ export default function AdminDashboardPage() {
 
               <button
                 onClick={() => setActiveTab('analytics')}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold transition-colors cursor-pointer shrink-0"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-xs font-semibold transition-colors cursor-pointer shrink-0"
               >
                 <span>Go to Analytics</span>
                 <ArrowRight size={13} />

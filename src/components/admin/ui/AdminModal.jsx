@@ -128,7 +128,7 @@ export default function AdminModal({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-slate-950/70 backdrop-blur-xs overflow-hidden animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/60 backdrop-blur-md overflow-hidden animate-fade-in"
       onClick={(e) => {
         if (e.target === e.currentTarget && closeOnBackdrop) {
           requestClose();
@@ -142,27 +142,27 @@ export default function AdminModal({
         aria-modal="true"
         aria-labelledby="admin-modal-title"
         aria-describedby={description ? 'admin-modal-description' : undefined}
-        className={`relative w-full ${sizeClasses} max-h-[92vh] sm:max-h-[90vh] flex flex-col rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden focus:outline-none`}
+        className={`relative w-full ${sizeClasses} max-h-[92vh] sm:max-h-[90vh] flex flex-col rounded-2xl bg-white/95 dark:bg-[#141516]/95 border border-neutral-300/80 dark:border-white/15 shadow-2xl backdrop-blur-2xl overflow-hidden focus:outline-none`}
       >
         {/* Modal Header */}
-        <div className="shrink-0 flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 z-10">
+        <div className="shrink-0 flex items-center justify-between px-5 py-4 border-b border-neutral-200/80 dark:border-white/10 bg-white/95 dark:bg-[#141516]/95 z-10">
           <div className="flex items-center gap-3 min-w-0 pr-2">
             {Icon && (
-              <div className="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-950/80 text-primary-600 dark:text-primary-400 flex items-center justify-center shrink-0 border border-primary-100 dark:border-primary-900/50">
+              <div className="w-9 h-9 rounded-xl bg-neutral-100 dark:bg-white/[0.04] text-primary-600 dark:text-primary-400 flex items-center justify-center shrink-0 border border-neutral-200 dark:border-white/10">
                 <Icon size={18} />
               </div>
             )}
             <div className="min-w-0">
               <h2
                 id="admin-modal-title"
-                className="text-base sm:text-lg font-bold text-slate-900 dark:text-white truncate tracking-tight"
+                className="text-base sm:text-lg font-bold text-neutral-900 dark:text-white truncate tracking-tight"
               >
                 {title}
               </h2>
               {description && (
                 <p
                   id="admin-modal-description"
-                  className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5"
+                  className="text-xs text-neutral-500 dark:text-neutral-400 truncate mt-0.5"
                 >
                   {description}
                 </p>
@@ -174,7 +174,7 @@ export default function AdminModal({
             <button
               type="button"
               onClick={requestClose}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer shrink-0 focus-visible:ring-2 focus-visible:ring-primary-500"
+              className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.05] transition-colors cursor-pointer shrink-0 focus-visible:ring-2 focus-visible:ring-primary-500"
               aria-label="Close dialog"
             >
               <X size={18} />
@@ -183,13 +183,13 @@ export default function AdminModal({
         </div>
 
         {/* Modal Scrollable Body */}
-        <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-5 sm:px-6 text-slate-800 dark:text-slate-200">
+        <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-5 sm:px-6 text-neutral-800 dark:text-[#D7E2EA]">
           {children}
         </div>
 
         {/* Modal Footer */}
         {footer && (
-          <div className="shrink-0 px-5 py-3.5 sm:px-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/90 z-10 flex items-center justify-end gap-2.5">
+          <div className="shrink-0 px-5 py-3.5 sm:px-6 border-t border-neutral-200/80 dark:border-white/10 bg-neutral-50/90 dark:bg-[#101112]/95 z-10 flex items-center justify-end gap-2.5">
             {footer}
           </div>
         )}
@@ -197,29 +197,29 @@ export default function AdminModal({
         {/* Unsaved Changes Confirmation Dialog Overlay */}
         {showUnsavedPrompt && (
           <div
-            className="absolute inset-0 z-20 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-fade-in"
+            className="absolute inset-0 z-20 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in"
             role="alertdialog"
             aria-labelledby="unsaved-prompt-title"
           >
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 max-w-sm w-full shadow-2xl space-y-4">
+            <div className="bg-white dark:bg-[#141516] rounded-2xl border border-neutral-300 dark:border-white/15 p-5 max-w-sm w-full shadow-2xl space-y-4">
               <div className="flex items-start gap-3">
                 <div className="p-2 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 shrink-0 border border-amber-200 dark:border-amber-900">
                   <AlertTriangle size={20} />
                 </div>
                 <div>
-                  <h3 id="unsaved-prompt-title" className="text-sm font-bold text-slate-900 dark:text-white">
+                  <h3 id="unsaved-prompt-title" className="text-sm font-bold text-neutral-900 dark:text-white">
                     Discard changes?
                   </h3>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 leading-relaxed">
                     Your changes have not been saved.
                   </p>
                 </div>
               </div>
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-neutral-100 dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setShowUnsavedPrompt(false)}
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/[0.05] cursor-pointer"
                 >
                   Cancel
                 </button>

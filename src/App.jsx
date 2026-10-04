@@ -25,8 +25,8 @@ function RouteLoadingFallback() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center p-8">
       <div className="flex flex-col items-center gap-3">
-        <div className="w-8 h-8 rounded-full border-2 border-primary-500 border-t-transparent animate-spin" />
-        <span className="text-xs font-mono text-slate-500 dark:text-slate-400">Loading experience...</span>
+        <div className="w-8 h-8 rounded-full border-2 border-primary-500/30 border-t-primary-500 animate-spin" />
+        <span className="text-xs font-mono tracking-wider text-neutral-500 dark:text-neutral-400">Loading experience...</span>
       </div>
     </div>
   );

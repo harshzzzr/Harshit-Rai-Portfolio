@@ -262,14 +262,14 @@ export default function EducationManager({ onEducationChanged }) {
       )}
 
       {/* Top Controls Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-[#101112] p-4 rounded-2xl border border-neutral-200 dark:border-white/10 shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-900/40 flex items-center justify-center">
             <GraduationCap size={20} />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Education Management</h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-white">Education Management</h2>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">
               Academic degrees, institutions, key curriculum coursework, and achievements
             </p>
           </div>
@@ -279,14 +279,14 @@ export default function EducationManager({ onEducationChanged }) {
           <button
             onClick={fetchEducationList}
             disabled={loading}
-            className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-2.5 rounded-xl border border-neutral-200 dark:border-white/10 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors cursor-pointer"
             title="Refresh education list"
           >
             <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
           </button>
           <button
             onClick={handleOpenCreate}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm shadow-sm transition-colors cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold text-sm shadow-sm transition-colors cursor-pointer"
           >
             <Plus size={16} />
             <span>Add Education</span>
@@ -296,30 +296,30 @@ export default function EducationManager({ onEducationChanged }) {
 
       {/* Search Input */}
       <div className="relative max-w-md">
-        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search by degree, institution, or status..."
-          className="w-full pl-9 pr-4 py-2 rounded-xl text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className="w-full pl-9 pr-4 py-2 rounded-xl text-sm bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
       </div>
 
       {/* Education Data Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-[#101112] rounded-2xl border border-neutral-200 dark:border-white/10 shadow-xs overflow-hidden">
         {loading ? (
           <div className="p-12 text-center space-y-3">
-            <div className="w-8 h-8 border-3 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-sm text-slate-500 font-medium">Loading education records...</p>
+            <div className="w-8 h-8 border-2 border-primary-500/20 border-t-primary-500 rounded-full animate-spin mx-auto" />
+            <p className="text-sm text-neutral-500 font-medium">Loading education records...</p>
           </div>
         ) : filteredEducation.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-white/[0.04] text-neutral-400 flex items-center justify-center mx-auto">
               <GraduationCap size={24} />
             </div>
-            <p className="text-base font-bold text-slate-900 dark:text-white">No education records</p>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            <p className="text-base font-bold text-neutral-900 dark:text-white">No education records</p>
+            <p className="text-xs text-neutral-500 max-w-sm mx-auto">
               {searchQuery
                 ? 'No education matching your search term.'
                 : 'Click "Add Education" above to catalog a degree or academic institution.'}
@@ -328,7 +328,7 @@ export default function EducationManager({ onEducationChanged }) {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 dark:bg-slate-800/60 text-xs font-semibold text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
+              <thead className="bg-neutral-50 dark:bg-[#141516] text-xs font-semibold text-neutral-500 dark:text-neutral-400 border-b border-neutral-200 dark:border-white/10">
                 <tr>
                   <th className="py-3.5 px-4">Degree & Program</th>
                   <th className="py-3.5 px-4">Institution</th>
@@ -339,40 +339,40 @@ export default function EducationManager({ onEducationChanged }) {
                   <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              <tbody className="divide-y divide-neutral-100 dark:divide-white/05">
                 {filteredEducation.map((edu) => (
                   <tr
                     key={edu.id}
-                    className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors"
+                    className="hover:bg-neutral-50/70 dark:hover:bg-white/[0.03] transition-colors"
                   >
                     {/* Degree */}
                     <td className="py-3.5 px-4">
-                      <div className="font-semibold text-slate-900 dark:text-white text-sm">
+                      <div className="font-semibold text-neutral-900 dark:text-white text-sm">
                         {edu.degree}
                       </div>
-                      <div className="text-[11px] text-slate-400 font-mono">{edu.id}</div>
+                      <div className="text-[11px] text-neutral-400 font-mono">{edu.id}</div>
                     </td>
 
                     {/* Institution */}
-                    <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300 font-medium">
+                    <td className="py-3.5 px-4 text-neutral-700 dark:text-neutral-300 font-medium">
                       {edu.institution}
                     </td>
 
                     {/* Status */}
                     <td className="py-3.5 px-4">
-                      <span className="inline-block text-xs px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                      <span className="inline-block text-xs px-2.5 py-0.5 rounded-full bg-neutral-100 dark:bg-white/[0.05] text-neutral-600 dark:text-neutral-300 border border-neutral-200 dark:border-white/10">
                         {edu.status}
                       </span>
                     </td>
 
                     {/* Highlights & Course summary */}
                     <td className="py-3.5 px-4 text-center">
-                      <div className="inline-flex items-center gap-2 text-xs text-slate-500">
+                      <div className="inline-flex items-center gap-2 text-xs text-neutral-500">
                         <span className="inline-flex items-center gap-1">
                           <ListCheck size={13} className="text-primary-500" />
                           <span>{(edu.highlights || []).length}</span>
                         </span>
-                        <span className="text-slate-300 dark:text-slate-700">•</span>
+                        <span className="text-neutral-300 dark:text-neutral-700">•</span>
                         <span className="inline-flex items-center gap-1">
                           <BookOpen size={13} className="text-primary-500" />
                           <span>{(edu.courses || []).length}</span>
@@ -382,7 +382,7 @@ export default function EducationManager({ onEducationChanged }) {
 
                     {/* Order */}
                     <td className="py-3.5 px-4 text-center">
-                      <span className="inline-block text-xs font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                      <span className="inline-block text-xs font-mono px-2 py-0.5 rounded bg-neutral-100 dark:bg-white/[0.05] text-neutral-600 dark:text-neutral-300">
                         #{edu.order}
                       </span>
                     </td>
@@ -394,7 +394,7 @@ export default function EducationManager({ onEducationChanged }) {
                         className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
                           edu.visible !== false
                             ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
-                            : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700'
+                            : 'bg-neutral-100 dark:bg-white/[0.04] text-neutral-500 border border-neutral-200 dark:border-white/10'
                         }`}
                         title={edu.visible !== false ? 'Visible on portfolio. Click to hide.' : 'Hidden. Click to show.'}
                       >
@@ -408,14 +408,14 @@ export default function EducationManager({ onEducationChanged }) {
                       <div className="inline-flex items-center gap-1.5">
                         <button
                           onClick={() => handleOpenEdit(edu)}
-                          className="p-1.5 rounded-lg text-slate-500 hover:text-primary-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-neutral-500 hover:text-primary-600 hover:bg-neutral-100 dark:hover:bg-white/[0.05] transition-colors cursor-pointer"
                           title="Edit education record"
                         >
                           <Edit2 size={15} />
                         </button>
                         <button
                           onClick={() => setDeleteConfirmEdu(edu)}
-                          className="p-1.5 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-neutral-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
                           title="Delete education record"
                         >
                           <Trash2 size={15} />
@@ -445,7 +445,7 @@ export default function EducationManager({ onEducationChanged }) {
               type="button"
               onClick={() => setModalOpen(false)}
               disabled={saving}
-              className="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer disabled:opacity-50"
+              className="px-4 py-2 text-xs sm:text-sm font-medium rounded-xl text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/5 transition-colors cursor-pointer disabled:opacity-50"
             >
               Cancel
             </button>
@@ -453,7 +453,7 @@ export default function EducationManager({ onEducationChanged }) {
               type="submit"
               form="education-editor-form"
               disabled={saving}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 transition-colors shadow-sm cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-primary-600 hover:bg-primary-500 transition-colors shadow-sm cursor-pointer disabled:opacity-50"
             >
               {saving ? (
                 <>
@@ -470,7 +470,7 @@ export default function EducationManager({ onEducationChanged }) {
         <form id="education-editor-form" onSubmit={handleSave} className="space-y-4">
               {/* Degree */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
                   Degree / Program Title *
                 </label>
                 <input
@@ -478,11 +478,11 @@ export default function EducationManager({ onEducationChanged }) {
                   value={formData.degree}
                   onChange={(e) => setFormData({ ...formData, degree: e.target.value })}
                   placeholder="e.g. Bachelor of Engineering in Computer Engineering"
-                  className={`w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border ${
+                  className={`w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-[#101112] border ${
                     formErrors.degree
                       ? 'border-red-500 focus:ring-red-500'
-                      : 'border-slate-200 dark:border-slate-800 focus:ring-primary-500'
-                  } text-slate-900 dark:text-white focus:outline-none focus:ring-2`}
+                      : 'border-neutral-200 dark:border-white/10 focus:ring-primary-500'
+                  } text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2`}
                 />
                 {formErrors.degree && (
                   <p className="text-xs text-red-500 mt-1 font-medium">{formErrors.degree}</p>
@@ -491,7 +491,7 @@ export default function EducationManager({ onEducationChanged }) {
 
               {/* Institution */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
                   Institution / University *
                 </label>
                 <input
@@ -499,11 +499,11 @@ export default function EducationManager({ onEducationChanged }) {
                   value={formData.institution}
                   onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
                   placeholder="e.g. University Name / Institute of Technology"
-                  className={`w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border ${
+                  className={`w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-[#101112] border ${
                     formErrors.institution
                       ? 'border-red-500 focus:ring-red-500'
-                      : 'border-slate-200 dark:border-slate-800 focus:ring-primary-500'
-                  } text-slate-900 dark:text-white focus:outline-none focus:ring-2`}
+                      : 'border-neutral-200 dark:border-white/10 focus:ring-primary-500'
+                  } text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2`}
                 />
                 {formErrors.institution && (
                   <p className="text-xs text-red-500 mt-1 font-medium">{formErrors.institution}</p>
@@ -513,7 +513,7 @@ export default function EducationManager({ onEducationChanged }) {
               <div className="grid grid-cols-2 gap-4">
                 {/* Status */}
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
                     Academic Status
                   </label>
                   <input
@@ -521,13 +521,13 @@ export default function EducationManager({ onEducationChanged }) {
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                     placeholder="e.g. Undergraduate Student"
-                    className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
 
                 {/* Display Order */}
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
                     Display Order
                   </label>
                   <input
@@ -535,14 +535,14 @@ export default function EducationManager({ onEducationChanged }) {
                     min="1"
                     value={formData.order}
                     onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value, 10) || 1 })}
-                    className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
               </div>
 
               {/* Highlights Manager */}
               <div className="space-y-2">
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
                   Key Focus & Academic Highlights ({formData.highlights.length})
                 </label>
                 <div className="flex gap-2">
@@ -557,29 +557,29 @@ export default function EducationManager({ onEducationChanged }) {
                       }
                     }}
                     placeholder="Add an achievement or focus bullet point..."
-                    className="flex-1 px-3.5 py-2 rounded-xl text-xs bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="flex-1 px-3.5 py-2 rounded-xl text-xs bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                   <button
                     type="button"
                     onClick={handleAddHighlight}
-                    className="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors cursor-pointer"
+                    className="px-3 py-2 rounded-xl text-xs font-semibold bg-neutral-100 dark:bg-white/10 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-white/15 transition-colors cursor-pointer"
                   >
                     Add
                   </button>
                 </div>
 
                 {formData.highlights.length > 0 && (
-                  <div className="space-y-1.5 max-h-32 overflow-y-auto p-2 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800">
+                  <div className="space-y-1.5 max-h-32 overflow-y-auto p-2 rounded-xl bg-neutral-50 dark:bg-[#101112]/60 border border-neutral-200 dark:border-white/10">
                     {formData.highlights.map((item, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center justify-between gap-2 p-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs"
+                        className="flex items-center justify-between gap-2 p-1.5 rounded-lg bg-white dark:bg-[#141516] border border-neutral-200 dark:border-white/10 text-xs"
                       >
-                        <span className="text-slate-700 dark:text-slate-300 truncate">• {item}</span>
+                        <span className="text-neutral-700 dark:text-neutral-300 truncate">• {item}</span>
                         <button
                           type="button"
                           onClick={() => handleRemoveHighlight(idx)}
-                          className="text-slate-400 hover:text-red-500 p-1 cursor-pointer"
+                          className="text-neutral-400 hover:text-red-500 p-1 cursor-pointer transition-colors"
                         >
                           <X size={12} />
                         </button>
@@ -591,7 +591,7 @@ export default function EducationManager({ onEducationChanged }) {
 
               {/* Courses Chips Manager */}
               <div className="space-y-2">
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
                   Core Coursework & Subjects ({formData.courses.length})
                 </label>
                 <div className="flex gap-2">
@@ -606,29 +606,29 @@ export default function EducationManager({ onEducationChanged }) {
                       }
                     }}
                     placeholder="e.g. Data Structures & Algorithms, DBMS..."
-                    className="flex-1 px-3.5 py-2 rounded-xl text-xs bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="flex-1 px-3.5 py-2 rounded-xl text-xs bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                   <button
                     type="button"
                     onClick={handleAddCourse}
-                    className="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors cursor-pointer"
+                    className="px-3 py-2 rounded-xl text-xs font-semibold bg-neutral-100 dark:bg-white/10 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-white/15 transition-colors cursor-pointer"
                   >
                     Add
                   </button>
                 </div>
 
                 {formData.courses.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 p-2 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800">
+                  <div className="flex flex-wrap gap-1.5 p-2 rounded-xl bg-neutral-50 dark:bg-[#101112]/60 border border-neutral-200 dark:border-white/10">
                     {formData.courses.map((course, idx) => (
                       <span
                         key={idx}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-primary-600 dark:text-primary-400"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono bg-white dark:bg-[#141516] border border-neutral-200 dark:border-white/10 text-primary-600 dark:text-primary-400"
                       >
                         <span>{course}</span>
                         <button
                           type="button"
                           onClick={() => handleRemoveCourse(idx)}
-                          className="text-slate-400 hover:text-red-500 cursor-pointer"
+                          className="text-neutral-400 hover:text-red-500 cursor-pointer transition-colors"
                         >
                           <X size={12} />
                         </button>
@@ -639,17 +639,17 @@ export default function EducationManager({ onEducationChanged }) {
               </div>
 
               {/* Visibility Checkbox */}
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10">
                 <input
                   type="checkbox"
                   id="edu-visible-toggle"
                   checked={formData.visible}
                   onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
-                  className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300 dark:border-slate-700 cursor-pointer"
+                  className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-neutral-300 dark:border-neutral-700 cursor-pointer"
                 />
                 <label
                   htmlFor="edu-visible-toggle"
-                  className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer select-none"
+                  className="text-xs font-medium text-neutral-700 dark:text-neutral-300 cursor-pointer select-none"
                 >
                   Visible on public portfolio website
                 </label>

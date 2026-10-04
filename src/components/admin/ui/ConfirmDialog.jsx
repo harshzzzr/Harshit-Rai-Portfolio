@@ -89,7 +89,7 @@ export default function ConfirmDialog({
 
   const dialog = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in"
       role="presentation"
       onClick={(e) => {
         if (e.target === e.currentTarget && !loading) {
@@ -102,7 +102,7 @@ export default function ConfirmDialog({
         aria-modal="true"
         aria-labelledby="confirm-dialog-title"
         aria-describedby="confirm-dialog-message"
-        className="relative w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-2xl space-y-5 animate-scale-up"
+        className="relative w-full max-w-md bg-white/95 dark:bg-[#141516]/95 border border-neutral-300/80 dark:border-white/15 rounded-2xl p-6 shadow-2xl backdrop-blur-2xl space-y-5 animate-scale-up"
       >
         <div className="flex items-start gap-4">
           <div
@@ -111,15 +111,15 @@ export default function ConfirmDialog({
             <IconComponent size={22} />
           </div>
           <div className="space-y-1.5 flex-1 min-w-0">
-            <h3 id="confirm-dialog-title" className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+            <h3 id="confirm-dialog-title" className="text-base sm:text-lg font-bold text-neutral-900 dark:text-white">
               {title}
             </h3>
-            <p id="confirm-dialog-message" className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p id="confirm-dialog-message" className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
               {displayMessage}
             </p>
             {itemName && (
-              <div className="mt-2.5 p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80">
-                <p className="text-xs font-semibold text-slate-900 dark:text-white truncate font-mono">
+              <div className="mt-2.5 p-2.5 rounded-xl bg-neutral-100 dark:bg-white/[0.04] border border-neutral-200 dark:border-white/10">
+                <p className="text-xs font-semibold text-neutral-900 dark:text-[#D7E2EA] truncate font-mono">
                   {itemName}
                 </p>
               </div>
@@ -128,20 +128,20 @@ export default function ConfirmDialog({
           <button
             onClick={handleCancel}
             disabled={loading}
-            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-lg cursor-pointer disabled:opacity-50"
+            className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 p-1 rounded-lg cursor-pointer disabled:opacity-50"
             aria-label="Close dialog"
           >
             <X size={18} />
           </button>
         </div>
 
-        <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-neutral-200/80 dark:border-white/10">
           <button
             ref={cancelBtnRef}
             type="button"
             onClick={handleCancel}
             disabled={loading}
-            className="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer disabled:opacity-50"
+            className="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/[0.05] transition-colors cursor-pointer disabled:opacity-50"
           >
             {cancelText}
           </button>

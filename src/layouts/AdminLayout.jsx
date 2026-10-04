@@ -58,15 +58,15 @@ export default function AdminLayout({ activeTab, onSelectTab, children }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col">
-        {/* Top Admin Bar - z-30 keeps it beneath modal z-50 */}
-        <header className="sticky top-0 z-30 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 flex items-center justify-between shadow-sm">
+    <div className="min-h-screen bg-[#F2F1ED] dark:bg-[#0C0C0C] text-[#101112] dark:text-[#D7E2EA] flex flex-col">
+      {/* Top Admin Bar - z-30 keeps it beneath modal z-50 */}
+      <header className="sticky top-0 z-30 h-16 bg-[#F2F1ED]/80 dark:bg-[#0C0C0C]/80 backdrop-blur-2xl border-b border-neutral-200/80 dark:border-white/10 px-4 sm:px-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
           {/* Mobile Menu Button */}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             aria-label="Toggle admin sidebar"
-            className="lg:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+            className="lg:hidden p-2 rounded-lg text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/[0.05] cursor-pointer"
           >
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -74,11 +74,11 @@ export default function AdminLayout({ activeTab, onSelectTab, children }) {
           {/* Admin Brand */}
           <Link
             to="/admin"
-            className="flex items-center gap-2 text-slate-900 dark:text-white font-bold tracking-tight text-base sm:text-lg"
+            className="flex items-center gap-2 text-neutral-900 dark:text-white font-bold tracking-tight text-base sm:text-lg"
           >
             <ShieldCheck size={20} className="text-primary-600 dark:text-primary-400" />
             <span>Admin Console</span>
-            <span className="hidden sm:inline-block text-xs font-mono px-2 py-0.5 rounded bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800">
+            <span className="hidden sm:inline-block text-xs font-mono px-2 py-0.5 rounded-md bg-neutral-100 dark:bg-white/[0.05] text-primary-600 dark:text-primary-400 border border-neutral-200 dark:border-white/10">
               v3.3
             </span>
           </Link>
@@ -91,7 +91,7 @@ export default function AdminLayout({ activeTab, onSelectTab, children }) {
             to="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/[0.05] transition-colors"
             title="View Live Public Site"
           >
             <span>Live Site</span>
@@ -102,17 +102,17 @@ export default function AdminLayout({ activeTab, onSelectTab, children }) {
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-2 rounded-lg text-neutral-500 hover:bg-neutral-100 dark:hover:bg-white/[0.05] transition-colors cursor-pointer"
           >
-            {theme === 'dark' ? <Sun size={17} className="text-amber-400" /> : <Moon size={17} className="text-slate-700" />}
+            {theme === 'dark' ? <Sun size={17} className="text-amber-400" /> : <Moon size={17} className="text-neutral-700" />}
           </button>
 
           {/* Admin Identity */}
           <div className="hidden md:flex flex-col text-right">
-            <span className="text-xs font-medium text-slate-800 dark:text-slate-200 leading-tight">
+            <span className="text-xs font-medium text-neutral-800 dark:text-neutral-200 leading-tight">
               {currentUser?.displayName || 'Administrator'}
             </span>
-            <span className="text-[11px] font-mono text-slate-400 leading-tight">
+            <span className="text-[11px] font-mono text-neutral-400 dark:text-neutral-500 leading-tight">
               {currentUser?.email}
             </span>
           </div>
@@ -134,19 +134,19 @@ export default function AdminLayout({ activeTab, onSelectTab, children }) {
         {sidebarOpen && (
           <div
             onClick={() => setSidebarOpen(false)}
-            className="fixed inset-0 z-30 bg-slate-950/50 backdrop-blur-xs lg:hidden"
+            className="fixed inset-0 z-30 bg-black/60 backdrop-blur-xs lg:hidden"
           />
         )}
 
         {/* Sidebar (Desktop Persistent / Mobile Drawer) - z-30 stays beneath modal z-50 */}
         <aside
-          className={`fixed lg:static top-16 bottom-0 left-0 z-30 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between transition-transform duration-200 ease-in-out ${
+          className={`fixed lg:static top-16 bottom-0 left-0 z-30 w-64 bg-[#FAF9F6] dark:bg-[#101112] border-r border-neutral-200/80 dark:border-white/10 flex flex-col justify-between transition-transform duration-200 ease-in-out ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
           }`}
         >
           {/* Nav Items */}
           <div className="p-3 space-y-1 overflow-y-auto">
-            <p className="px-3 pt-2 pb-1.5 text-[11px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 font-semibold">
+            <p className="px-3 pt-2 pb-1.5 text-[11px] font-mono uppercase tracking-wider text-neutral-400 dark:text-neutral-500 font-semibold">
               Management Portal
             </p>
             {ADMIN_TABS.map((tab) => {
@@ -158,11 +158,11 @@ export default function AdminLayout({ activeTab, onSelectTab, children }) {
                   onClick={() => handleTabClick(tab.id)}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors cursor-pointer ${
                     isActive
-                      ? 'bg-primary-50 dark:bg-primary-950/80 text-primary-600 dark:text-primary-400 font-semibold shadow-xs'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                      ? 'bg-neutral-200/70 dark:bg-white/[0.08] text-primary-600 dark:text-primary-400 font-semibold shadow-xs border border-neutral-300/50 dark:border-white/10'
+                      : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/70 dark:hover:bg-white/[0.03]'
                   }`}
                 >
-                  <Icon size={18} className={isActive ? 'text-primary-600 dark:text-primary-400' : 'text-slate-400'} />
+                  <Icon size={18} className={isActive ? 'text-primary-600 dark:text-primary-400' : 'text-neutral-400'} />
                   <span>{tab.label}</span>
                 </button>
               );
@@ -170,7 +170,7 @@ export default function AdminLayout({ activeTab, onSelectTab, children }) {
           </div>
 
           {/* Sidebar Footer */}
-          <div className="p-3 border-t border-slate-200 dark:border-slate-800 space-y-2">
+          <div className="p-3 border-t border-neutral-200/80 dark:border-white/10 space-y-2">
             <button
               onClick={handleLogout}
               className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors cursor-pointer"
@@ -178,7 +178,7 @@ export default function AdminLayout({ activeTab, onSelectTab, children }) {
               <LogOut size={18} />
               <span>Log Out</span>
             </button>
-            <div className="px-3 pt-1 text-[11px] font-mono text-slate-400">
+            <div className="px-3 pt-1 text-[11px] font-mono text-neutral-400 dark:text-neutral-500">
               Session: {currentUser?.isDemo ? 'Dev Session' : 'Firebase Live'}
             </div>
           </div>

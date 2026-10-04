@@ -195,14 +195,14 @@ export default function FeedbackManager({ onFeedbackChanged }) {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+            <h2 className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white">
               Feedback & Testimonials Moderation
             </h2>
-            <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-primary-100 dark:bg-primary-900/60 text-primary-700 dark:text-primary-300 font-semibold">
+            <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-primary-500/10 dark:bg-primary-500/20 text-primary-600 dark:text-primary-400 font-semibold border border-primary-500/20">
               v5.1
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1">
             Review pending submissions, approve endorsements, mark featured reviews, and filter public testimonials.
           </p>
         </div>
@@ -210,7 +210,7 @@ export default function FeedbackManager({ onFeedbackChanged }) {
         <button
           onClick={fetchFeedback}
           disabled={loading}
-          className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/5 transition-colors cursor-pointer self-start sm:self-auto"
         >
           <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
           <span>Refresh</span>
@@ -232,7 +232,7 @@ export default function FeedbackManager({ onFeedbackChanged }) {
           </div>
           <button
             onClick={() => setBanner(null)}
-            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+            className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 cursor-pointer"
           >
             <X size={14} />
           </button>
@@ -245,11 +245,11 @@ export default function FeedbackManager({ onFeedbackChanged }) {
           onClick={() => setStatusFilter('pending')}
           className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
             statusFilter === 'pending'
-              ? 'border-amber-500 ring-2 ring-amber-500/20 bg-amber-50/50 dark:bg-amber-950/20'
-              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-amber-400'
+              ? 'border-amber-500/60 ring-1 ring-amber-500/30 bg-amber-500/5 dark:bg-amber-500/10'
+              : 'border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] hover:border-amber-400/50'
           }`}
         >
-          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+          <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
             <span>Pending</span>
             {counts.pending > 0 && (
               <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
@@ -264,11 +264,11 @@ export default function FeedbackManager({ onFeedbackChanged }) {
           onClick={() => setStatusFilter('approved')}
           className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
             statusFilter === 'approved'
-              ? 'border-emerald-500 ring-2 ring-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-950/20'
-              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-emerald-400'
+              ? 'border-emerald-500/60 ring-1 ring-emerald-500/30 bg-emerald-500/5 dark:bg-emerald-500/10'
+              : 'border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] hover:border-emerald-400/50'
           }`}
         >
-          <div className="text-xs text-slate-500 dark:text-slate-400">Approved</div>
+          <div className="text-xs text-neutral-500 dark:text-neutral-400">Approved</div>
           <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
             {counts.approved}
           </div>
@@ -278,11 +278,11 @@ export default function FeedbackManager({ onFeedbackChanged }) {
           onClick={() => setStatusFilter('rejected')}
           className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
             statusFilter === 'rejected'
-              ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/50 dark:bg-red-950/20'
-              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-red-400'
+              ? 'border-red-500/60 ring-1 ring-red-500/30 bg-red-500/5 dark:bg-red-500/10'
+              : 'border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] hover:border-red-400/50'
           }`}
         >
-          <div className="text-xs text-slate-500 dark:text-slate-400">Rejected</div>
+          <div className="text-xs text-neutral-500 dark:text-neutral-400">Rejected</div>
           <div className="text-xl font-bold text-red-600 dark:text-red-400 mt-1">
             {counts.rejected}
           </div>
@@ -292,11 +292,11 @@ export default function FeedbackManager({ onFeedbackChanged }) {
           onClick={() => setStatusFilter('featured')}
           className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
             statusFilter === 'featured'
-              ? 'border-yellow-500 ring-2 ring-yellow-500/20 bg-yellow-50/50 dark:bg-yellow-950/20'
-              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-yellow-400'
+              ? 'border-yellow-500/60 ring-1 ring-yellow-500/30 bg-yellow-500/5 dark:bg-yellow-500/10'
+              : 'border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] hover:border-yellow-400/50'
           }`}
         >
-          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+          <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
             <span>Featured</span>
             <Star size={12} className="text-amber-500 fill-amber-500" />
           </div>
@@ -309,12 +309,12 @@ export default function FeedbackManager({ onFeedbackChanged }) {
           onClick={() => setStatusFilter('all')}
           className={`p-3.5 rounded-xl border transition-all cursor-pointer col-span-2 sm:col-span-1 ${
             statusFilter === 'all'
-              ? 'border-primary-500 ring-2 ring-primary-500/20 bg-primary-50/50 dark:bg-primary-950/20'
-              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-primary-400'
+              ? 'border-primary-500/60 ring-1 ring-primary-500/30 bg-primary-500/5 dark:bg-primary-500/10'
+              : 'border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] hover:border-primary-400/50'
           }`}
         >
-          <div className="text-xs text-slate-500 dark:text-slate-400">Total Submissions</div>
-          <div className="text-xl font-bold text-slate-900 dark:text-white mt-1">
+          <div className="text-xs text-neutral-500 dark:text-neutral-400">Total Submissions</div>
+          <div className="text-xl font-bold text-neutral-900 dark:text-white mt-1">
             {counts.total}
           </div>
         </div>
@@ -335,16 +335,16 @@ export default function FeedbackManager({ onFeedbackChanged }) {
               onClick={() => setStatusFilter(tab.id)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
                 statusFilter === tab.id
-                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                  ? 'bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 shadow-xs'
+                  : 'bg-neutral-100 dark:bg-white/10 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-white/15'
               }`}
             >
               <span>{tab.label}</span>
               <span
                 className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
                   statusFilter === tab.id
-                    ? 'bg-slate-700 dark:bg-slate-200 text-slate-100 dark:text-slate-900'
-                    : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+                    ? 'bg-neutral-800 dark:bg-neutral-200 text-neutral-200 dark:text-neutral-800'
+                    : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400'
                 }`}
               >
                 {tab.count}
@@ -355,18 +355,18 @@ export default function FeedbackManager({ onFeedbackChanged }) {
 
         {/* Search */}
         <div className="relative sm:w-64">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
           <input
             type="text"
             placeholder="Search reviewer or text..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-8 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full pl-9 pr-8 py-1.5 text-xs rounded-lg border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 cursor-pointer"
             >
               <X size={12} />
             </button>
@@ -375,21 +375,21 @@ export default function FeedbackManager({ onFeedbackChanged }) {
       </div>
 
       {/* Moderation Table */}
-      <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm">
+      <div className="rounded-2xl border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] overflow-hidden shadow-xs">
         {loading ? (
-          <div className="p-12 text-center text-slate-400 text-sm font-mono flex items-center justify-center gap-2">
+          <div className="p-12 text-center text-neutral-400 text-sm font-mono flex items-center justify-center gap-2">
             <RefreshCw size={16} className="animate-spin text-primary-500" />
             <span>Loading feedback records...</span>
           </div>
         ) : filteredList.length === 0 ? (
           <div className="p-12 text-center space-y-2">
-            <div className="w-12 h-12 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+            <div className="w-12 h-12 mx-auto rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 flex items-center justify-center text-neutral-400">
               <MessageSquareQuote size={24} />
             </div>
-            <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+            <h4 className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">
               No Feedback Found
             </h4>
-            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 max-w-sm mx-auto">
               {searchQuery
                 ? `No feedback matching "${searchQuery}".`
                 : statusFilter === 'pending'
@@ -399,8 +399,8 @@ export default function FeedbackManager({ onFeedbackChanged }) {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-600 dark:text-slate-300">
-              <thead className="bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-[11px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            <table className="w-full text-left text-xs text-neutral-600 dark:text-neutral-300">
+              <thead className="bg-neutral-50 dark:bg-white/5 border-b border-neutral-200 dark:border-white/10 text-[11px] font-mono text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                 <tr>
                   <th className="py-3 px-4">Reviewer</th>
                   <th className="py-3 px-4">Rating</th>
@@ -411,16 +411,16 @@ export default function FeedbackManager({ onFeedbackChanged }) {
                   <th className="py-3 px-4 text-right">Moderation Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
+              <tbody className="divide-y divide-neutral-100 dark:divide-white/5">
                 {filteredList.map((item) => (
                   <tr
                     key={item.id}
-                    className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors"
+                    className="hover:bg-neutral-50/70 dark:hover:bg-white/[0.02] transition-colors"
                   >
                     {/* Reviewer Name */}
-                    <td className="py-3.5 px-4 font-medium text-slate-900 dark:text-white whitespace-nowrap">
+                    <td className="py-3.5 px-4 font-medium text-neutral-900 dark:text-white whitespace-nowrap">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 rounded-full bg-primary-100 dark:bg-primary-950/80 text-primary-700 dark:text-primary-300 font-bold text-xs flex items-center justify-center shrink-0 border border-primary-200 dark:border-primary-800">
+                        <div className="w-7 h-7 rounded-full bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold text-xs flex items-center justify-center shrink-0 border border-primary-500/20">
                           {getInitials(item.name)}
                         </div>
                         <span className="font-semibold">{item.name}</span>
@@ -437,11 +437,11 @@ export default function FeedbackManager({ onFeedbackChanged }) {
                             className={`${
                               s <= item.rating
                                 ? 'text-amber-400 fill-amber-400'
-                                : 'text-slate-200 dark:text-slate-700'
+                                : 'text-neutral-200 dark:text-neutral-700'
                             }`}
                           />
                         ))}
-                        <span className="ml-1 text-[11px] font-mono text-slate-500 font-semibold">
+                        <span className="ml-1 text-[11px] font-mono text-neutral-500 font-semibold">
                           {item.rating}/5
                         </span>
                       </div>
@@ -451,7 +451,7 @@ export default function FeedbackManager({ onFeedbackChanged }) {
                     <td className="py-3.5 px-4 max-w-xs sm:max-w-md">
                       <p
                         onClick={() => setViewingItem(item)}
-                        className="truncate text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer"
+                        className="truncate text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer"
                         title={item.feedback}
                       >
                         "{item.feedback}"
@@ -459,26 +459,26 @@ export default function FeedbackManager({ onFeedbackChanged }) {
                     </td>
 
                     {/* Date */}
-                    <td className="py-3.5 px-4 whitespace-nowrap font-mono text-[11px] text-slate-400">
+                    <td className="py-3.5 px-4 whitespace-nowrap font-mono text-[11px] text-neutral-400">
                       {formatDate(item.createdAt)}
                     </td>
 
                     {/* Status Badge */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       {item.status === 'pending' && (
-                        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800">
+                        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
                           <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
                           Pending
                         </span>
                       )}
                       {item.status === 'approved' && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                           <Check size={11} />
                           Approved
                         </span>
                       )}
                       {item.status === 'rejected' && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20">
                           <Ban size={11} />
                           Rejected
                         </span>
@@ -491,8 +491,8 @@ export default function FeedbackManager({ onFeedbackChanged }) {
                         onClick={() => handleToggleFeatured(item)}
                         className={`p-1.5 rounded-lg transition-transform hover:scale-110 cursor-pointer ${
                           item.featured
-                            ? 'text-amber-400 hover:text-amber-500 bg-amber-50 dark:bg-amber-950/40'
-                            : 'text-slate-300 dark:text-slate-700 hover:text-amber-400'
+                            ? 'text-amber-400 hover:text-amber-500 bg-amber-500/10'
+                            : 'text-neutral-300 dark:text-neutral-700 hover:text-amber-400'
                         }`}
                         title={item.featured ? 'Unmark featured' : 'Mark featured'}
                       >
@@ -510,7 +510,7 @@ export default function FeedbackManager({ onFeedbackChanged }) {
                         {item.status !== 'approved' && (
                           <button
                             onClick={() => handleApprove(item)}
-                            className="p-1.5 rounded-lg text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg text-emerald-600 hover:text-emerald-700 hover:bg-emerald-500/10 transition-colors cursor-pointer"
                             title="Approve for public showcase"
                           >
                             <CheckCircle2 size={16} />
@@ -521,7 +521,7 @@ export default function FeedbackManager({ onFeedbackChanged }) {
                         {item.status !== 'rejected' && (
                           <button
                             onClick={() => handleReject(item)}
-                            className="p-1.5 rounded-lg text-amber-600 hover:text-amber-700 hover:bg-amber-50 dark:hover:bg-amber-950/50 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg text-amber-600 hover:text-amber-700 hover:bg-amber-500/10 transition-colors cursor-pointer"
                             title="Reject testimonial"
                           >
                             <XCircle size={16} />
@@ -531,7 +531,7 @@ export default function FeedbackManager({ onFeedbackChanged }) {
                         {/* View Detail Modal */}
                         <button
                           onClick={() => setViewingItem(item)}
-                          className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
                           title="View complete feedback"
                         >
                           <Eye size={16} />
@@ -540,7 +540,7 @@ export default function FeedbackManager({ onFeedbackChanged }) {
                         {/* Delete Button */}
                         <button
                           onClick={() => setDeleteConfirmItem(item)}
-                          className="p-1.5 rounded-lg text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/50 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-neutral-500 hover:text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
                           title="Delete feedback"
                         >
                           <Trash2 size={16} />
@@ -569,7 +569,7 @@ export default function FeedbackManager({ onFeedbackChanged }) {
               <button
                 type="button"
                 onClick={() => handleToggleFeatured(viewingItem)}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/5 cursor-pointer"
               >
                 <Star
                   size={14}
@@ -584,7 +584,7 @@ export default function FeedbackManager({ onFeedbackChanged }) {
                     type="button"
                     onClick={() => handleApprove(viewingItem)}
                     disabled={actionLoading}
-                    className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-colors cursor-pointer"
                   >
                     <CheckCircle2 size={14} />
                     <span>Approve</span>
@@ -596,7 +596,7 @@ export default function FeedbackManager({ onFeedbackChanged }) {
                     type="button"
                     onClick={() => handleReject(viewingItem)}
                     disabled={actionLoading}
-                    className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold transition-colors cursor-pointer"
                   >
                     <Ban size={14} />
                     <span>Reject</span>
@@ -606,7 +606,7 @@ export default function FeedbackManager({ onFeedbackChanged }) {
                 <button
                   type="button"
                   onClick={() => setDeleteConfirmItem(viewingItem)}
-                  className="p-2 rounded-xl text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
+                  className="p-2 rounded-xl text-neutral-500 hover:text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
                   title="Delete feedback"
                 >
                   <Trash2 size={16} />
@@ -619,7 +619,7 @@ export default function FeedbackManager({ onFeedbackChanged }) {
         {viewingItem && (
           <div className="space-y-4">
             {/* Rating & Status Bar */}
-            <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-neutral-50 dark:bg-[#141516] border border-neutral-200 dark:border-white/10">
               <div className="flex items-center gap-1.5">
                 {[1, 2, 3, 4, 5].map((s) => (
                   <Star
@@ -628,35 +628,35 @@ export default function FeedbackManager({ onFeedbackChanged }) {
                     className={`${
                       s <= viewingItem.rating
                         ? 'text-amber-400 fill-amber-400'
-                        : 'text-slate-200 dark:text-slate-700'
+                        : 'text-neutral-200 dark:text-neutral-700'
                     }`}
                   />
                 ))}
-                <span className="ml-1 text-xs font-mono font-bold text-slate-700 dark:text-slate-200">
+                <span className="ml-1 text-xs font-mono font-bold text-neutral-700 dark:text-neutral-200">
                   {viewingItem.rating} / 5 Stars
                 </span>
               </div>
 
               <div className="flex items-center gap-2">
                 {viewingItem.featured && (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
                     <Sparkles size={11} />
                     Featured
                   </span>
                 )}
 
                 {viewingItem.status === 'pending' && (
-                  <span className="text-[11px] font-medium text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-950 px-2 py-0.5 rounded-full">
+                  <span className="text-[11px] font-medium text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
                     Pending
                   </span>
                 )}
                 {viewingItem.status === 'approved' && (
-                  <span className="text-[11px] font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 rounded-full">
+                  <span className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
                     Approved
                   </span>
                 )}
                 {viewingItem.status === 'rejected' && (
-                  <span className="text-[11px] font-medium text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-950 px-2 py-0.5 rounded-full">
+                  <span className="text-[11px] font-medium text-red-600 dark:text-red-400 bg-red-500/10 px-2 py-0.5 rounded-full border border-red-500/20">
                     Rejected
                   </span>
                 )}
@@ -664,8 +664,8 @@ export default function FeedbackManager({ onFeedbackChanged }) {
             </div>
 
             {/* Feedback Body */}
-            <div className="p-4 rounded-xl bg-slate-50/60 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/80">
-              <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap italic">
+            <div className="p-4 rounded-xl bg-neutral-50/60 dark:bg-[#101112] border border-neutral-200 dark:border-white/10">
+              <p className="text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed whitespace-pre-wrap italic">
                 "{viewingItem.feedback}"
               </p>
             </div>

@@ -228,14 +228,14 @@ export default function SkillManager({ onSkillChanged }) {
       )}
 
       {/* Top Controls Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-[#101112] p-4 rounded-2xl border border-neutral-200 dark:border-white/10 shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-900/40 flex items-center justify-center">
             <Code size={20} />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Skills Management</h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-white">Skills Management</h2>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">
               {skills.length} verified technologies across {CATEGORIES.length} categories
             </p>
           </div>
@@ -245,14 +245,14 @@ export default function SkillManager({ onSkillChanged }) {
           <button
             onClick={fetchSkillsList}
             disabled={loading}
-            className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-2.5 rounded-xl border border-neutral-200 dark:border-white/10 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors cursor-pointer"
             title="Refresh skills catalog"
           >
             <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
           </button>
           <button
             onClick={handleOpenCreate}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm shadow-sm transition-colors cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold text-sm shadow-sm transition-colors cursor-pointer"
           >
             <Plus size={16} />
             <span>Add Skill</span>
@@ -264,13 +264,13 @@ export default function SkillManager({ onSkillChanged }) {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Search */}
         <div className="relative flex-1 max-w-md">
-          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search skills by name or category..."
-            className="w-full pl-9 pr-4 py-2 rounded-xl text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full pl-9 pr-4 py-2 rounded-xl text-sm bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
 
@@ -281,7 +281,7 @@ export default function SkillManager({ onSkillChanged }) {
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
               selectedCategory === 'all'
                 ? 'bg-primary-600 text-white shadow-xs'
-                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                : 'bg-white dark:bg-[#101112] text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-white/10 hover:bg-neutral-50 dark:hover:bg-white/[0.04]'
             }`}
           >
             All ({skills.length})
@@ -295,7 +295,7 @@ export default function SkillManager({ onSkillChanged }) {
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                   selectedCategory === cat
                     ? 'bg-primary-600 text-white shadow-xs'
-                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                    : 'bg-white dark:bg-[#101112] text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-white/10 hover:bg-neutral-50 dark:hover:bg-white/[0.04]'
                 }`}
               >
                 {cat} ({count})
@@ -306,19 +306,19 @@ export default function SkillManager({ onSkillChanged }) {
       </div>
 
       {/* Skills Data Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-[#101112] rounded-2xl border border-neutral-200 dark:border-white/10 shadow-xs overflow-hidden">
         {loading ? (
           <div className="p-12 text-center space-y-3">
-            <div className="w-8 h-8 border-3 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Loading skills catalog...</p>
+            <div className="w-8 h-8 border-2 border-primary-500/20 border-t-primary-500 rounded-full animate-spin mx-auto" />
+            <p className="text-sm text-neutral-500 dark:text-neutral-400 font-medium">Loading skills catalog...</p>
           </div>
         ) : filteredSkills.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-white/[0.04] text-neutral-400 flex items-center justify-center mx-auto">
               <Code size={24} />
             </div>
-            <p className="text-base font-bold text-slate-900 dark:text-white">No skills found</p>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            <p className="text-base font-bold text-neutral-900 dark:text-white">No skills found</p>
+            <p className="text-xs text-neutral-500 max-w-sm mx-auto">
               {searchQuery || selectedCategory !== 'all'
                 ? 'Try adjusting your search query or category filter.'
                 : 'No skills have been cataloged yet. Click "Add Skill" above to create one.'}
@@ -327,7 +327,7 @@ export default function SkillManager({ onSkillChanged }) {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 dark:bg-slate-800/60 text-xs font-semibold text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
+              <thead className="bg-neutral-50 dark:bg-[#141516] text-xs font-semibold text-neutral-500 dark:text-neutral-400 border-b border-neutral-200 dark:border-white/10">
                 <tr>
                   <th className="py-3.5 px-4">Skill Name</th>
                   <th className="py-3.5 px-4">Category</th>
@@ -337,30 +337,30 @@ export default function SkillManager({ onSkillChanged }) {
                   <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              <tbody className="divide-y divide-neutral-100 dark:divide-white/05">
                 {filteredSkills.map((skill) => (
                   <tr
                     key={skill.id}
-                    className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors group"
+                    className="hover:bg-neutral-50/70 dark:hover:bg-white/[0.03] transition-colors group"
                   >
                     {/* Name */}
                     <td className="py-3.5 px-4">
-                      <div className="font-semibold text-slate-900 dark:text-white font-mono text-sm">
+                      <div className="font-semibold text-neutral-900 dark:text-white font-mono text-sm">
                         {skill.name}
                       </div>
-                      <div className="text-[11px] text-slate-400 font-mono">{skill.id}</div>
+                      <div className="text-[11px] text-neutral-400 font-mono">{skill.id}</div>
                     </td>
 
                     {/* Category */}
                     <td className="py-3.5 px-4">
-                      <span className="inline-block text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                      <span className="inline-block text-xs font-medium px-2.5 py-1 rounded-md bg-neutral-100 dark:bg-white/[0.05] text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-white/10">
                         {skill.category}
                       </span>
                     </td>
 
                     {/* Icon */}
                     <td className="py-3.5 px-4">
-                      <span className="inline-flex items-center gap-1.5 text-xs font-mono text-slate-500 dark:text-slate-400">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-mono text-neutral-500 dark:text-neutral-400">
                         <Code size={14} className="text-primary-500" />
                         <span>{skill.icon || 'Code'}</span>
                       </span>
@@ -368,7 +368,7 @@ export default function SkillManager({ onSkillChanged }) {
 
                     {/* Order */}
                     <td className="py-3.5 px-4 text-center">
-                      <span className="inline-block text-xs font-mono font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                      <span className="inline-block text-xs font-mono font-medium px-2 py-0.5 rounded bg-neutral-100 dark:bg-white/[0.05] text-neutral-600 dark:text-neutral-300">
                         #{skill.order}
                       </span>
                     </td>
@@ -380,7 +380,7 @@ export default function SkillManager({ onSkillChanged }) {
                         className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
                           skill.visible !== false
                             ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
-                            : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700'
+                            : 'bg-neutral-100 dark:bg-white/[0.04] text-neutral-500 border border-neutral-200 dark:border-white/10'
                         }`}
                         title={skill.visible !== false ? 'Visible on portfolio. Click to hide.' : 'Hidden from portfolio. Click to show.'}
                       >
@@ -394,14 +394,14 @@ export default function SkillManager({ onSkillChanged }) {
                       <div className="inline-flex items-center gap-1.5">
                         <button
                           onClick={() => handleOpenEdit(skill)}
-                          className="p-1.5 rounded-lg text-slate-500 hover:text-primary-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-neutral-500 hover:text-primary-600 hover:bg-neutral-100 dark:hover:bg-white/[0.05] transition-colors cursor-pointer"
                           title="Edit skill"
                         >
                           <Edit2 size={15} />
                         </button>
                         <button
                           onClick={() => setDeleteConfirmSkill(skill)}
-                          className="p-1.5 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-neutral-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
                           title="Delete skill"
                         >
                           <Trash2 size={15} />
@@ -431,7 +431,7 @@ export default function SkillManager({ onSkillChanged }) {
               type="button"
               onClick={() => setModalOpen(false)}
               disabled={saving}
-              className="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer disabled:opacity-50"
+              className="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/[0.05] transition-colors cursor-pointer disabled:opacity-50"
             >
               Cancel
             </button>
@@ -439,7 +439,7 @@ export default function SkillManager({ onSkillChanged }) {
               type="submit"
               form="skill-editor-form"
               disabled={saving}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 transition-colors shadow-sm cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-primary-600 hover:bg-primary-500 transition-colors shadow-sm cursor-pointer disabled:opacity-50"
             >
               {saving ? (
                 <>
@@ -456,7 +456,7 @@ export default function SkillManager({ onSkillChanged }) {
         <form id="skill-editor-form" onSubmit={handleSave} className="space-y-4">
           {/* Skill Name */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
               Skill / Technology Name *
             </label>
             <input
@@ -464,11 +464,11 @@ export default function SkillManager({ onSkillChanged }) {
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="e.g. TypeScript, Docker, PostgreSQL"
-              className={`w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border ${
+              className={`w-full px-3.5 py-2.5 rounded-xl text-sm bg-neutral-50 dark:bg-[#101112] border ${
                 formErrors.name
                   ? 'border-red-500 focus:ring-red-500'
-                  : 'border-slate-200 dark:border-slate-800 focus:ring-primary-500'
-              } text-slate-900 dark:text-white focus:outline-none focus:ring-2`}
+                  : 'border-neutral-200 dark:border-white/10 focus:ring-primary-500'
+              } text-neutral-900 dark:text-[#D7E2EA] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2`}
             />
             {formErrors.name && (
               <p className="text-xs text-red-500 mt-1 font-medium">{formErrors.name}</p>
@@ -477,13 +477,13 @@ export default function SkillManager({ onSkillChanged }) {
 
           {/* Category */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
               Category *
             </label>
             <select
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
+              className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
             >
               {CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
@@ -496,13 +496,13 @@ export default function SkillManager({ onSkillChanged }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Icon identifier */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
                 Icon Identifier
               </label>
               <select
                 value={formData.icon}
                 onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
+                className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
               >
                 {COMMON_ICONS.map((ico) => (
                   <option key={ico} value={ico}>
@@ -514,7 +514,7 @@ export default function SkillManager({ onSkillChanged }) {
 
             {/* Display Order */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
                 Display Order
               </label>
               <input
@@ -522,23 +522,23 @@ export default function SkillManager({ onSkillChanged }) {
                 min="1"
                 value={formData.order}
                 onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value, 10) || 1 })}
-                className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-[#D7E2EA] focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
           </div>
 
           {/* Visibility Checkbox */}
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.03] border border-neutral-100 dark:border-white/05">
             <input
               type="checkbox"
               id="skill-visible-toggle"
               checked={formData.visible}
               onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
-              className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300 dark:border-slate-700 cursor-pointer"
+              className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-neutral-300 dark:border-white/10 cursor-pointer"
             />
             <label
               htmlFor="skill-visible-toggle"
-              className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer select-none"
+              className="text-xs font-medium text-neutral-700 dark:text-neutral-300 cursor-pointer select-none"
             >
               Visible on public portfolio website
             </label>

@@ -205,21 +205,21 @@ export default function MessageManager({ onMessageChanged }) {
       )}
 
       {/* Top Controls Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-[#101112] p-4 rounded-2xl border border-neutral-200 dark:border-white/10 shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-primary-500/10 text-primary-600 dark:text-primary-400 border border-primary-500/20 flex items-center justify-center">
             <Mail size={20} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Message Inbox</h2>
+              <h2 className="text-lg font-bold text-neutral-900 dark:text-white">Message Inbox</h2>
               {unreadCount > 0 && (
                 <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-primary-600 text-white font-mono">
                   {unreadCount} unread
                 </span>
               )}
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">
               {messages.length} inquiries received from portfolio contact form
             </p>
           </div>
@@ -229,7 +229,7 @@ export default function MessageManager({ onMessageChanged }) {
           <button
             onClick={fetchInbox}
             disabled={loading}
-            className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-2.5 rounded-xl border border-neutral-200 dark:border-white/10 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
             title="Refresh inbox"
           >
             <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
@@ -241,13 +241,13 @@ export default function MessageManager({ onMessageChanged }) {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Search */}
         <div className="relative flex-1 max-w-md">
-          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by sender, email, subject, or keywords..."
-            className="w-full pl-9 pr-4 py-2 rounded-xl text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full pl-9 pr-4 py-2 rounded-xl text-sm bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
 
@@ -258,7 +258,7 @@ export default function MessageManager({ onMessageChanged }) {
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
               statusFilter === 'all'
                 ? 'bg-primary-600 text-white shadow-xs'
-                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                : 'bg-white dark:bg-[#101112] text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-white/10 hover:border-neutral-300 dark:hover:border-white/20'
             }`}
           >
             Active ({messages.length - archivedCount})
@@ -268,11 +268,11 @@ export default function MessageManager({ onMessageChanged }) {
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
               statusFilter === 'unread'
                 ? 'bg-primary-600 text-white shadow-xs'
-                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                : 'bg-white dark:bg-[#101112] text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-white/10 hover:border-neutral-300 dark:hover:border-white/20'
             }`}
           >
             <span>Unread</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono">
+            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-neutral-100 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-mono">
               {unreadCount}
             </span>
           </button>
@@ -281,7 +281,7 @@ export default function MessageManager({ onMessageChanged }) {
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
               statusFilter === 'read'
                 ? 'bg-primary-600 text-white shadow-xs'
-                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                : 'bg-white dark:bg-[#101112] text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-white/10 hover:border-neutral-300 dark:hover:border-white/20'
             }`}
           >
             Read ({readCount})
@@ -291,7 +291,7 @@ export default function MessageManager({ onMessageChanged }) {
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
               statusFilter === 'archived'
                 ? 'bg-primary-600 text-white shadow-xs'
-                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                : 'bg-white dark:bg-[#101112] text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-white/10 hover:border-neutral-300 dark:hover:border-white/20'
             }`}
           >
             <Archive size={13} />
@@ -301,19 +301,19 @@ export default function MessageManager({ onMessageChanged }) {
       </div>
 
       {/* Messages Data Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-[#101112] rounded-2xl border border-neutral-200 dark:border-white/10 shadow-xs overflow-hidden">
         {loading ? (
           <div className="p-12 text-center space-y-3">
-            <div className="w-8 h-8 border-3 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-sm text-slate-500 font-medium">Loading inbox messages...</p>
+            <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-sm text-neutral-500 dark:text-neutral-400 font-medium">Loading inbox messages...</p>
           </div>
         ) : filteredMessages.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-white/5 text-neutral-400 flex items-center justify-center mx-auto border border-neutral-200 dark:border-white/10">
               <Inbox size={24} />
             </div>
-            <p className="text-base font-bold text-slate-900 dark:text-white">No messages found</p>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            <p className="text-base font-bold text-neutral-900 dark:text-white">No messages found</p>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 max-w-sm mx-auto">
               {searchQuery || statusFilter !== 'all'
                 ? 'Try adjusting your search query or filter tab.'
                 : 'Your inbox is empty. Inquiries submitted through the contact form will appear here.'}
@@ -322,7 +322,7 @@ export default function MessageManager({ onMessageChanged }) {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 dark:bg-slate-800/60 text-xs font-semibold text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
+              <thead className="bg-neutral-50 dark:bg-white/5 text-xs font-semibold text-neutral-500 dark:text-neutral-400 border-b border-neutral-200 dark:border-white/10">
                 <tr>
                   <th className="py-3.5 px-4 w-8 text-center">Status</th>
                   <th className="py-3.5 px-4">Sender</th>
@@ -331,7 +331,7 @@ export default function MessageManager({ onMessageChanged }) {
                   <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              <tbody className="divide-y divide-neutral-100 dark:divide-white/5">
                 {filteredMessages.map((msg) => {
                   const isUnread = msg.status === 'unread';
 
@@ -341,8 +341,8 @@ export default function MessageManager({ onMessageChanged }) {
                       onClick={() => handleOpenMessage(msg)}
                       className={`cursor-pointer transition-colors ${
                         isUnread
-                          ? 'bg-primary-50/30 dark:bg-primary-950/20 font-medium'
-                          : 'hover:bg-slate-50/70 dark:hover:bg-slate-800/40'
+                          ? 'bg-primary-500/[0.06] dark:bg-primary-500/[0.08] font-medium'
+                          : 'hover:bg-neutral-50/70 dark:hover:bg-white/[0.02]'
                       }`}
                     >
                       {/* Status Indicator */}
@@ -352,8 +352,8 @@ export default function MessageManager({ onMessageChanged }) {
                             isUnread
                               ? 'bg-primary-600 dark:bg-primary-400 animate-pulse'
                               : msg.status === 'archived'
-                              ? 'bg-slate-300 dark:bg-slate-600'
-                              : 'bg-transparent border border-slate-300 dark:border-slate-600'
+                              ? 'bg-neutral-300 dark:bg-neutral-600'
+                              : 'bg-transparent border border-neutral-300 dark:border-neutral-600'
                           }`}
                           title={`Status: ${msg.status}`}
                         />
@@ -361,27 +361,27 @@ export default function MessageManager({ onMessageChanged }) {
 
                       {/* Sender Name & Email */}
                       <td className="py-3.5 px-4 max-w-[200px]">
-                        <div className={`text-sm text-slate-900 dark:text-white truncate ${isUnread ? 'font-bold' : 'font-medium'}`}>
+                        <div className={`text-sm text-neutral-900 dark:text-white truncate ${isUnread ? 'font-bold' : 'font-medium'}`}>
                           {msg.name}
                         </div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                        <div className="text-xs text-neutral-500 dark:text-neutral-400 font-mono truncate">
                           {msg.email}
                         </div>
                       </td>
 
                       {/* Subject & Preview snippet */}
                       <td className="py-3.5 px-4 max-w-md">
-                        <div className={`text-sm text-slate-900 dark:text-white truncate ${isUnread ? 'font-bold' : 'font-medium'}`}>
+                        <div className={`text-sm text-neutral-900 dark:text-white truncate ${isUnread ? 'font-bold' : 'font-medium'}`}>
                           {msg.subject}
                         </div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">
+                        <div className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-1">
                           {msg.message}
                         </div>
                       </td>
 
                       {/* Date */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                        <span className="text-xs text-neutral-500 dark:text-neutral-400 font-mono">
                           {formatDate(msg.createdAt)}
                         </span>
                       </td>
@@ -392,7 +392,7 @@ export default function MessageManager({ onMessageChanged }) {
                           {/* Open detail */}
                           <button
                             onClick={() => handleOpenMessage(msg)}
-                            className="p-1.5 rounded-lg text-slate-500 hover:text-primary-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg text-neutral-500 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
                             title="Open message details"
                           >
                             <Eye size={15} />
@@ -401,7 +401,7 @@ export default function MessageManager({ onMessageChanged }) {
                           {/* Toggle Read */}
                           <button
                             onClick={(e) => handleToggleRead(msg, e)}
-                            className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
                             title={isUnread ? 'Mark as read' : 'Mark as unread'}
                           >
                             {isUnread ? <MailOpen size={15} /> : <Mail size={15} />}
@@ -410,7 +410,7 @@ export default function MessageManager({ onMessageChanged }) {
                           {/* Archive */}
                           <button
                             onClick={(e) => handleToggleArchive(msg, e)}
-                            className="p-1.5 rounded-lg text-slate-500 hover:text-amber-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg text-neutral-500 hover:text-amber-500 hover:bg-amber-500/10 transition-colors cursor-pointer"
                             title={msg.status === 'archived' ? 'Restore to active' : 'Archive message'}
                           >
                             {msg.status === 'archived' ? <ArchiveRestore size={15} /> : <Archive size={15} />}
@@ -422,7 +422,7 @@ export default function MessageManager({ onMessageChanged }) {
                               e.stopPropagation();
                               setDeleteConfirmMessage(msg);
                             }}
-                            className="p-1.5 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg text-neutral-500 hover:text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
                             title="Delete message"
                           >
                             <Trash2 size={15} />
@@ -458,7 +458,7 @@ export default function MessageManager({ onMessageChanged }) {
                 <button
                   type="button"
                   onClick={() => handleToggleRead(viewingMessage)}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
                 >
                   {viewingMessage.status === 'unread' ? <MailOpen size={14} /> : <Mail size={14} />}
                   <span>{viewingMessage.status === 'unread' ? 'Mark as Read' : 'Mark as Unread'}</span>
@@ -468,7 +468,7 @@ export default function MessageManager({ onMessageChanged }) {
                 <button
                   type="button"
                   onClick={() => handleToggleArchive(viewingMessage)}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
                 >
                   {viewingMessage.status === 'archived' ? <ArchiveRestore size={14} /> : <Archive size={14} />}
                   <span>{viewingMessage.status === 'archived' ? 'Restore' : 'Archive'}</span>
@@ -481,7 +481,7 @@ export default function MessageManager({ onMessageChanged }) {
                   onClick={() => {
                     setDeleteConfirmMessage(viewingMessage);
                   }}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 border border-red-200 dark:border-red-900 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-red-500 hover:bg-red-500/10 border border-red-500/20 transition-colors cursor-pointer"
                 >
                   <Trash2 size={14} />
                   <span>Delete</span>
@@ -489,7 +489,7 @@ export default function MessageManager({ onMessageChanged }) {
                 <button
                   type="button"
                   onClick={() => setViewingMessage(null)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
+                  className="px-4 py-2 text-xs sm:text-sm font-medium rounded-xl text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
                 >
                   Close
                 </button>
@@ -501,16 +501,16 @@ export default function MessageManager({ onMessageChanged }) {
         {viewingMessage && (
           <div className="space-y-4">
             {/* Sender Details Card */}
-            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="p-4 rounded-xl bg-neutral-50 dark:bg-[#101112] border border-neutral-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-primary-600 text-white font-bold text-sm flex items-center justify-center shrink-0">
                   {viewingMessage.name?.charAt(0)?.toUpperCase() || 'U'}
                 </div>
                 <div>
-                  <div className="font-semibold text-slate-900 dark:text-white text-sm">
+                  <div className="font-semibold text-neutral-900 dark:text-white text-sm">
                     {viewingMessage.name}
                   </div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                  <div className="text-xs text-neutral-500 dark:text-neutral-400 font-mono">
                     {viewingMessage.email}
                   </div>
                 </div>
@@ -519,7 +519,7 @@ export default function MessageManager({ onMessageChanged }) {
               {/* Direct Reply Link */}
               <a
                 href={`mailto:${viewingMessage.email}?subject=Re: ${encodeURIComponent(viewingMessage.subject)}`}
-                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold transition-colors shadow-xs w-fit"
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-xs font-semibold transition-colors shadow-xs w-fit"
               >
                 <Send size={13} />
                 <span>Reply via Email</span>
@@ -529,10 +529,10 @@ export default function MessageManager({ onMessageChanged }) {
 
             {/* Message Body Content */}
             <div className="space-y-2">
-              <span className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-400">
+              <span className="text-xs font-mono font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
                 Message Content
               </span>
-              <div className="p-5 rounded-xl bg-slate-50/50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/80 text-sm text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap font-sans">
+              <div className="p-5 rounded-xl bg-neutral-50/50 dark:bg-[#101112]/60 border border-neutral-200 dark:border-white/10 text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed whitespace-pre-wrap font-sans">
                 {viewingMessage.message}
               </div>
             </div>
