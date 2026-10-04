@@ -66,16 +66,16 @@ export default function LeetCodeSection() {
             <LeetcodeIcon size={14} className="text-amber-500" />
             <span>Problem Solving & Algorithms</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-[#D7E2EA] font-sans">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#101112] dark:text-[#D7E2EA] font-sans">
             LeetCode & Computational Practice
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-slate-600 dark:text-[#D7E2EA]/75">
+          <p className="mt-3 text-sm sm:text-base text-neutral-600 dark:text-[#D7E2EA]/75">
             Dedicated problem-solving practice in C++ covering fundamental and advanced data structures, graph search, dynamic programming, and asymptotic runtime optimization.
           </p>
         </div>
 
         {/* Profile Card & Action Bar */}
-        <div className="mb-8 sm:mb-10 p-4 sm:p-6 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#101112] shadow-xs">
+        <div className="mb-8 sm:mb-10 p-4 sm:p-6 rounded-xl border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] shadow-xs">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-5">
             {/* Handle info */}
             <div className="flex items-center gap-3 sm:gap-4 min-w-0">
@@ -93,14 +93,14 @@ export default function LeetCodeSection() {
 
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-[#D7E2EA] break-words">
+                  <h3 className="text-base sm:text-lg font-bold text-[#101112] dark:text-[#D7E2EA] break-words">
                     LeetCode Profile
                   </h3>
                   <span className="text-xs font-mono text-amber-600 dark:text-amber-400 font-semibold bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800/80 shrink-0">
                     @{LEETCODE_USERNAME}
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-[#D7E2EA]/65 mt-0.5 line-clamp-1">
+                <p className="text-xs text-neutral-500 dark:text-[#D7E2EA]/65 mt-0.5 line-clamp-1">
                   Algorithm Practice • Data Structures • C++ Systems Solutions
                 </p>
               </div>
@@ -112,7 +112,7 @@ export default function LeetCodeSection() {
                 onClick={() => loadStats(true)}
                 disabled={loading}
                 aria-label="Refresh LeetCode statistics"
-                className="p-2 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#141516] text-slate-600 dark:text-[#D7E2EA] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#101112] transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-500 shrink-0"
+                className="p-2 rounded-lg border border-neutral-200 dark:border-white/10 bg-neutral-50 dark:bg-[#141516] text-neutral-600 dark:text-[#D7E2EA] hover:text-[#101112] dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-[#101112] transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-500 shrink-0"
               >
                 <RefreshCw size={14} className={loading ? 'animate-spin' : ''} aria-hidden="true" />
               </button>
@@ -138,11 +138,11 @@ export default function LeetCodeSection() {
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="p-6 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#101112] space-y-3"
+                className="p-6 rounded-xl border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] space-y-3"
               >
-                <div className="h-4 bg-slate-200 dark:bg-[#141516] rounded w-1/2" />
-                <div className="h-8 bg-slate-200 dark:bg-[#141516] rounded w-3/4" />
-                <div className="h-3 bg-slate-200 dark:bg-[#141516] rounded w-full" />
+                <div className="h-4 bg-neutral-200 dark:bg-[#141516] rounded w-1/2" />
+                <div className="h-8 bg-neutral-200 dark:bg-[#141516] rounded w-3/4" />
+                <div className="h-3 bg-neutral-200 dark:bg-[#141516] rounded w-full" />
               </div>
             ))}
           </div>
@@ -152,15 +152,15 @@ export default function LeetCodeSection() {
             {/* 4 Stats Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {/* Total Solved */}
-              <div className="p-6 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#101112] shadow-xs hover:border-slate-300 dark:hover:border-white/20 transition-all">
-                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-[#D7E2EA]/60 mb-2">
+              <div className="p-6 rounded-xl border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] shadow-xs hover:border-neutral-300 dark:hover:border-white/20 transition-all">
+                <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-[#D7E2EA]/60 mb-2">
                   <span className="font-medium">Total Solved</span>
                   <Award size={16} className="text-amber-500" />
                 </div>
-                <div className="text-3xl font-extrabold font-mono text-slate-900 dark:text-[#D7E2EA]">
+                <div className="text-3xl font-extrabold font-mono text-[#101112] dark:text-[#D7E2EA]">
                   {stats.totalSolved}
                 </div>
-                <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-white/8 text-[11px] text-slate-400 dark:text-[#D7E2EA]/50 font-mono">
+                <div className="flex items-center gap-2 mt-3 pt-3 border-t border-neutral-200 dark:border-white/10 text-[11px] text-neutral-400 dark:text-[#D7E2EA]/50 font-mono">
                   {stats.acceptanceRate ? (
                     <span>{stats.acceptanceRate}% Acceptance Rate</span>
                   ) : (
@@ -216,7 +216,7 @@ export default function LeetCodeSection() {
           /* Clean Coding Fallback Mode */
           <div className="space-y-6 animate-fade-in">
             {/* Notice card */}
-            <div className="p-4 rounded-xl bg-white dark:bg-[#141516] border border-slate-200 dark:border-white/10 text-xs text-slate-600 dark:text-[#D7E2EA]/75 flex items-center justify-between flex-wrap gap-2">
+            <div className="p-4 rounded-xl bg-white dark:bg-[#141516] border border-neutral-200 dark:border-white/10 text-xs text-neutral-600 dark:text-[#D7E2EA]/75 flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2">
                 <ShieldCheck size={16} className="text-primary-600 dark:text-primary-400 shrink-0" />
                 <span>
@@ -242,27 +242,27 @@ export default function LeetCodeSection() {
                 return (
                   <div
                     key={cat.category}
-                    className="p-6 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#101112] shadow-xs hover:border-slate-300 dark:hover:border-white/20 transition-all flex flex-col justify-between"
+                    className="p-6 rounded-xl border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] shadow-xs hover:border-neutral-300 dark:hover:border-white/20 transition-all flex flex-col justify-between"
                   >
                     <div>
                       <div className="flex items-center gap-2.5 mb-2">
                         <div className="p-2 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800/80">
                           <IconComponent size={18} aria-hidden="true" />
                         </div>
-                        <h3 className="text-base font-bold text-slate-900 dark:text-[#D7E2EA]">
+                        <h3 className="text-base font-bold text-[#101112] dark:text-[#D7E2EA]">
                           {cat.category}
                         </h3>
                       </div>
-                      <p className="text-xs text-slate-500 dark:text-[#D7E2EA]/65 mb-4 leading-relaxed">
+                      <p className="text-xs text-neutral-500 dark:text-[#D7E2EA]/65 mb-4 leading-relaxed">
                         {cat.description}
                       </p>
                     </div>
 
-                    <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100 dark:border-white/8">
+                    <div className="flex flex-wrap gap-1.5 pt-3 border-t border-neutral-200 dark:border-white/10">
                       {cat.skills.map((skill) => (
                         <span
                           key={skill}
-                          className="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-50 dark:bg-[#141516] border border-slate-200/70 dark:border-white/8 text-slate-700 dark:text-[#D7E2EA]"
+                          className="px-2.5 py-1 rounded-md text-[11px] font-mono bg-neutral-50 dark:bg-[#141516] border border-neutral-200/70 dark:border-white/8 text-neutral-700 dark:text-[#D7E2EA]"
                         >
                           {skill}
                         </span>

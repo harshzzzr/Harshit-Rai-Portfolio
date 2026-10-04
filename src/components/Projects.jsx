@@ -147,14 +147,14 @@ export default function Projects() {
       <div className="max-w-6xl mx-auto space-y-10">
         {/* Section Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-medium bg-white dark:bg-[#141516] border border-slate-200 dark:border-white/10 text-slate-600 dark:text-[#D7E2EA] mb-1 shadow-xs">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-medium bg-white dark:bg-[#141516] border border-neutral-200 dark:border-white/10 text-neutral-600 dark:text-[#D7E2EA] mb-1 shadow-xs">
             <span className={`w-2 h-2 rounded-full ${isLive ? 'bg-emerald-500 animate-pulse' : 'bg-primary-500'}`} />
             <span>{isLive ? 'Cloud Firestore Live Data' : 'Structured Data Feed'}</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-[#D7E2EA] font-sans">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#101112] dark:text-[#D7E2EA] font-sans">
             Featured Projects
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-[#D7E2EA]/75 max-w-xl mx-auto">
+          <p className="text-sm sm:text-base text-neutral-600 dark:text-[#D7E2EA]/75 max-w-xl mx-auto">
             Practical software implementations loaded asynchronously from our data architecture.
           </p>
           <div className="w-12 h-0.5 bg-primary-500 mx-auto rounded-xs mt-2" />
@@ -169,7 +169,7 @@ export default function Projects() {
               <div className="relative flex-1" role="search">
                 <Search
                   size={16}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#D7E2EA]/40 pointer-events-none"
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-[#D7E2EA]/40 pointer-events-none"
                   aria-hidden="true"
                 />
                 <input
@@ -178,14 +178,14 @@ export default function Projects() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search projects..."
                   aria-label="Search projects by title, description, category, or technology"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white dark:bg-[#101112] border border-slate-200 dark:border-white/10 text-slate-900 dark:text-[#D7E2EA] placeholder-slate-400 dark:placeholder-[#D7E2EA]/40 text-xs sm:text-sm focus-visible:ring-2 focus-visible:ring-primary-500 shadow-xs transition-colors"
+                  className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-[#101112] dark:text-[#D7E2EA] placeholder-neutral-400 dark:placeholder-[#D7E2EA]/40 text-xs sm:text-sm focus-visible:ring-2 focus-visible:ring-primary-500 shadow-xs transition-colors"
                 />
                 {searchQuery && (
                   <button
                     type="button"
                     onClick={() => setSearchQuery('')}
                     aria-label="Clear search query"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-[#D7E2EA] p-1 rounded-md transition-colors cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-[#D7E2EA] p-1 rounded-md transition-colors cursor-pointer"
                   >
                     <X size={15} />
                   </button>
@@ -204,7 +204,7 @@ export default function Projects() {
                       id="tech-filter"
                       value={selectedTechnology}
                       onChange={(e) => setSelectedTechnology(e.target.value)}
-                      className="px-3 py-2 rounded-xl bg-white dark:bg-[#101112] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-[#D7E2EA] text-xs font-medium focus-visible:ring-2 focus-visible:ring-primary-500 shadow-xs cursor-pointer"
+                      className="px-3 py-2 rounded-xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-[#D7E2EA] text-xs font-medium focus-visible:ring-2 focus-visible:ring-primary-500 shadow-xs cursor-pointer"
                     >
                       <option value="all">All Technologies</option>
                       {availableTechnologies
@@ -226,7 +226,7 @@ export default function Projects() {
                   className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer shadow-xs focus-visible:ring-2 focus-visible:ring-primary-500 ${
                     featuredOnly
                       ? 'bg-amber-500 text-white shadow-amber-500/20'
-                      : 'bg-white dark:bg-[#101112] text-slate-700 dark:text-[#D7E2EA] border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-[#141516]'
+                      : 'bg-white dark:bg-[#101112] text-neutral-700 dark:text-[#D7E2EA] border border-neutral-200 dark:border-white/10 hover:bg-neutral-50 dark:hover:bg-[#141516]'
                   }`}
                 >
                   <Sparkles size={13} className={featuredOnly ? 'text-white' : 'text-amber-500'} />
@@ -270,8 +270,8 @@ export default function Projects() {
                     aria-pressed={isSelected}
                     className={`px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 ${
                       isSelected
-                        ? 'bg-slate-900 text-white dark:bg-[#D7E2EA] dark:text-[#0C0C0C] font-semibold shadow-xs'
-                        : 'bg-white dark:bg-[#101112] text-slate-700 dark:text-[#D7E2EA]/85 border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-[#141516]'
+                        ? 'bg-neutral-900 text-white dark:bg-[#D7E2EA] dark:text-[#0C0C0C] font-semibold shadow-xs'
+                        : 'bg-white dark:bg-[#101112] text-neutral-700 dark:text-[#D7E2EA]/85 border border-neutral-200 dark:border-white/10 hover:bg-neutral-50 dark:hover:bg-[#141516]'
                     }`}
                   >
                     <span className="capitalize">{category === 'all' ? 'All Categories' : category}</span>
@@ -283,9 +283,9 @@ export default function Projects() {
 
             {/* Result summary count when filters are active */}
             {hasActiveFilters && (
-              <div className="flex items-center justify-between text-xs text-slate-500 dark:text-[#D7E2EA]/60 px-1">
+              <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-[#D7E2EA]/60 px-1">
                 <span>
-                  Showing <strong className="text-slate-800 dark:text-[#D7E2EA]">{filteredProjects.length}</strong> of{' '}
+                  Showing <strong className="text-neutral-800 dark:text-[#D7E2EA]">{filteredProjects.length}</strong> of{' '}
                   {projects.length} projects
                 </span>
                 <button
@@ -306,17 +306,17 @@ export default function Projects() {
             {[1, 2, 3].map((skeletonId) => (
               <div
                 key={skeletonId}
-                className="rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#101112] p-4 space-y-4 motion-safe:animate-pulse"
+                className="rounded-xl border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] p-4 space-y-4 motion-safe:animate-pulse"
               >
-                <div className="h-44 w-full bg-slate-200 dark:bg-[#141516] rounded-lg" />
+                <div className="h-44 w-full bg-neutral-200 dark:bg-[#141516] rounded-lg" />
                 <div className="space-y-2">
-                  <div className="h-6 w-3/4 bg-slate-200 dark:bg-[#141516] rounded" />
-                  <div className="h-4 w-full bg-slate-200 dark:bg-[#141516] rounded" />
-                  <div className="h-4 w-2/3 bg-slate-200 dark:bg-[#141516] rounded" />
+                  <div className="h-6 w-3/4 bg-neutral-200 dark:bg-[#141516] rounded" />
+                  <div className="h-4 w-full bg-neutral-200 dark:bg-[#141516] rounded" />
+                  <div className="h-4 w-2/3 bg-neutral-200 dark:bg-[#141516] rounded" />
                 </div>
                 <div className="flex gap-2 pt-2">
-                  <div className="h-6 w-16 bg-slate-200 dark:bg-[#141516] rounded" />
-                  <div className="h-6 w-16 bg-slate-200 dark:bg-[#141516] rounded" />
+                  <div className="h-6 w-16 bg-neutral-200 dark:bg-[#141516] rounded" />
+                  <div className="h-6 w-16 bg-neutral-200 dark:bg-[#141516] rounded" />
                 </div>
               </div>
             ))}
@@ -349,14 +349,14 @@ export default function Projects() {
 
         {/* Meaningful Empty States for Search & Filters */}
         {!loading && !error && filteredProjects.length === 0 && (
-          <div className="text-center py-16 px-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 max-w-lg mx-auto space-y-3 animate-fade-in">
-            <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 mx-auto flex items-center justify-center">
+          <div className="text-center py-16 px-4 rounded-xl border border-dashed border-neutral-300 dark:border-white/10 max-w-lg mx-auto space-y-3 animate-fade-in">
+            <div className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-[#141516] text-neutral-500 mx-auto flex items-center justify-center">
               <FolderX size={24} />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+            <h3 className="text-lg font-bold text-[#101112] dark:text-[#D7E2EA]">
               {getEmptyStateMessage().title}
             </h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+            <p className="text-sm text-neutral-500 dark:text-[#D7E2EA]/60 max-w-sm mx-auto">
               {getEmptyStateMessage().description}
             </p>
             {hasActiveFilters && (

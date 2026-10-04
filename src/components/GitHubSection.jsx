@@ -110,25 +110,25 @@ export default function GitHubSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-xs font-mono font-medium bg-slate-900 dark:bg-[#141516] text-white dark:text-[#D7E2EA] border border-black/10 dark:border-white/10 mb-3 shadow-xs">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-xs font-mono font-medium bg-neutral-900 dark:bg-[#141516] text-white dark:text-[#D7E2EA] border border-neutral-200 dark:border-white/10 mb-3 shadow-xs">
             <GithubIcon size={14} />
             <span>Public Open-Source Footprint</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-[#D7E2EA] font-sans">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#101112] dark:text-[#D7E2EA] font-sans">
             GitHub Dynamic Repositories
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-slate-600 dark:text-[#D7E2EA]/75">
+          <p className="mt-3 text-sm sm:text-base text-neutral-600 dark:text-[#D7E2EA]/75">
             Live public repositories and systems code synchronized via the official GitHub REST API. Inspect open-source contributions, algorithms, and technical prototypes.
           </p>
         </div>
 
         {/* Profile Stats & API Status Bar */}
-        <div className="mb-8 p-4 sm:p-6 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#101112] shadow-xs">
+        <div className="mb-8 p-4 sm:p-6 rounded-xl border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] shadow-xs">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-5">
             {/* User Info */}
             <div className="flex items-center gap-3 sm:gap-4 min-w-0">
               <div className="relative shrink-0">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-slate-900 dark:bg-[#141516] border border-black/10 dark:border-white/10 text-white p-2.5 flex items-center justify-center shadow-xs">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-neutral-900 dark:bg-[#141516] border border-neutral-200/20 dark:border-white/10 text-white p-2.5 flex items-center justify-center shadow-xs">
                   <GithubIcon size={28} />
                 </div>
                 <span
@@ -141,14 +141,14 @@ export default function GitHubSection() {
 
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-[#D7E2EA] break-words">
+                  <h3 className="text-base sm:text-lg font-bold text-[#101112] dark:text-[#D7E2EA] break-words">
                     {profile?.name || 'Harshit Rai'}
                   </h3>
-                  <span className="text-xs font-mono text-slate-400 dark:text-[#D7E2EA]/50">
+                  <span className="text-xs font-mono text-neutral-400 dark:text-[#D7E2EA]/50">
                     @{profile?.login || GITHUB_USERNAME}
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-[#D7E2EA]/65 max-w-md line-clamp-1 mt-0.5">
+                <p className="text-xs text-neutral-500 dark:text-[#D7E2EA]/65 max-w-md line-clamp-1 mt-0.5">
                   {profile?.bio || 'Computer Engineering Student & Full-Stack Systems Developer'}
                 </p>
               </div>
@@ -156,19 +156,19 @@ export default function GitHubSection() {
 
             {/* Counts & Actions */}
             <div className="flex flex-wrap items-center gap-2.5 sm:gap-4 self-start md:self-auto w-full md:w-auto">
-              <div className="flex items-center gap-3 text-xs font-mono text-slate-600 dark:text-[#D7E2EA] bg-slate-50 dark:bg-[#141516] px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shrink-0">
+              <div className="flex items-center gap-3 text-xs font-mono text-neutral-600 dark:text-[#D7E2EA] bg-neutral-50 dark:bg-[#141516] px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-white/10 shrink-0">
                 <span>
-                  <strong className="text-slate-900 dark:text-white font-bold">
+                  <strong className="text-[#101112] dark:text-white font-bold">
                     {profile?.publicRepos ?? repos.length}
                   </strong>{' '}
-                  <span className="text-slate-400 dark:text-[#D7E2EA]/50 text-[11px]">Repos</span>
+                  <span className="text-neutral-400 dark:text-[#D7E2EA]/50 text-[11px]">Repos</span>
                 </span>
-                <span className="text-slate-300 dark:text-white/20">|</span>
+                <span className="text-neutral-300 dark:text-white/20">|</span>
                 <span>
-                  <strong className="text-slate-900 dark:text-white font-bold">
+                  <strong className="text-[#101112] dark:text-white font-bold">
                     {profile?.followers ?? 0}
                   </strong>{' '}
-                  <span className="text-slate-400 dark:text-[#D7E2EA]/50 text-[11px]">Followers</span>
+                  <span className="text-neutral-400 dark:text-[#D7E2EA]/50 text-[11px]">Followers</span>
                 </span>
               </div>
 
@@ -176,7 +176,7 @@ export default function GitHubSection() {
                 onClick={() => loadGitHubData(true)}
                 disabled={loading}
                 aria-label="Force refresh GitHub data from API"
-                className="p-2 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#141516] text-slate-600 dark:text-[#D7E2EA] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#101112] transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 shrink-0"
+                className="p-2 rounded-lg border border-neutral-200 dark:border-white/10 bg-neutral-50 dark:bg-[#141516] text-neutral-600 dark:text-[#D7E2EA] hover:text-[#101112] dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-[#101112] transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 shrink-0"
               >
                 <RefreshCw size={14} className={loading ? 'animate-spin' : ''} aria-hidden="true" />
               </button>
@@ -186,7 +186,7 @@ export default function GitHubSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="View Harshit Rai GitHub profile (opens in new tab)"
-                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-black dark:bg-[#D7E2EA] dark:hover:bg-white text-white dark:text-[#0C0C0C] font-semibold text-xs transition-colors shadow-xs focus-visible:ring-2 focus-visible:ring-primary-500 flex-1 sm:flex-initial"
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-neutral-900 hover:bg-black dark:bg-[#D7E2EA] dark:hover:bg-white text-white dark:text-[#0C0C0C] font-semibold text-xs transition-colors shadow-xs focus-visible:ring-2 focus-visible:ring-primary-500 flex-1 sm:flex-initial"
               >
                 <span>View on GitHub</span>
                 <ExternalLink size={13} aria-hidden="true" />
@@ -227,8 +227,8 @@ export default function GitHubSection() {
                 aria-pressed={selectedLanguage === lang}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 ${
                   selectedLanguage === lang
-                    ? 'bg-slate-900 text-white dark:bg-[#D7E2EA] dark:text-[#0C0C0C] font-semibold shadow-xs'
-                    : 'bg-white dark:bg-[#101112] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-[#D7E2EA]/85 hover:bg-slate-50 dark:hover:bg-[#141516]'
+                    ? 'bg-neutral-900 text-white dark:bg-[#D7E2EA] dark:text-[#0C0C0C] font-semibold shadow-xs'
+                    : 'bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-[#D7E2EA]/85 hover:bg-neutral-50 dark:hover:bg-[#141516]'
                 }`}
               >
                 {lang !== 'All' && (
@@ -245,20 +245,20 @@ export default function GitHubSection() {
 
           {/* Search box */}
           <div className="relative sm:w-64">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#D7E2EA]/40" aria-hidden="true" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-[#D7E2EA]/40" aria-hidden="true" />
             <input
               type="text"
               aria-label="Search repositories by name or description"
               placeholder="Search repositories..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-8 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-[#101112] text-slate-900 dark:text-[#D7E2EA] placeholder-slate-400 dark:placeholder-[#D7E2EA]/40 focus-visible:ring-2 focus-visible:ring-primary-500"
+              className="w-full pl-9 pr-8 py-1.5 text-xs rounded-lg border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] text-[#101112] dark:text-[#D7E2EA] placeholder-neutral-400 dark:placeholder-[#D7E2EA]/40 focus-visible:ring-2 focus-visible:ring-primary-500"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
                 aria-label="Clear repository search query"
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-[#D7E2EA] cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-[#D7E2EA] cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
               >
                 <X size={12} />
               </button>
@@ -273,28 +273,28 @@ export default function GitHubSection() {
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={i}
-                className="p-5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#101112] animate-pulse space-y-3"
+                className="p-5 rounded-xl border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] animate-pulse space-y-3"
               >
-                <div className="h-4 bg-slate-200 dark:bg-[#141516] rounded w-2/3" />
-                <div className="h-3 bg-slate-200 dark:bg-[#141516] rounded w-full" />
-                <div className="h-3 bg-slate-200 dark:bg-[#141516] rounded w-4/5" />
+                <div className="h-4 bg-neutral-200 dark:bg-[#141516] rounded w-2/3" />
+                <div className="h-3 bg-neutral-200 dark:bg-[#141516] rounded w-full" />
+                <div className="h-3 bg-neutral-200 dark:bg-[#141516] rounded w-4/5" />
                 <div className="pt-2 flex items-center justify-between">
-                  <div className="h-3 bg-slate-200 dark:bg-[#141516] rounded w-16" />
-                  <div className="h-3 bg-slate-200 dark:bg-[#141516] rounded w-12" />
+                  <div className="h-3 bg-neutral-200 dark:bg-[#141516] rounded w-16" />
+                  <div className="h-3 bg-neutral-200 dark:bg-[#141516] rounded w-12" />
                 </div>
               </div>
             ))}
           </div>
         ) : filteredRepos.length === 0 ? (
           /* Empty State */
-          <div className="p-12 text-center rounded-xl border border-dashed border-slate-300 dark:border-white/10 bg-white/60 dark:bg-[#101112]/60 space-y-3">
-            <div className="w-12 h-12 mx-auto rounded-full bg-slate-100 dark:bg-[#141516] flex items-center justify-center text-slate-400">
+          <div className="p-12 text-center rounded-xl border border-dashed border-neutral-300 dark:border-white/10 bg-white/60 dark:bg-[#101112]/60 space-y-3">
+            <div className="w-12 h-12 mx-auto rounded-full bg-neutral-100 dark:bg-[#141516] flex items-center justify-center text-neutral-400">
               <FolderGit2 size={24} />
             </div>
-            <h4 className="text-sm font-semibold text-slate-800 dark:text-[#D7E2EA]">
+            <h4 className="text-sm font-semibold text-[#101112] dark:text-[#D7E2EA]">
               {repos.length === 0 ? 'GitHub API Unavailable / Rate-Limited' : 'No Repositories Found'}
             </h4>
-            <p className="text-xs text-slate-500 dark:text-[#D7E2EA]/60 max-w-sm mx-auto">
+            <p className="text-xs text-neutral-500 dark:text-[#D7E2EA]/60 max-w-sm mx-auto">
               {repos.length === 0
                 ? 'GitHub API rate limit reached or service temporarily unavailable. You can explore all public repositories directly on my GitHub profile.'
                 : searchQuery
@@ -307,7 +307,7 @@ export default function GitHubSection() {
                   href={GITHUB_PROFILE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-900 hover:bg-black dark:bg-[#D7E2EA] dark:hover:bg-white text-white dark:text-[#0C0C0C] font-semibold text-xs transition-colors shadow-xs"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-neutral-900 hover:bg-black dark:bg-[#D7E2EA] dark:hover:bg-white text-white dark:text-[#0C0C0C] font-semibold text-xs transition-colors shadow-xs"
                 >
                   <span>View GitHub Profile</span>
                   <ExternalLink size={13} />
@@ -334,31 +334,31 @@ export default function GitHubSection() {
                 href={repo.htmlUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group p-5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#101112] shadow-xs hover:border-slate-300 dark:hover:border-white/20 transition-all duration-200 flex flex-col justify-between"
+                className="group p-5 rounded-xl border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] shadow-xs hover:border-neutral-300 dark:hover:border-white/20 transition-all duration-200 flex flex-col justify-between"
               >
                 <div>
                   {/* Title & Link icon */}
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2 min-w-0">
                       <FolderGit2 size={16} className="text-primary-600 dark:text-primary-400 shrink-0" />
-                      <h4 className="text-sm font-bold text-slate-900 dark:text-[#D7E2EA] font-mono truncate group-hover:text-primary-600 dark:group-hover:text-white transition-colors">
+                      <h4 className="text-sm font-bold text-[#101112] dark:text-[#D7E2EA] font-mono truncate group-hover:text-primary-600 dark:group-hover:text-white transition-colors">
                         {repo.name}
                       </h4>
                     </div>
                     <ExternalLink
                       size={14}
-                      className="text-slate-400 dark:text-[#D7E2EA]/40 group-hover:text-primary-500 transition-colors shrink-0 mt-0.5"
+                      className="text-neutral-400 dark:text-[#D7E2EA]/40 group-hover:text-primary-500 transition-colors shrink-0 mt-0.5"
                     />
                   </div>
 
                   {/* Description */}
-                  <p className="text-xs text-slate-600 dark:text-[#D7E2EA]/75 line-clamp-2 leading-relaxed mb-4">
+                  <p className="text-xs text-neutral-600 dark:text-[#D7E2EA]/75 line-clamp-2 leading-relaxed mb-4">
                     {repo.description || 'Public engineering project repository.'}
                   </p>
                 </div>
 
                 {/* Footer Metadata */}
-                <div className="pt-3 border-t border-slate-100 dark:border-white/8 flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-[#D7E2EA]/50">
+                <div className="pt-3 border-t border-neutral-200 dark:border-white/10 flex items-center justify-between text-[11px] font-mono text-neutral-500 dark:text-[#D7E2EA]/50">
                   {/* Language */}
                   <div className="flex items-center gap-1.5">
                     <span
@@ -379,13 +379,13 @@ export default function GitHubSection() {
 
                     {repo.forks > 0 && (
                       <span className="flex items-center gap-0.5" title={`${repo.forks} forks`}>
-                        <GitFork size={12} className="text-slate-400 dark:text-[#D7E2EA]/40" />
+                        <GitFork size={12} className="text-neutral-400 dark:text-[#D7E2EA]/40" />
                         <span>{repo.forks}</span>
                       </span>
                     )}
 
                     {repo.updatedAt && (
-                      <span className="text-[10px] text-slate-400 dark:text-[#D7E2EA]/40" title="Last updated">
+                      <span className="text-[10px] text-neutral-400 dark:text-[#D7E2EA]/40" title="Last updated">
                         {formatDate(repo.updatedAt)}
                       </span>
                     )}

@@ -61,21 +61,21 @@ export default function ProjectDetailPage() {
     return (
       <article className="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-12 motion-safe:animate-pulse">
         {/* Back Link Skeleton */}
-        <div className="h-5 w-36 bg-slate-200 dark:bg-slate-800 rounded-md" />
+        <div className="h-5 w-36 bg-neutral-200 dark:bg-[#141516] rounded-md" />
 
         {/* Hero Header Banner Skeleton */}
-        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-10 space-y-6">
+        <div className="rounded-xl border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#101112] p-6 sm:p-10 space-y-6">
           <div className="flex gap-2">
-            <div className="h-6 w-28 bg-slate-200 dark:bg-slate-800 rounded-md" />
-            <div className="h-6 w-24 bg-slate-200 dark:bg-slate-800 rounded-md" />
+            <div className="h-6 w-28 bg-neutral-200 dark:bg-[#141516] rounded-md" />
+            <div className="h-6 w-24 bg-neutral-200 dark:bg-[#141516] rounded-md" />
           </div>
           <div className="space-y-3">
-            <div className="h-10 w-3/4 sm:w-1/2 bg-slate-200 dark:bg-slate-800 rounded-lg" />
-            <div className="h-5 w-full sm:w-2/3 bg-slate-200 dark:bg-slate-800 rounded-md" />
+            <div className="h-10 w-3/4 sm:w-1/2 bg-neutral-200 dark:bg-[#141516] rounded-lg" />
+            <div className="h-5 w-full sm:w-2/3 bg-neutral-200 dark:bg-[#141516] rounded-md" />
           </div>
           <div className="flex flex-wrap gap-3 pt-2">
-            <div className="h-10 w-36 bg-slate-200 dark:bg-slate-800 rounded-lg" />
-            <div className="h-10 w-36 bg-slate-200 dark:bg-slate-800 rounded-lg" />
+            <div className="h-10 w-36 bg-neutral-200 dark:bg-[#141516] rounded-lg" />
+            <div className="h-10 w-36 bg-neutral-200 dark:bg-[#141516] rounded-lg" />
           </div>
         </div>
 
@@ -84,37 +84,37 @@ export default function ProjectDetailPage() {
           {/* Left Column Narrative */}
           <div className="lg:col-span-8 space-y-6">
             {/* Overview Card */}
-            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
-              <div className="h-6 w-40 bg-slate-200 dark:bg-slate-800 rounded" />
+            <div className="p-6 rounded-xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 space-y-4">
+              <div className="h-6 w-40 bg-neutral-200 dark:bg-[#141516] rounded" />
               <div className="space-y-2">
-                <div className="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded" />
-                <div className="h-4 w-5/6 bg-slate-200 dark:bg-slate-800 rounded" />
-                <div className="h-4 w-4/6 bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-4 w-full bg-neutral-200 dark:bg-[#141516] rounded" />
+                <div className="h-4 w-5/6 bg-neutral-200 dark:bg-[#141516] rounded" />
+                <div className="h-4 w-4/6 bg-neutral-200 dark:bg-[#141516] rounded" />
               </div>
             </div>
 
             {/* Problem & Solution Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
-                <div className="h-5 w-28 bg-slate-200 dark:bg-slate-800 rounded" />
-                <div className="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded" />
-                <div className="h-4 w-3/4 bg-slate-200 dark:bg-slate-800 rounded" />
+              <div className="p-5 rounded-xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 space-y-3">
+                <div className="h-5 w-28 bg-neutral-200 dark:bg-[#141516] rounded" />
+                <div className="h-4 w-full bg-neutral-200 dark:bg-[#141516] rounded" />
+                <div className="h-4 w-3/4 bg-neutral-200 dark:bg-[#141516] rounded" />
               </div>
-              <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
-                <div className="h-5 w-28 bg-slate-200 dark:bg-slate-800 rounded" />
-                <div className="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded" />
-                <div className="h-4 w-3/4 bg-slate-200 dark:bg-slate-800 rounded" />
+              <div className="p-5 rounded-xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 space-y-3">
+                <div className="h-5 w-28 bg-neutral-200 dark:bg-[#141516] rounded" />
+                <div className="h-4 w-full bg-neutral-200 dark:bg-[#141516] rounded" />
+                <div className="h-4 w-3/4 bg-neutral-200 dark:bg-[#141516] rounded" />
               </div>
             </div>
 
             {/* Features Checklist */}
-            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
-              <div className="h-6 w-36 bg-slate-200 dark:bg-slate-800 rounded" />
+            <div className="p-6 rounded-xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 space-y-4">
+              <div className="h-6 w-36 bg-neutral-200 dark:bg-[#141516] rounded" />
               <div className="space-y-3">
                 {[1, 2, 3, 4].map((f) => (
                   <div key={f} className="flex items-center gap-3">
-                    <div className="w-4 h-4 bg-slate-200 dark:bg-slate-800 rounded shrink-0" />
-                    <div className="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded" />
+                    <div className="w-4 h-4 bg-neutral-200 dark:bg-[#141516] rounded shrink-0" />
+                    <div className="h-4 w-full bg-neutral-200 dark:bg-[#141516] rounded" />
                   </div>
                 ))}
               </div>
@@ -123,11 +123,11 @@ export default function ProjectDetailPage() {
 
           {/* Right Column Sidebar */}
           <div className="lg:col-span-4 space-y-6">
-            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
-              <div className="h-5 w-32 bg-slate-200 dark:bg-slate-800 rounded" />
+            <div className="p-6 rounded-xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 space-y-4">
+              <div className="h-5 w-32 bg-neutral-200 dark:bg-[#141516] rounded" />
               <div className="flex flex-wrap gap-2">
                 {[1, 2, 3, 4, 5].map((t) => (
-                  <div key={t} className="h-6 w-16 bg-slate-200 dark:bg-slate-800 rounded-md" />
+                  <div key={t} className="h-6 w-16 bg-neutral-200 dark:bg-[#141516] rounded-md" />
                 ))}
               </div>
             </div>
@@ -163,7 +163,7 @@ export default function ProjectDetailPage() {
             </button>
             <Link
               to="/#projects"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-[#D7E2EA] text-xs font-semibold hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors"
             >
               <ArrowLeft size={14} />
               <span>Back</span>
@@ -183,16 +183,16 @@ export default function ProjectDetailPage() {
           description="The requested project could not be found in the portfolio repository."
           noindex={true}
         />
-        <div className="max-w-md w-full p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-5 shadow-lg animate-fade-in">
+        <div className="max-w-md w-full p-8 rounded-2xl bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 text-center space-y-5 shadow-lg animate-fade-in">
           <div className="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 mx-auto flex items-center justify-center">
             <AlertTriangle size={32} />
           </div>
           <div className="space-y-2">
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+            <h1 className="text-2xl font-bold text-[#101112] dark:text-[#D7E2EA]">
               Project Not Found
             </h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              The project identifier <code className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono text-xs text-primary-600 dark:text-primary-400">"{projectId}"</code> does not match any project in our database.
+            <p className="text-sm text-neutral-600 dark:text-[#D7E2EA]/70">
+              The project identifier <code className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-[#141516] font-mono text-xs text-primary-600 dark:text-primary-400">"{projectId}"</code> does not match any project in our database.
             </p>
           </div>
           <Link

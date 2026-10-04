@@ -58,7 +58,7 @@ export default function Navbar() {
           <Link
             to="/#hero"
             aria-label="Harshit Rai Portfolio Homepage"
-            className="flex items-center gap-1.5 sm:gap-2 text-slate-900 dark:text-[#D7E2EA] font-bold tracking-tight text-base sm:text-xl group focus-visible:ring-2 focus-visible:ring-primary-500 rounded-md shrink-0"
+            className="flex items-center gap-1.5 sm:gap-2 text-[#101112] dark:text-[#D7E2EA] font-bold tracking-tight text-base sm:text-xl group focus-visible:ring-2 focus-visible:ring-primary-500 rounded-md shrink-0"
           >
             <span className="font-mono text-primary-600 dark:text-primary-400 font-semibold">&lt;</span>
             <span className="group-hover:text-primary-600 dark:group-hover:text-white transition-colors">
@@ -73,7 +73,7 @@ export default function Navbar() {
               <a
                 key={item.label}
                 href={item.href}
-                className="px-2.5 py-1.5 text-xs lg:text-sm font-medium text-slate-700 dark:text-[#D7E2EA]/85 hover:text-primary-600 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 whitespace-nowrap"
+                className="px-2.5 py-1.5 text-xs lg:text-sm font-medium text-neutral-700 dark:text-[#D7E2EA]/85 hover:text-primary-600 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 whitespace-nowrap"
               >
                 {item.label}
               </a>
@@ -83,9 +83,9 @@ export default function Navbar() {
             <button
               onClick={toggleTheme}
               aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-              className="ml-1 p-2 rounded-lg text-slate-600 hover:text-slate-900 dark:text-[#D7E2EA]/80 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 cursor-pointer"
+              className="ml-1 p-2 rounded-lg text-neutral-600 hover:text-neutral-900 dark:text-[#D7E2EA]/80 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 cursor-pointer"
             >
-              {theme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-slate-700" />}
+              {theme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-neutral-700" />}
             </button>
           </nav>
 
@@ -97,7 +97,7 @@ export default function Navbar() {
                 <a
                   key={item.label}
                   href={item.href}
-                  className="px-2.5 py-1.5 text-sm font-medium text-slate-700 dark:text-[#D7E2EA]/85 hover:text-primary-600 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-primary-500"
+                  className="px-2.5 py-1.5 text-sm font-medium text-neutral-700 dark:text-[#D7E2EA]/85 hover:text-primary-600 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-primary-500"
                 >
                   {item.label}
                 </a>
@@ -109,9 +109,9 @@ export default function Navbar() {
             <button
               onClick={toggleTheme}
               aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-              className="p-2 rounded-lg text-slate-600 dark:text-[#D7E2EA]/80 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500"
+              className="p-2 rounded-lg text-neutral-600 dark:text-[#D7E2EA]/80 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500"
             >
-              {theme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-slate-700" />}
+              {theme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-neutral-700" />}
             </button>
 
             <button
@@ -119,7 +119,7 @@ export default function Navbar() {
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-navigation"
-              className="p-2 rounded-lg text-slate-600 dark:text-[#D7E2EA]/80 hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 cursor-pointer"
+              className="p-2 rounded-lg text-neutral-600 dark:text-[#D7E2EA]/80 hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 cursor-pointer"
             >
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -139,7 +139,7 @@ export default function Navbar() {
               key={item.label}
               href={item.href}
               onClick={closeMenu}
-              className="block px-3 py-2 text-base font-medium text-slate-700 dark:text-[#D7E2EA]/90 hover:text-primary-600 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-primary-500"
+              className="block px-3 py-2 text-base font-medium text-neutral-700 dark:text-[#D7E2EA]/90 hover:text-primary-600 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-primary-500"
             >
               {item.label}
             </a>

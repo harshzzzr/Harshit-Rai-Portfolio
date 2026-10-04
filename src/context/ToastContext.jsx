@@ -69,7 +69,7 @@ export function ToastProvider({ children }) {
           <div
             key={toast.id}
             role="status"
-            className={`pointer-events-auto flex items-center justify-between gap-3 p-3.5 rounded-xl border shadow-lg backdrop-blur-xs transition-all duration-200 animate-slide-down ${style}`}
+            className={`pointer-events-auto flex items-center justify-between gap-3 p-3.5 rounded-xl border shadow-lg transition-all duration-200 animate-slide-down ${style}`}
           >
             <div className="flex items-center gap-2.5 min-w-0">
               <IconComponent size={18} className="shrink-0" />

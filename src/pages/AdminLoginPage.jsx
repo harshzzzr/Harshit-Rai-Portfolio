@@ -81,7 +81,7 @@ export default function AdminLoginPage() {
     return (
       <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
         <SEO title="Admin Console | Harshit Rai" noindex={true} />
-        <div className="max-w-md w-full p-8 rounded-2xl bg-white/90 dark:bg-[#141516]/90 border border-neutral-300/80 dark:border-white/10 text-center space-y-6 shadow-xl backdrop-blur-xl animate-fade-in">
+        <div className="max-w-md w-full p-8 rounded-2xl glass-strong text-center space-y-6 animate-fade-in">
           <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center border border-emerald-500/20">
             <ShieldCheck size={36} />
           </div>
@@ -128,7 +128,7 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">
       <SEO title="Admin Login | Harshit Rai" noindex={true} />
-      <div className="max-w-md w-full p-6 sm:p-8 rounded-2xl bg-white/90 dark:bg-[#141516]/90 border border-neutral-300/80 dark:border-white/10 shadow-2xl backdrop-blur-xl space-y-6 animate-fade-in">
+      <div className="max-w-md w-full p-6 sm:p-8 rounded-2xl glass-strong space-y-6 animate-fade-in">
         {/* Header */}
         <div className="text-center space-y-2">
           <div className="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-white/[0.04] border border-neutral-200 dark:border-white/10 text-primary-600 dark:text-primary-400 mx-auto flex items-center justify-center">

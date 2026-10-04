@@ -197,7 +197,7 @@ export default function AdminModal({
         {/* Unsaved Changes Confirmation Dialog Overlay */}
         {showUnsavedPrompt && (
           <div
-            className="absolute inset-0 z-20 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in"
+            className="absolute inset-0 z-20 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
             role="alertdialog"
             aria-labelledby="unsaved-prompt-title"
           >

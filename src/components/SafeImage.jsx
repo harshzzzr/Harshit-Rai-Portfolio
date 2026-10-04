@@ -17,7 +17,7 @@ function SafeImage({
   return (
     <div className={`relative overflow-hidden ${className}`}>
       {!isLoaded && (
-        <div className="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse" />
+        <div className="absolute inset-0 bg-neutral-200 dark:bg-[#141516] animate-pulse" />
       )}
       <img
         src={src}

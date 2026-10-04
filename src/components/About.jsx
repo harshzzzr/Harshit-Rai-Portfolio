@@ -29,7 +29,7 @@ export default function About() {
           <p className="text-xs font-mono font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
             Background & Mindset
           </p>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-[#D7E2EA] font-sans">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#101112] dark:text-[#D7E2EA] font-sans">
             About Me
           </h2>
           <div className="w-12 h-0.5 bg-primary-500 mx-auto rounded-xs mt-2" />
@@ -38,17 +38,17 @@ export default function About() {
         {/* Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Narrative description */}
-          <div className="lg:col-span-7 space-y-5 text-slate-600 dark:text-[#D7E2EA]/80 leading-relaxed text-base sm:text-lg">
+          <div className="lg:col-span-7 space-y-5 text-neutral-600 dark:text-[#D7E2EA]/80 leading-relaxed text-base sm:text-lg">
             {personalInfo.about.map((paragraph, index) => (
               <p key={index}>
                 {paragraph}
               </p>
             ))}
             <div className="pt-2 flex flex-wrap gap-3 font-mono text-xs sm:text-sm">
-              <span className="px-3 py-1.5 rounded-lg bg-white dark:bg-[#141516] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-[#D7E2EA] shadow-xs">
+              <span className="px-3 py-1.5 rounded-lg bg-white dark:bg-[#141516] border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-[#D7E2EA] shadow-xs">
                 Focus: Computer Engineering
               </span>
-              <span className="px-3 py-1.5 rounded-lg bg-white dark:bg-[#141516] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-[#D7E2EA] shadow-xs">
+              <span className="px-3 py-1.5 rounded-lg bg-white dark:bg-[#141516] border border-neutral-200 dark:border-white/10 text-neutral-700 dark:text-[#D7E2EA] shadow-xs">
                 Architecture: Clean & Scalable
               </span>
             </div>
@@ -65,7 +65,7 @@ export default function About() {
                   className={`p-4 sm:p-5 rounded-xl transition-all duration-200 ${
                     isGlassCard
                       ? 'glass-subtle hover:border-black/15 dark:hover:border-white/20'
-                      : 'bg-white dark:bg-[#101112] border border-slate-200 dark:border-white/10 shadow-xs hover:border-slate-300 dark:hover:border-white/20'
+                      : 'bg-white dark:bg-[#101112] border border-neutral-200 dark:border-white/10 shadow-xs hover:border-neutral-300 dark:hover:border-white/20'
                   }`}
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
@@ -73,10 +73,10 @@ export default function About() {
                       <Icon size={22} />
                     </div>
                     <div className="min-w-0">
-                      <h3 className="text-base font-bold text-slate-900 dark:text-[#D7E2EA] break-words">
+                      <h3 className="text-base font-bold text-[#101112] dark:text-[#D7E2EA] break-words">
                         {item.title}
                       </h3>
-                      <p className="text-sm text-slate-500 dark:text-[#D7E2EA]/65 mt-1 leading-normal">
+                      <p className="text-sm text-neutral-500 dark:text-[#D7E2EA]/65 mt-1 leading-normal">
                         {item.description}
                       </p>
                     </div>

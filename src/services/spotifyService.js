@@ -35,7 +35,7 @@ export const CODING_SOUNDTRACKS = [
     genre: 'Downtempo / Electronic',
     songUrl: SPOTIFY_PROFILE_URL,
     duration: 'Night Session',
-    coverColor: 'from-slate-700 to-slate-900'
+    coverColor: 'from-neutral-700 to-neutral-900'
   }
 ];
 

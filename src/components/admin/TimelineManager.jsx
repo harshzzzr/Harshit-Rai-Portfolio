@@ -239,7 +239,7 @@ export default function TimelineManager({ initialType = 'experience', onTimeline
           </div>
           <button
             onClick={() => setFeedback(null)}
-            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+            className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 cursor-pointer"
           >
             <X size={16} />
           </button>

@@ -60,7 +60,7 @@ export default function AdminLayout({ activeTab, onSelectTab, children }) {
   return (
     <div className="min-h-screen bg-[#F2F1ED] dark:bg-[#0C0C0C] text-[#101112] dark:text-[#D7E2EA] flex flex-col">
       {/* Top Admin Bar - z-30 keeps it beneath modal z-50 */}
-      <header className="sticky top-0 z-30 h-16 bg-[#F2F1ED]/80 dark:bg-[#0C0C0C]/80 backdrop-blur-2xl border-b border-neutral-200/80 dark:border-white/10 px-4 sm:px-6 flex items-center justify-between">
+      <header className="sticky top-0 z-30 h-16 glass-navbar px-4 sm:px-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
           {/* Mobile Menu Button */}
           <button
@@ -134,7 +134,7 @@ export default function AdminLayout({ activeTab, onSelectTab, children }) {
         {sidebarOpen && (
           <div
             onClick={() => setSidebarOpen(false)}
-            className="fixed inset-0 z-30 bg-black/60 backdrop-blur-xs lg:hidden"
+            className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden"
           />
         )}
 

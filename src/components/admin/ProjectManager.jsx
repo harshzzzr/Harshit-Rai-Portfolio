@@ -171,7 +171,7 @@ export default function ProjectManager({ onProjectChanged }) {
           </div>
           <button
             onClick={() => setFeedback(null)}
-            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer text-xs"
+            className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 cursor-pointer text-xs"
           >
             Dismiss
           </button>
